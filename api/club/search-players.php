@@ -10,7 +10,7 @@ $sess = requireSession('club');
 $db   = getDB();
 
 // Verify club is verified
-$clubStmt = $db->prepare("SELECT verification_status FROM club_profiles WHERE user_id = ? AND is_deleted = 0");
+$clubStmt = $db->prepare("SELECT verification_status FROM club_profiles WHERE user_id = ?");
 $clubStmt->execute([$sess['user_id']]);
 $club = $clubStmt->fetch();
 if (!$club || $club['verification_status'] !== 'verified') {
@@ -21,7 +21,7 @@ $page    = max(1, (int)($_GET['page']    ?? 1));
 $perPage = min(50, max(1, (int)($_GET['per_page'] ?? 20)));
 $offset  = ($page - 1) * $perPage;
 
-$where  = ["pp.is_deleted = 0", "u.is_active = 1", "u.is_deleted = 0"];
+$where  = ["u.is_active = 1", "u.is_deleted = 0"];
 $params = [];
 
 if (!empty($_GET['position'])) {

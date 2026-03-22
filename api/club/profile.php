@@ -13,7 +13,7 @@ $stmt = $db->prepare("
     SELECT cp.*, u.email
     FROM club_profiles cp
     JOIN users u ON u.id = cp.user_id
-    WHERE cp.user_id = ? AND cp.is_deleted = 0
+    WHERE cp.user_id = ?
 ");
 $stmt->execute([$sess['user_id']]);
 $club = $stmt->fetch();
