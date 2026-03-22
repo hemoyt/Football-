@@ -20,8 +20,8 @@ try {
     $db = getDB();
 
     $stmt = $db->prepare(
-        "SELECT cp.id, cp.club_name, cp.country, cp.city, cp.founded,
-                cp.description, cp.website, cp.phone, cp.doc_url,
+        "SELECT cp.id, cp.club_name, cp.country, cp.league_division,
+                cp.contact_person_name, cp.contact_title, cp.phone, cp.doc_url,
                 cp.verification_status, cp.created_at,
                 u.id AS user_id, u.email, u.is_active
          FROM club_profiles cp

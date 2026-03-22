@@ -36,7 +36,7 @@ try {
         $countParams[] = $like;
     }
 
-    $allowedStatuses = ['pending', 'verified', 'rejected', 'revoked'];
+    $allowedStatuses = ['pending', 'verified', 'rejected'];
     if ($status !== '' && in_array($status, $allowedStatuses, true)) {
         $conditions[]  = 'cp.verification_status = ?';
         $countParams[] = $status;
@@ -56,8 +56,8 @@ try {
     $pageParams = array_merge($countParams, [$perPage, $offset]);
 
     $stmt = $db->prepare(
-        "SELECT cp.id, cp.user_id, cp.club_name, cp.country, cp.city, cp.founded,
-                cp.website, cp.verification_status, cp.verified_at,
+        "SELECT cp.id, cp.user_id, cp.club_name, cp.country, cp.league_division,
+                cp.contact_person_name, cp.verification_status, cp.verified_at,
                 cp.rejection_reason, cp.created_at,
                 u.email, u.is_active, u.last_login
          FROM club_profiles cp

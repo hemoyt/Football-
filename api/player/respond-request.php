@@ -48,7 +48,7 @@ try {
     // Verify that this request belongs to this player
     $checkStmt = $db->prepare(
         "SELECT id, status FROM contact_requests
-         WHERE id = ? AND player_profile_id = ?
+         WHERE id = ? AND player_id = ?
          LIMIT 1"
     );
     $checkStmt->execute([$requestId, $profile['id']]);

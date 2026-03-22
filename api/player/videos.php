@@ -26,9 +26,9 @@ if ($method === 'GET') {
             $stmt = $db->prepare(
                 "SELECT pv.*
                  FROM player_videos pv
-                 JOIN player_profiles pp ON pp.id = pv.player_profile_id
+                 JOIN player_profiles pp ON pp.id = pv.player_id
                  JOIN users u ON u.id = pp.user_id
-                 WHERE pv.player_profile_id = ?
+                 WHERE pv.player_id = ?
                    AND u.is_deleted = 0
                  ORDER BY pv.created_at DESC"
             );
@@ -40,7 +40,7 @@ if ($method === 'GET') {
             $stmt = $db->prepare(
                 "SELECT pv.*
                  FROM player_videos pv
-                 JOIN player_profiles pp ON pp.id = pv.player_profile_id
+                 JOIN player_profiles pp ON pp.id = pv.player_id
                  WHERE pp.user_id = ?
                  ORDER BY pv.created_at DESC"
             );
@@ -65,21 +65,21 @@ if ($method === 'GET') {
         jsonError('Invalid JSON body.');
     }
 
-    $url   = isset($body['url'])   ? trim((string)$body['url'])   : '';
-    $type  = isset($body['type'])  ? trim((string)$body['type'])  : 'external';
+    $url   = isset($body['video_url']) ? trim((string)$body['video_url']) : (isset($body['url']) ? trim((string)$body['url']) : '');
+    $type  = isset($body['video_type']) ? trim((string)$body['video_type']) : (isset($body['type']) ? trim((string)$body['type']) : 'youtube');
     $title = isset($body['title']) ? trim((string)$body['title']) : null;
 
     if ($url === '') {
-        jsonError('url is required.');
+        jsonError('video_url is required.');
     }
 
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
         jsonError('Invalid URL format.');
     }
 
-    $allowedTypes = ['external', 'youtube', 'upload'];
+    $allowedTypes = ['youtube', 'vimeo', 'upload'];
     if (!in_array($type, $allowedTypes, true)) {
-        jsonError('type must be one of: external, youtube, upload.');
+        jsonError('video_type must be one of: youtube, vimeo, upload.');
     }
 
     try {
@@ -93,7 +93,7 @@ if ($method === 'GET') {
         }
 
         $insStmt = $db->prepare(
-            "INSERT INTO player_videos (player_profile_id, url, type, title, created_at)
+            "INSERT INTO player_videos (player_id, video_url, video_type, title, created_at)
              VALUES (?, ?, ?, ?, NOW())"
         );
         $insStmt->execute([$profile['id'], $url, $type, $title]);

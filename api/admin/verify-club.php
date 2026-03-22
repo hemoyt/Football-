@@ -71,9 +71,9 @@ try {
 
             // Notify the club's user
             $db->prepare(
-                "INSERT INTO notifications (user_id, type, reference_id, message, is_read, created_at)
-                 VALUES (?, 'club_verified', ?, 'Congratulations! Your club has been verified. You now have full access to GOG.', 0, NOW())"
-            )->execute([$club['user_id'], $clubId]);
+                "INSERT INTO notifications (user_id, type, title, body, is_read, created_at)
+                 VALUES (?, 'club_verified', 'Club Verified', 'Congratulations! Your club has been verified. You now have full access to GOG.', 0, NOW())"
+            )->execute([$club['user_id']]);
             break;
 
         case 'reject':
@@ -90,11 +90,10 @@ try {
 
             // Notify the club's user
             $db->prepare(
-                "INSERT INTO notifications (user_id, type, reference_id, message, is_read, created_at)
-                 VALUES (?, 'club_rejected', ?, ?, 0, NOW())"
+                "INSERT INTO notifications (user_id, type, title, body, is_read, created_at)
+                 VALUES (?, 'club_rejected', 'Verification Rejected', ?, 0, NOW())"
             )->execute([
                 $club['user_id'],
-                $clubId,
                 'Your club verification was rejected. Reason: ' . $reason,
             ]);
             break;
@@ -102,7 +101,7 @@ try {
         case 'revoke':
             $db->prepare(
                 "UPDATE club_profiles
-                 SET verification_status = 'revoked',
+                 SET verification_status = 'rejected',
                      verified_by = ?,
                      rejection_reason = 'Verification revoked by administrator.'
                  WHERE id = ?"
@@ -112,9 +111,9 @@ try {
 
             // Notify the club's user
             $db->prepare(
-                "INSERT INTO notifications (user_id, type, reference_id, message, is_read, created_at)
-                 VALUES (?, 'club_revoked', ?, 'Your club verification has been revoked by an administrator.', 0, NOW())"
-            )->execute([$club['user_id'], $clubId]);
+                "INSERT INTO notifications (user_id, type, title, body, is_read, created_at)
+                 VALUES (?, 'club_revoked', 'Verification Revoked', 'Your club verification has been revoked by an administrator.', 0, NOW())"
+            )->execute([$club['user_id']]);
             break;
     }
 

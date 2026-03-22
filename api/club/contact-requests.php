@@ -35,9 +35,9 @@ try {
                 pp.position_primary, pp.photo_url, pp.nationality,
                 u.email AS player_email
          FROM contact_requests cr
-         JOIN player_profiles pp ON pp.id = cr.player_profile_id
+         JOIN player_profiles pp ON pp.id = cr.player_id
          JOIN users u ON u.id = pp.user_id
-         WHERE cr.club_profile_id = ?
+         WHERE cr.club_id = ?
          ORDER BY cr.sent_at DESC"
     );
     $stmt->execute([$club['id']]);

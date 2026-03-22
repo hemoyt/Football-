@@ -35,9 +35,9 @@ try {
                 pp.height_cm, pp.preferred_foot,
                 sp.saved_at
          FROM saved_players sp
-         JOIN player_profiles pp ON pp.id = sp.player_profile_id
+         JOIN player_profiles pp ON pp.id = sp.player_id
          JOIN users u ON u.id = pp.user_id
-         WHERE sp.club_profile_id = ?
+         WHERE sp.club_id = ?
            AND u.is_deleted = 0
            AND u.is_active = 1
          ORDER BY sp.saved_at DESC"
