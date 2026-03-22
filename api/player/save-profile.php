@@ -99,7 +99,7 @@ try {
     // -----------------------------------------------------------------------
     // Skills update
     // -----------------------------------------------------------------------
-    $skillFields = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical'];
+    $skillFields = ['speed', 'dribbling', 'shooting', 'passing', 'defending', 'heading'];
     $skillParams = [];
     $skillSet    = [];
 
@@ -117,7 +117,7 @@ try {
 
     if (!empty($skillSet)) {
         $skillParams[] = $profileId;
-        $skillSql = "UPDATE player_skills SET " . implode(', ', $skillSet) . ", updated_at = NOW() WHERE player_profile_id = ?";
+        $skillSql = "UPDATE player_skills SET " . implode(', ', $skillSet) . ", updated_at = NOW() WHERE player_id = ?";
         $db->prepare($skillSql)->execute($skillParams);
     }
 
@@ -132,28 +132,28 @@ try {
             jsonError('career must be a valid JSON array.');
         }
 
-        $delStmt = $db->prepare("DELETE FROM player_career_history WHERE player_profile_id = ?");
+        $delStmt = $db->prepare("DELETE FROM player_career_history WHERE player_id = ?");
         $delStmt->execute([$profileId]);
 
         $insStmt = $db->prepare(
             "INSERT INTO player_career_history
-             (player_profile_id, club_name, position, start_year, end_year, description, sort_order)
+             (player_id, club_name, season, appearances, goals, assists, sort_order)
              VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
 
         foreach ($careerData as $idx => $entry) {
             if (!is_array($entry)) continue;
 
-            $clubName   = isset($entry['club_name'])   ? trim((string)$entry['club_name'])   : '';
-            $position   = isset($entry['position'])    ? trim((string)$entry['position'])    : null;
-            $startYear  = isset($entry['start_year'])  ? (int)$entry['start_year']           : null;
-            $endYear    = isset($entry['end_year'])    ? (int)$entry['end_year']             : null;
-            $desc       = isset($entry['description']) ? trim((string)$entry['description']) : null;
-            $sortOrder  = (int)($entry['sort_order'] ?? $idx);
+            $clubName    = isset($entry['club_name'])   ? trim((string)$entry['club_name'])  : '';
+            $season      = isset($entry['season'])      ? trim((string)$entry['season'])     : null;
+            $appearances = isset($entry['appearances']) ? (int)$entry['appearances']         : 0;
+            $goals       = isset($entry['goals'])       ? (int)$entry['goals']               : 0;
+            $assists     = isset($entry['assists'])     ? (int)$entry['assists']             : 0;
+            $sortOrder   = (int)($entry['sort_order'] ?? $idx);
 
             if ($clubName === '') continue;
 
-            $insStmt->execute([$profileId, $clubName, $position, $startYear, $endYear, $desc, $sortOrder]);
+            $insStmt->execute([$profileId, $clubName, $season, $appearances, $goals, $assists, $sortOrder]);
         }
     }
 

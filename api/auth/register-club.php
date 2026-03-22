@@ -18,24 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Validate required text fields from $_POST (multipart/form-data)
-$required = ['club_name', 'email', 'password', 'country', 'city'];
+$required = ['club_name', 'email', 'password', 'country', 'contact_person_name'];
 foreach ($required as $field) {
     if (!isset($_POST[$field]) || trim((string)$_POST[$field]) === '') {
         jsonError("Field '{$field}' is required.");
     }
 }
 
-$clubName    = trim((string)$_POST['club_name']);
-$email       = trim((string)$_POST['email']);
-$password    = (string)$_POST['password'];
-$country     = trim((string)$_POST['country']);
-$city        = trim((string)$_POST['city']);
+$clubName           = trim((string)$_POST['club_name']);
+$email              = trim((string)$_POST['email']);
+$password           = (string)$_POST['password'];
+$country            = trim((string)$_POST['country']);
+$contactPersonName  = trim((string)$_POST['contact_person_name']);
 
 // Optional text fields
-$founded     = isset($_POST['founded'])     ? trim((string)$_POST['founded'])     : null;
-$description = isset($_POST['description']) ? trim((string)$_POST['description']) : null;
-$website     = isset($_POST['website'])     ? trim((string)$_POST['website'])     : null;
-$phone       = isset($_POST['phone'])       ? trim((string)$_POST['phone'])       : null;
+$leagueDivision = isset($_POST['league_division']) ? trim((string)$_POST['league_division']) : null;
+$contactTitle   = isset($_POST['contact_title'])   ? trim((string)$_POST['contact_title'])   : null;
+$phone          = isset($_POST['phone'])           ? trim((string)$_POST['phone'])           : null;
 
 // Validate email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -45,21 +44,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 // Validate password length
 if (strlen($password) < 8) {
     jsonError('Password must be at least 8 characters long.');
-}
-
-// Validate optional website URL
-if ($website !== null && $website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) {
-    jsonError('Invalid website URL.');
-}
-
-// Validate founded year if provided
-if ($founded !== null && $founded !== '') {
-    if (!ctype_digit($founded) || (int)$founded < 1800 || (int)$founded > (int)date('Y')) {
-        jsonError('Invalid founded year.');
-    }
-    $founded = (int)$founded;
-} else {
-    $founded = null;
 }
 
 // Handle document upload
@@ -132,12 +116,12 @@ try {
     // Insert into club_profiles
     $clubStmt = $db->prepare(
         "INSERT INTO club_profiles
-         (user_id, club_name, country, city, founded, description, website, phone,
+         (user_id, club_name, country, league_division, contact_person_name, contact_title, phone,
           doc_url, verification_status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())"
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())"
     );
     $clubStmt->execute([
-        $userId, $clubName, $country, $city, $founded, $description, $website, $phone, $docUrl
+        $userId, $clubName, $country, $leagueDivision, $contactPersonName, $contactTitle, $phone, $docUrl
     ]);
 
     $db->commit();

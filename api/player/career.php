@@ -26,9 +26,9 @@ try {
         $stmt = $db->prepare(
             "SELECT pch.*
              FROM player_career_history pch
-             JOIN player_profiles pp ON pp.id = pch.player_profile_id
+             JOIN player_profiles pp ON pp.id = pch.player_id
              JOIN users u ON u.id = pp.user_id
-             WHERE pch.player_profile_id = ?
+             WHERE pch.player_id = ?
                AND u.is_deleted = 0
              ORDER BY pch.sort_order ASC, pch.id DESC"
         );
@@ -41,7 +41,7 @@ try {
         $stmt = $db->prepare(
             "SELECT pch.*
              FROM player_career_history pch
-             JOIN player_profiles pp ON pp.id = pch.player_profile_id
+             JOIN player_profiles pp ON pp.id = pch.player_id
              WHERE pp.user_id = ?
              ORDER BY pch.sort_order ASC, pch.id DESC"
         );

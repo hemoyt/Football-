@@ -26,9 +26,9 @@ try {
         $stmt = $db->prepare(
             "SELECT ps.*
              FROM player_skills ps
-             JOIN player_profiles pp ON pp.id = ps.player_profile_id
+             JOIN player_profiles pp ON pp.id = ps.player_id
              JOIN users u ON u.id = pp.user_id
-             WHERE ps.player_profile_id = ?
+             WHERE ps.player_id = ?
                AND u.is_deleted = 0
              LIMIT 1"
         );
@@ -42,7 +42,7 @@ try {
         $stmt = $db->prepare(
             "SELECT ps.*
              FROM player_skills ps
-             JOIN player_profiles pp ON pp.id = ps.player_profile_id
+             JOIN player_profiles pp ON pp.id = ps.player_id
              WHERE pp.user_id = ?
              LIMIT 1"
         );
