@@ -1,0 +1,254 @@
+/* GOG — Dashboard Page Styles */
+
+.page-header {
+  margin-bottom: var(--sp-8);
+}
+
+.page-header__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-1);
+}
+
+.page-header__subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-8);
+}
+
+/* Profile Completion Card */
+.completion-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-6);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-6);
+}
+
+.completion-card__info { flex: 1; }
+
+.completion-card__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: var(--sp-2);
+}
+
+.completion-card__pct {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-4);
+}
+
+.completion-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.completion-task {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.completion-task--done { color: var(--success); }
+.completion-task--done::before { content: '✓'; color: var(--success); font-weight: 700; }
+.completion-task:not(.completion-task--done)::before { content: '○'; color: var(--gold-dim); }
+
+/* Video Section */
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-4);
+}
+
+.video-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: border-color var(--transition-base);
+}
+
+.video-card:hover { border-color: var(--gold-dim); }
+
+.video-card__thumb {
+  aspect-ratio: 16/9;
+  background: var(--bg-elevated);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dim);
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.video-card__thumb:hover { color: var(--gold-primary); }
+
+.video-card__info {
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.video-card__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.video-card__type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Career History */
+.career-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr auto;
+  gap: var(--sp-3);
+  align-items: center;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.career-row:last-child { border-bottom: none; }
+
+.career-add-row {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.career-add-row .form-input { min-width: 100px; }
+
+/* Request cards list */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* Saved players */
+.saved-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* Notification dot */
+.notif-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold-primary);
+  flex-shrink: 0;
+}
+
+/* Verification status page */
+.verification-status {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verification-status__card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-16) var(--sp-12);
+  max-width: 560px;
+  text-align: center;
+}
+
+.verification-status__icon {
+  font-size: 4rem;
+  margin-bottom: var(--sp-6);
+}
+
+.verification-status__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--gold-primary);
+  margin-bottom: var(--sp-4);
+}
+
+/* Club search */
+.search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.results-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Admin verification queue */
+.queue-actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.doc-link {
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* System logs */
+.log-action {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--gold-dim);
+  background: var(--bg-elevated);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Revocation warning */
+.danger-zone {
+  background: rgba(192, 57, 43, 0.08);
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  border-radius: var(--radius-card);
+  padding: var(--sp-6);
+  margin-top: var(--sp-8);
+}
+
+.danger-zone__title {
+  color: var(--danger);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: var(--sp-4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .career-row { grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .completion-card { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Club Registration — GOG</title>
+  <meta name="description" content="Register your football club on GOG to scout verified players worldwide.">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/profile.css">
+  <style>
+    .register-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    .register-panel {
+      background: linear-gradient(160deg, #0A0A0A 0%, #111111 100%);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-12);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .register-panel__logo {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: var(--sp-6);
+    }
+    .register-panel__tagline {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: var(--sp-8);
+    }
+    .register-panel__note {
+      background: rgba(212,175,55,0.08);
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: var(--radius-card);
+      padding: var(--sp-4) var(--sp-6);
+      max-width: 340px;
+    }
+    .register-panel__note p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .register-panel__note strong { color: var(--gold-primary); }
+    .register-form-side {
+      overflow-y: auto;
+      padding: var(--sp-8);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .register-form-card {
+      width: 100%;
+      max-width: 560px;
+      animation: fadeSlideUp 0.4s ease;
+    }
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--gold-primary);
+      letter-spacing: 0.05em;
+      margin: var(--sp-6) 0 var(--sp-4);
+    }
+    .section-heading:first-of-type { margin-top: 0; }
+    @media (max-width: 900px) {
+      .register-layout { grid-template-columns: 1fr; }
+      .register-panel { display: none; }
+      .register-form-side { padding: var(--sp-6) var(--sp-4); }
+    }
+  </style>
+</head>
+<body data-page="club-register">
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="register-layout">
+    <!-- Left panel -->
+    <div class="register-panel">
+      <div class="register-panel__logo">GOG</div>
+      <div class="register-panel__tagline">For Football Clubs</div>
+      <div class="register-panel__note">
+        <p>
+          Join <strong>GOG</strong> to access a global network of verified football talent.
+          Only <strong>verified clubs</strong> can view full player profiles and send contact requests.
+          Verification takes <strong>up to 48 hours</strong> after document review.
+        </p>
+      </div>
+
+      <div style="margin-top:var(--sp-8);text-align:center">
+        <div style="font-size:0.8rem;color:var(--gold-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:var(--sp-4)">Verification Steps</div>
+        <div style="display:flex;flex-direction:column;gap:var(--sp-3);max-width:260px">
+          <div style="display:flex;align-items:center;gap:var(--sp-3);color:var(--text-secondary);font-size:0.9rem">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,0.15);border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);color:var(--gold-primary);flex-shrink:0">1</span>
+            Submit club details &amp; document
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--sp-3);color:var(--text-secondary);font-size:0.9rem">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,0.15);border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);color:var(--gold-primary);flex-shrink:0">2</span>
+            GOG admin reviews within 48h
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--sp-3);color:var(--text-secondary);font-size:0.9rem">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,0.15);border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);color:var(--gold-primary);flex-shrink:0">3</span>
+            Access full player database
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form -->
+    <div class="register-form-side">
+      <div class="register-form-card">
+        <div style="margin-bottom:var(--sp-8)">
+          <a href="/index.html" class="navbar__logo" style="display:inline-block;margin-bottom:var(--sp-4)">GOG</a>
+          <h1 style="font-family:var(--font-display);font-size:2rem;margin-bottom:var(--sp-2)">Register Your Club</h1>
+          <p style="color:var(--text-secondary)">Start the verification process to access GOG's player database.</p>
+        </div>
+
+        <form id="club-register-form" novalidate>
+
+          <!-- Club Details -->
+          <div class="section-heading">Club Details</div>
+
+          <div class="form-group">
+            <label class="form-label" for="club_name">Club Name <span style="color:var(--danger)">*</span></label>
+            <input class="form-input" type="text" id="club_name" name="club_name" placeholder="e.g. Al Hilal FC" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="country">Country <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="country" name="country" placeholder="Saudi Arabia" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="league_division">League / Division</label>
+              <input class="form-input" type="text" id="league_division" name="league_division" placeholder="Saudi Pro League">
+            </div>
+          </div>
+
+          <!-- Contact Person -->
+          <div class="section-heading">Contact Person</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="contact_person_name">Full Name <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="text" id="contact_person_name" name="contact_person_name" placeholder="Ahmed Al-Rashid" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact_title">Title / Role</label>
+              <input class="form-input" type="text" id="contact_title" name="contact_title" placeholder="Head of Scouting">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="email">Official Email <span style="color:var(--danger)">*</span></label>
+              <input class="form-input" type="email" id="email" name="email" placeholder="scouting@club.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone</label>
+              <input class="form-input" type="tel" id="phone" name="phone" placeholder="+966 50 000 0000">
+            </div>
+          </div>
+
+          <!-- Account Security -->
+          <div class="section-heading">Account Security</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="password">Password <span style="color:var(--danger)">*</span></label>
+              <div style="position:relative;display:flex;align-items:center">
+                <input class="form-input" type="password" id="password" name="password" placeholder="Min. 8 characters" required style="padding-right:48px">
+                <button type="button" class="password-toggle" style="position:absolute;right:12px;background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--gold-dim)">👁</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">Confirm Password <span style="color:var(--danger)">*</span></label>
+              <div style="position:relative;display:flex;align-items:center">
+                <input class="form-input" type="password" id="confirm_password" name="confirm_password" placeholder="Repeat password" required style="padding-right:48px">
+                <button type="button" class="password-toggle" style="position:absolute;right:12px;background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--gold-dim)">👁</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification Document -->
+          <div class="section-heading">Verification Document</div>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:var(--sp-4)">
+            Upload official proof that you represent this club (club registration certificate, official letterhead, league membership card, etc.).
+          </p>
+
+          <div class="file-upload" onclick="document.getElementById('doc_file').click()">
+            <input type="file" id="doc_file" name="doc_file" accept=".pdf,.jpg,.jpeg,.png,.webp" style="display:none">
+            <div class="file-upload__icon">📄</div>
+            <div class="file-upload__text" id="doc-file-name">Click to upload verification document</div>
+            <div class="file-upload__hint">PDF, JPG, PNG — Max 10MB</div>
+          </div>
+
+          <div style="margin-top:var(--sp-6)">
+            <label style="display:flex;align-items:flex-start;gap:var(--sp-3);cursor:pointer">
+              <input type="checkbox" id="terms" required style="margin-top:4px;accent-color:var(--gold-primary)">
+              <span style="font-size:0.9rem;color:var(--text-secondary)">
+                I confirm that I am an authorized representative of this club and that all information provided is accurate.
+              </span>
+            </label>
+          </div>
+
+          <div style="margin-top:var(--sp-6)">
+            <button type="submit" class="btn btn--primary btn--full btn--lg">
+              Submit Application →
+            </button>
+          </div>
+
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="/login.html">Sign In</a>
+        </div>
+
+        <div class="auth-footer" style="margin-top:var(--sp-3)">
+          Want to register as a player? <a href="/player/register.html">Player Registration</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNavbar('guest');
+
+      // File name display
+      document.getElementById('doc_file').addEventListener('change', function() {
+        const name = this.files[0]?.name || 'Click to upload verification document';
+        document.getElementById('doc-file-name').textContent = name;
+      });
+    });
+  </script>
+
+</body>
+</html>

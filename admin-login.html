@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GOG Admin — Restricted access portal.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>Admin — GOG</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <style>
+    /* ── Admin login page ── */
+    .admin-login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-4);
+      background: #000;
+    }
+
+    .admin-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-8);
+      box-shadow: var(--shadow-elevated);
+      animation: fadeSlideUp 0.4s ease both;
+    }
+
+    .admin-card__logo {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-primary);
+      text-align: center;
+      display: block;
+      margin-bottom: var(--sp-4);
+      text-decoration: none;
+    }
+
+    .admin-card__title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: var(--sp-1);
+    }
+
+    .admin-card__subtitle {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--sp-6);
+    }
+
+    .admin-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+      background: rgba(192, 57, 43, 0.08);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+      border-radius: var(--radius-btn);
+      padding: var(--sp-3) var(--sp-4);
+      margin-bottom: var(--sp-6);
+    }
+
+    .admin-warning__icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      line-height: 1.5;
+    }
+
+    .admin-warning__text {
+      font-size: 0.8rem;
+      color: #e74c3c;
+      line-height: 1.5;
+    }
+
+    /* Password field wrapper */
+    .password-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-field .form-input {
+      padding-right: 48px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 46px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 var(--radius-input) var(--radius-input) 0;
+      transition: color var(--transition-fast);
+    }
+
+    .password-toggle:hover {
+      color: var(--gold-primary);
+    }
+
+    .admin-divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--sp-6) 0;
+    }
+
+    .admin-card__submit.btn--primary {
+      background: var(--gold-primary);
+      color: var(--bg-primary);
+      border-color: var(--gold-primary);
+      letter-spacing: 0.04em;
+    }
+
+    .admin-card__submit.btn--primary:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-light);
+      box-shadow: var(--shadow-gold-md);
+    }
+
+    .admin-footer {
+      text-align: center;
+      margin-top: var(--sp-6);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body data-page="admin-login">
+
+  <main class="admin-login-page">
+    <div class="admin-card">
+
+      <!-- Logo (no shimmer, flat gold) -->
+      <a href="/index.html" class="admin-card__logo" aria-label="GOG">GOG</a>
+
+      <!-- Title -->
+      <h1 class="admin-card__title">GOG Admin</h1>
+      <p class="admin-card__subtitle">Restricted Access &mdash; Admin Only</p>
+
+      <!-- Warning notice -->
+      <div class="admin-warning" role="alert">
+        <span class="admin-warning__icon">&#9888;</span>
+        <span class="admin-warning__text">Unauthorized access attempts are logged and may result in legal action.</span>
+      </div>
+
+      <!-- Admin Login Form -->
+      <form id="admin-login-form" novalidate>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="admin@gog.com"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-field">
+            <input
+              class="form-input"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              aria-label="Toggle password visibility"
+            >👁</button>
+          </div>
+        </div>
+
+        <!-- Access Key -->
+        <div class="form-group">
+          <label class="form-label" for="admin_secret">Access Key</label>
+          <div class="password-field">
+            <input
+              class="form-input"
+              type="password"
+              id="admin_secret"
+              name="admin_secret"
+              placeholder="Enter your access key"
+              autocomplete="off"
+              required
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              aria-label="Toggle access key visibility"
+            >👁</button>
+          </div>
+          <span class="form-hint">This key is issued by the GOG system administrator.</span>
+        </div>
+
+        <div class="admin-divider"></div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn--primary btn--full btn--lg admin-card__submit"
+        >
+          Access Admin Panel
+        </button>
+
+      </form>
+
+      <p class="admin-footer">Gateway of Goals &mdash; Admin Portal</p>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="/js/components.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNavbar('guest');
+    });
+  </script>
+</body>
+</html>

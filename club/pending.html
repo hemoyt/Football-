@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verification Pending — GOG</title>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/dashboard.css">
+  <style>
+    .pending-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .pending-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-4);
+    }
+    .pending-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-12);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-elevated);
+      animation: fadeSlideUp 0.5s ease;
+    }
+    .pending-icon {
+      font-size: 5rem;
+      margin-bottom: var(--sp-6);
+      animation: pulse 2s ease infinite;
+    }
+    .pending-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--gold-primary);
+      margin-bottom: var(--sp-4);
+    }
+    .pending-desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: var(--sp-8);
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .pending-steps {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-card);
+      padding: var(--sp-6);
+      margin-bottom: var(--sp-8);
+      text-align: left;
+    }
+    .pending-steps__title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: var(--sp-4);
+    }
+    .pending-step {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: var(--sp-3) 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .pending-step:last-child { border-bottom: none; }
+    .pending-step--done { color: var(--success); }
+    .pending-step__icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+    .pending-step--done .pending-step__icon {
+      background: rgba(30,132,73,0.2);
+      color: var(--success);
+    }
+    .pending-step--current .pending-step__icon {
+      background: rgba(212,175,55,0.15);
+      color: var(--gold-primary);
+      animation: pulse 2s ease infinite;
+    }
+    .pending-step--future .pending-step__icon {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .contact-info {
+      background: rgba(212,175,55,0.06);
+      border: 1px solid rgba(212,175,55,0.15);
+      border-radius: var(--radius-card);
+      padding: var(--sp-4);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body data-page="club-pending" class="pending-page">
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="pending-content">
+    <div class="pending-card">
+      <div class="pending-icon">⏳</div>
+      <h1 class="pending-title">Application Submitted</h1>
+      <p class="pending-desc">
+        Thank you for registering your club on GOG. Your application is currently under review.
+        We verify all clubs to maintain the quality and security of our platform.
+      </p>
+
+      <div class="pending-steps">
+        <div class="pending-steps__title">Verification Progress</div>
+
+        <div class="pending-step pending-step--done">
+          <div class="pending-step__icon">✓</div>
+          <span>Application submitted with verification document</span>
+        </div>
+
+        <div class="pending-step pending-step--current">
+          <div class="pending-step__icon">◉</div>
+          <span>GOG admin reviewing your documents <em>(up to 48 hours)</em></span>
+        </div>
+
+        <div class="pending-step pending-step--future">
+          <div class="pending-step__icon">○</div>
+          <span>Email notification sent with verification result</span>
+        </div>
+
+        <div class="pending-step pending-step--future">
+          <div class="pending-step__icon">○</div>
+          <span>Full access to player search &amp; contact system</span>
+        </div>
+      </div>
+
+      <div class="contact-info" style="margin-bottom:var(--sp-6)">
+        <p>Need help? Contact us at <a href="mailto:support@gog.football" style="color:var(--gold-primary)">support@gog.football</a></p>
+        <p style="margin-top:var(--sp-2)">Please check your spam folder for our verification email.</p>
+      </div>
+
+      <div style="display:flex;gap:var(--sp-3);justify-content:center;flex-wrap:wrap">
+        <a href="/login.html" class="btn btn--outline">Back to Login</a>
+        <button class="btn btn--ghost" onclick="checkVerificationStatus()">Check Status</button>
+      </div>
+
+      <div id="status-result" style="margin-top:var(--sp-4)"></div>
+    </div>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNavbar('guest');
+    });
+
+    async function checkVerificationStatus() {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = 'Checking…';
+
+      try {
+        const res = await apiRequest('/api/club/profile.php');
+        const resultEl = document.getElementById('status-result');
+
+        if (res.verification_status === 'verified') {
+          resultEl.innerHTML = '<div class="badge badge--verified" style="font-size:1rem;padding:8px 16px">🛡 Verified! Redirecting to dashboard…</div>';
+          setTimeout(() => { window.location.href = '/club/dashboard.html'; }, 1500);
+        } else if (res.verification_status === 'rejected') {
+          resultEl.innerHTML = `<div class="badge badge--rejected" style="font-size:0.9rem;padding:8px 16px">Application Rejected${res.rejection_reason ? ': ' + res.rejection_reason : ''}</div>`;
+          btn.disabled = false;
+          btn.textContent = 'Check Status';
+        } else {
+          renderToast('Your application is still under review. Please check back later.', 'info');
+          btn.disabled = false;
+          btn.textContent = 'Check Status';
+        }
+      } catch {
+        renderToast('Please log in to check your status.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Check Status';
+      }
+    }
+  </script>
+
+</body>
+</html>

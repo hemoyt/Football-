@@ -1,0 +1,391 @@
+/* GOG — Profile Pages */
+
+/* Auth pages */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-4);
+  background: radial-gradient(ellipse at center, rgba(212,175,55,0.04) 0%, transparent 70%);
+}
+
+.auth-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-8);
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-elevated);
+  animation: fadeSlideUp 0.4s ease;
+}
+
+.auth-card__logo {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+}
+
+.auth-card__logo-text {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.auth-card__subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: var(--sp-2);
+}
+
+.auth-card__title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: var(--sp-2);
+}
+
+.auth-card__desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-6);
+}
+
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: var(--sp-6) 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 30px);
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-divider::before { left: 0; }
+.auth-divider::after  { right: 0; }
+
+.auth-divider span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 0 var(--sp-3);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: var(--sp-6);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.role-select {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.role-option {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.role-option:hover,
+.role-option.selected {
+  border-color: var(--gold-primary);
+  background: rgba(212,175,55,0.08);
+}
+
+.role-option__icon {
+  font-size: 2rem;
+  margin-bottom: var(--sp-2);
+}
+
+.role-option__label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.role-option__desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Registration Steps */
+.reg-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: var(--sp-8);
+}
+
+.reg-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.reg-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+
+.reg-step.done::after { background: var(--gold-primary); }
+
+.reg-step__num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-base);
+}
+
+.reg-step.active .reg-step__num {
+  border-color: var(--gold-primary);
+  background: var(--gold-primary);
+  color: var(--bg-primary);
+}
+
+.reg-step.done .reg-step__num {
+  border-color: var(--gold-primary);
+  background: rgba(212,175,55,0.15);
+  color: var(--gold-primary);
+}
+
+.reg-step__label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: var(--sp-2);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reg-step.active .reg-step__label { color: var(--gold-primary); }
+
+/* Profile view page */
+.profile-hero {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: var(--sp-8) 0;
+}
+
+.profile-hero__inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+  display: flex;
+  gap: var(--sp-8);
+  align-items: flex-start;
+}
+
+.profile-hero__photo {
+  width: 160px; height: 160px;
+  border-radius: var(--radius-card);
+  object-fit: cover;
+  border: 3px solid var(--gold-dim);
+  flex-shrink: 0;
+}
+
+.profile-hero__photo-placeholder {
+  width: 160px; height: 160px;
+  border-radius: var(--radius-card);
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-dim);
+  font-size: 4rem;
+  border: 3px solid var(--border);
+  flex-shrink: 0;
+}
+
+.profile-hero__info { flex: 1; min-width: 0; }
+
+.profile-hero__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin-bottom: var(--sp-3);
+}
+
+.profile-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.profile-hero__stat {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.profile-hero__stat strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.profile-hero__bio {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-6);
+  max-width: 540px;
+}
+
+.profile-hero__actions {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.profile-body {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--sp-8) var(--sp-6);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--sp-8);
+}
+
+@media (max-width: 768px) {
+  .profile-hero__inner { flex-direction: column; align-items: center; text-align: center; }
+  .profile-hero__meta { justify-content: center; }
+  .profile-hero__actions { justify-content: center; }
+  .profile-body { grid-template-columns: 1fr; }
+}
+
+/* Photo upload preview */
+.photo-upload-area {
+  position: relative;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 3px dashed var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--transition-base);
+  margin: 0 auto var(--sp-4);
+}
+
+.photo-upload-area:hover { border-color: var(--gold-primary); }
+
+.photo-upload-area img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+
+.photo-upload-area__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.photo-upload-area:hover .photo-upload-area__overlay { opacity: 1; }
+
+/* Skill rating inputs */
+.skill-rating {
+  margin-bottom: var(--sp-4);
+}
+
+.skill-rating__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+
+.skill-rating__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.skill-rating__val {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  min-width: 30px;
+  text-align: right;
+}
+
+.skill-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    to right,
+    var(--gold-primary) 0%,
+    var(--gold-primary) var(--val, 50%),
+    var(--border) var(--val, 50%),
+    var(--border) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.skill-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gold-primary);
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 0 8px rgba(212,175,55,0.4);
+  transition: box-shadow var(--transition-fast);
+}
+
+.skill-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 16px rgba(212,175,55,0.6);
+}
+
+/* Country flag emoji */
+.flag { font-size: 1.1em; }

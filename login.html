@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to your GOG account — Gateway of Goals football scouting platform.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>Login — GOG</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <style>
+    /* ── Auth page layout ── */
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-4);
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent),
+        var(--bg-primary);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-8) var(--sp-8);
+      box-shadow: var(--shadow-elevated);
+      animation: fadeSlideUp 0.45s ease both;
+    }
+
+    .auth-card__logo {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      letter-spacing: 0.08em;
+      background: linear-gradient(
+        135deg,
+        var(--gold-dim) 0%,
+        var(--gold-primary) 40%,
+        var(--gold-light) 60%,
+        var(--gold-primary) 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+      text-align: center;
+      display: block;
+      margin-bottom: var(--sp-6);
+      text-decoration: none;
+    }
+
+    .auth-card__heading {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      text-align: center;
+      color: var(--text-primary);
+      margin-bottom: var(--sp-1);
+    }
+
+    .auth-card__sub {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: var(--sp-8);
+    }
+
+    /* Password field wrapper */
+    .password-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-field .form-input {
+      padding-right: 48px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 46px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 var(--radius-input) var(--radius-input) 0;
+      transition: color var(--transition-fast);
+    }
+
+    .password-toggle:hover {
+      color: var(--gold-primary);
+    }
+
+    .auth-forgot {
+      display: block;
+      text-align: right;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: calc(-1 * var(--sp-2));
+      margin-bottom: var(--sp-6);
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .auth-divider {
+      height: 1px;
+      background: var(--border);
+      margin: var(--sp-6) 0;
+    }
+
+    .auth-footer-link {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .auth-footer-link a {
+      color: var(--gold-primary);
+      font-weight: 600;
+    }
+
+    .auth-footer-link a:hover {
+      color: var(--gold-light);
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: var(--sp-6) var(--sp-6);
+      }
+    }
+  </style>
+</head>
+<body data-page="login">
+
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <main class="auth-page">
+    <div class="auth-card">
+
+      <!-- Logo -->
+      <a href="/index.html" class="auth-card__logo" aria-label="GOG — Gateway of Goals">GOG</a>
+
+      <!-- Heading -->
+      <h1 class="auth-card__heading">Welcome Back</h1>
+      <p class="auth-card__sub">Sign in to your GOG account</p>
+
+      <!-- Login Form -->
+      <form id="login-form" novalidate>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-field">
+            <input
+              class="form-input"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              aria-label="Toggle password visibility"
+            >👁</button>
+          </div>
+        </div>
+
+        <!-- Forgot password -->
+        <span class="auth-forgot" title="Password reset coming soon">Forgot password?</span>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn--primary btn--full btn--lg">
+          Sign In
+        </button>
+
+      </form>
+
+      <div class="auth-divider"></div>
+
+      <!-- Footer link -->
+      <p class="auth-footer-link">
+        Don't have an account?
+        <a href="/player/register.html">Get Started</a>
+      </p>
+
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="/js/components.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNavbar('guest');
+    });
+  </script>
+</body>
+</html>

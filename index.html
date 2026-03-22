@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GOG — Gateway of Goals. The football scouting platform where talent meets opportunity. Connect players with verified clubs worldwide.">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>GOG — Gateway of Goals</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="GOG — Gateway of Goals">
+  <meta property="og:description" content="Where talent meets opportunity. Connect with verified football clubs worldwide.">
+  <meta property="og:type" content="website">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/landing.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero__bg"></div>
+
+    <div class="hero__content animate-fade-up">
+      <div class="hero__logo" aria-label="GOG — Gateway of Goals">GOG</div>
+      <p class="hero__tagline">Where talent meets opportunity</p>
+
+      <div class="hero__ctas">
+        <a href="/player/register.html" class="btn btn--primary btn--lg">
+          I'm a Player
+        </a>
+        <a href="/club/register.html" class="btn btn--outline btn--lg">
+          I'm a Club
+        </a>
+      </div>
+
+      <!-- Stats bar inside hero, anchored at bottom of content -->
+      <div class="stats-bar">
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">2,847</span>
+          <span class="stats-bar__label">Players</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">312</span>
+          <span class="stats-bar__label">Verified Clubs</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">1,205</span>
+          <span class="stats-bar__label">Connections Made</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       HOW IT WORKS
+       ═══════════════════════════════════════ -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Simple steps to kickstart your football journey</p>
+
+      <!-- Tabs -->
+      <div class="how-tabs" role="tablist" aria-label="Player or Club journey">
+        <button
+          class="how-tab active"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-player"
+          id="tab-player"
+          onclick="switchHowTab('player', this)"
+        >Player</button>
+        <button
+          class="how-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-club"
+          id="tab-club"
+          onclick="switchHowTab('club', this)"
+        >Club</button>
+      </div>
+
+      <!-- Player Steps -->
+      <div class="tab-panel active" id="panel-player" role="tabpanel" aria-labelledby="tab-player">
+        <div class="steps">
+          <div class="step animate-fade-up delay-1">
+            <div class="step__number">1</div>
+            <h3 class="step__title">Create Profile</h3>
+            <p class="step__text">Sign up and build your complete player profile — stats, position, nationality, and more.</p>
+          </div>
+          <div class="step animate-fade-up delay-2">
+            <div class="step__number">2</div>
+            <h3 class="step__title">Upload Highlights</h3>
+            <p class="step__text">Share your best moments. Upload match videos and photos to showcase your abilities.</p>
+          </div>
+          <div class="step animate-fade-up delay-3">
+            <div class="step__number">3</div>
+            <h3 class="step__title">Get Scouted</h3>
+            <p class="step__text">Verified clubs browse your profile and reach out directly when they find their next star.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Club Steps -->
+      <div class="tab-panel" id="panel-club" role="tabpanel" aria-labelledby="tab-club">
+        <div class="steps">
+          <div class="step animate-fade-up delay-1">
+            <div class="step__number">1</div>
+            <h3 class="step__title">Register Club</h3>
+            <p class="step__text">Create your club account and submit your official details and documentation for review.</p>
+          </div>
+          <div class="step animate-fade-up delay-2">
+            <div class="step__number">2</div>
+            <h3 class="step__title">Get Verified</h3>
+            <p class="step__text">Our admin team reviews your submission within 48 hours and grants verified club status.</p>
+          </div>
+          <div class="step animate-fade-up delay-3">
+            <div class="step__number">3</div>
+            <h3 class="step__title">Scout Players</h3>
+            <p class="step__text">Browse our full roster of talented players. Filter by position, age, nationality, and foot.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FEATURES
+       ═══════════════════════════════════════ -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Built for the Beautiful Game</h2>
+      <p class="section-subtitle">Everything a player and a club needs — nothing they don't</p>
+
+      <div class="features-grid">
+
+        <div class="feature-item animate-fade-up delay-1">
+          <div class="feature-item__icon" aria-hidden="true">🛡</div>
+          <h3 class="feature-item__title">Verified Clubs Only</h3>
+          <p class="feature-item__text">Every club on GOG goes through a strict verification process. Players never have to worry about fake interest or fraudulent approaches.</p>
+        </div>
+
+        <div class="feature-item animate-fade-up delay-2">
+          <div class="feature-item__icon" aria-hidden="true">⚽</div>
+          <h3 class="feature-item__title">Player Showcase</h3>
+          <p class="feature-item__text">Your profile is your stage. Upload highlight reels, photos, and stats to craft a compelling football CV that speaks for itself.</p>
+        </div>
+
+        <div class="feature-item animate-fade-up delay-3">
+          <div class="feature-item__icon" aria-hidden="true">📨</div>
+          <h3 class="feature-item__title">Direct Contact</h3>
+          <p class="feature-item__text">No middlemen. Verified clubs send connection requests directly. When both sides agree, contact details are exchanged securely.</p>
+        </div>
+
+        <div class="feature-item animate-fade-up delay-4">
+          <div class="feature-item__icon" aria-hidden="true">🔒</div>
+          <h3 class="feature-item__title">Privacy First</h3>
+          <p class="feature-item__text">Your personal contact information remains private until you choose to share it. You are always in control of who sees your details.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__logo" aria-label="GOG">GOG</span>
+      <p class="footer__copy">&copy; 2026 Gateway of Goals. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNavbar('guest');
+    });
+
+    function switchHowTab(tab, clickedBtn) {
+      // Update tab buttons
+      document.querySelectorAll('.how-tab').forEach(function (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      clickedBtn.classList.add('active');
+      clickedBtn.setAttribute('aria-selected', 'true');
+
+      // Update panels
+      document.querySelectorAll('.tab-panel').forEach(function (panel) {
+        panel.classList.remove('active');
+      });
+      var panel = document.getElementById('panel-' + tab);
+      if (panel) panel.classList.add('active');
+    }
+  </script>
+</body>
+</html>
