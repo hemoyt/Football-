@@ -24,22 +24,23 @@ if (!is_array($body)) {
 }
 
 // Required fields
-$required = ['full_name', 'email', 'password', 'date_of_birth', 'position_primary', 'preferred_foot'];
+$required = ['full_name', 'email', 'password', 'date_of_birth', 'nationality', 'country_residence', 'position_primary', 'preferred_foot'];
 foreach ($required as $field) {
     if (!isset($body[$field]) || trim((string)$body[$field]) === '') {
         jsonError("Field '{$field}' is required.");
     }
 }
 
-$fullName       = trim((string)$body['full_name']);
-$email          = trim((string)$body['email']);
-$password       = (string)$body['password'];
-$dateOfBirth    = trim((string)$body['date_of_birth']);
-$positionPrimary = trim((string)$body['position_primary']);
-$preferredFoot  = trim((string)$body['preferred_foot']);
+$fullName         = trim((string)$body['full_name']);
+$email            = trim((string)$body['email']);
+$password         = (string)$body['password'];
+$dateOfBirth      = trim((string)$body['date_of_birth']);
+$nationality      = trim((string)$body['nationality']);
+$countryResidence = trim((string)$body['country_residence']);
+$positionPrimary  = trim((string)$body['position_primary']);
+$preferredFoot    = trim((string)$body['preferred_foot']);
 
 // Optional fields
-$nationality       = isset($body['nationality'])        ? trim((string)$body['nationality'])        : null;
 $positionSecondary = isset($body['position_secondary']) ? trim((string)$body['position_secondary']) : null;
 $heightCm          = isset($body['height_cm'])          ? (int)$body['height_cm']                   : null;
 $weightKg          = isset($body['weight_kg'])          ? (float)$body['weight_kg']                 : null;
@@ -106,21 +107,22 @@ try {
     // Insert into player_profiles
     $profileStmt = $db->prepare(
         "INSERT INTO player_profiles
-         (user_id, full_name, date_of_birth, position_primary, position_secondary,
-          preferred_foot, nationality, height_cm, weight_kg, bio, instagram_url,
+         (user_id, full_name, date_of_birth, nationality, country_residence, position_primary,
+          position_secondary, preferred_foot, height_cm, weight_kg, bio, instagram_url,
           youtube_url, photo_url, profile_views, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, NOW())"
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, NOW())"
     );
     $profileStmt->execute([
-        $userId, $fullName, $dateOfBirth, $positionPrimary, $positionSecondary,
-        $preferredFoot, $nationality, $heightCm, $weightKg, $bio, $instagramUrl, $youtubeUrl
+        $userId, $fullName, $dateOfBirth, $nationality, $countryResidence,
+        $positionPrimary, $positionSecondary, $preferredFoot,
+        $heightCm, $weightKg, $bio, $instagramUrl, $youtubeUrl
     ]);
     $profileId = (int)$db->lastInsertId();
 
     // Insert default player_skills record
     $skillsStmt = $db->prepare(
-        "INSERT INTO player_skills (player_profile_id, pace, shooting, passing, dribbling, defending, physical, created_at)
-         VALUES (?, 50, 50, 50, 50, 50, 50, NOW())"
+        "INSERT INTO player_skills (player_id, speed, dribbling, shooting, passing, defending, heading)
+         VALUES (?, 50, 50, 50, 50, 50, 50)"
     );
     $skillsStmt->execute([$profileId]);
 
@@ -141,9 +143,10 @@ try {
             'role'             => 'player',
             'full_name'        => $fullName,
             'date_of_birth'    => $dateOfBirth,
+            'nationality'      => $nationality,
+            'country_residence' => $countryResidence,
             'position_primary' => $positionPrimary,
             'preferred_foot'   => $preferredFoot,
-            'nationality'      => $nationality,
             'height_cm'        => $heightCm,
             'weight_kg'        => $weightKg,
             'bio'              => $bio,

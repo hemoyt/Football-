@@ -42,24 +42,17 @@ if ($method === 'GET') {
 
             // Log view if caller is a club
             if ($session['role'] === 'club') {
-                // Fetch club_profile id
-                $cStmt = $db->prepare("SELECT id FROM club_profiles WHERE user_id = ? LIMIT 1");
-                $cStmt->execute([$session['user_id']]);
-                $club = $cStmt->fetch();
+                $logStmt = $db->prepare(
+                    "INSERT INTO profile_views_log (player_id, viewed_by, viewed_at)
+                     VALUES (?, ?, NOW())"
+                );
+                $logStmt->execute([$targetId, $session['user_id']]);
 
-                if ($club) {
-                    $logStmt = $db->prepare(
-                        "INSERT INTO profile_views_log (player_profile_id, club_profile_id, viewed_at)
-                         VALUES (?, ?, NOW())"
-                    );
-                    $logStmt->execute([$targetId, $club['id']]);
-
-                    $updStmt = $db->prepare(
-                        "UPDATE player_profiles SET profile_views = profile_views + 1 WHERE id = ?"
-                    );
-                    $updStmt->execute([$targetId]);
-                    $player['profile_views'] = (int)$player['profile_views'] + 1;
-                }
+                $updStmt = $db->prepare(
+                    "UPDATE player_profiles SET profile_views = profile_views + 1 WHERE id = ?"
+                );
+                $updStmt->execute([$targetId]);
+                $player['profile_views'] = (int)$player['profile_views'] + 1;
             }
 
             unset($player['password_hash']);
