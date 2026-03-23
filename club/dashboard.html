@@ -1,13 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Club Dashboard — GOG</title>
+  <title>لوحة النادي — Got</title>
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/pages/dashboard.css">
+
+  <style>
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: var(--sp-4);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-5);
+      margin-bottom: var(--sp-6);
+    }
+
+    .filter-bar .form-group { margin-bottom: 0; }
+
+    .filter-bar .filter-actions {
+      display: flex; align-items: flex-end; gap: var(--sp-2);
+    }
+
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--sp-4);
+    }
+
+    .results-count {
+      font-size: 0.88rem; color: var(--text-secondary);
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--sp-5);
+      margin-bottom: var(--sp-8);
+    }
+
+    .page-header { margin-bottom: var(--sp-6); }
+    .page-header__title { font-size: 1.9rem; font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-1); }
+    .page-header__subtitle { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+    .dashboard-section { display: none; }
+    .dashboard-section.active { display: block; }
+
+    #pagination { margin-top: var(--sp-4); }
+
+    .saved-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--sp-5);
+    }
+
+    .requests-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+  </style>
 </head>
 <body data-page="club-dashboard">
 
@@ -19,24 +77,24 @@
       <div class="sidebar__profile">
         <div class="avatar avatar--lg avatar-placeholder" id="club-logo-placeholder" style="width:72px;height:72px;margin:0 auto;font-size:2rem;border-radius:var(--radius-btn)">🏟</div>
         <img id="club-logo" src="" alt="" class="avatar avatar--lg" style="display:none;margin:0 auto;border-radius:var(--radius-btn)">
-        <div class="sidebar__name" id="club-name">Club Name</div>
-        <div class="sidebar__role" id="club-country" style="font-size:0.8rem;color:var(--text-secondary)">Loading…</div>
+        <div class="sidebar__name" id="club-name">اسم النادي</div>
+        <div class="sidebar__role" id="club-country" style="font-size:0.8rem;color:var(--text-secondary)">جارٍ التحميل…</div>
         <div style="margin-top:var(--sp-2)" id="club-verified-badge"></div>
       </div>
 
       <nav class="sidebar__nav">
-        <a href="#" class="sidebar__link active" data-section="search" onclick="showSection('search',this)">
-          <span>🔍</span> Find Players
+        <a href="#" class="sidebar__link active" data-section="search" onclick="showSection('search',this);return false">
+          <span>🔍</span> البحث عن لاعبين
         </a>
-        <a href="#" class="sidebar__link" data-section="saved" onclick="showSection('saved',this)">
-          <span>🔖</span> Saved Players
+        <a href="#" class="sidebar__link" data-section="saved" onclick="showSection('saved',this);return false">
+          <span>🔖</span> اللاعبون المحفوظون
         </a>
-        <a href="#" class="sidebar__link" data-section="requests" onclick="showSection('requests',this)">
-          <span>📤</span> Sent Requests
+        <a href="#" class="sidebar__link" data-section="requests" onclick="showSection('requests',this);return false">
+          <span>📤</span> الطلبات المرسلة
         </a>
         <div class="divider"></div>
-        <a href="/login.html" class="sidebar__link" onclick="handleLogout();return false">
-          <span>🚪</span> Logout
+        <a href="#" class="sidebar__link" onclick="handleLogout();return false">
+          <span>🚪</span> تسجيل الخروج
         </a>
       </nav>
     </aside>
@@ -45,140 +103,102 @@
     <main class="dashboard-main">
 
       <!-- SECTION: Player Search -->
-      <section id="section-search" class="dashboard-section">
+      <section id="section-search" class="dashboard-section active">
         <div class="page-header">
-          <h1 class="page-header__title">Find Players</h1>
-          <p class="page-header__subtitle">Search and filter from our verified player database.</p>
+          <h1 class="page-header__title">البحث عن لاعبين</h1>
+          <p class="page-header__subtitle">تصفّح قاعدة بيانات اللاعبين الموثقين وابحث عن موهبتك القادمة.</p>
         </div>
 
         <!-- Filter Bar -->
         <div class="filter-bar">
           <div class="form-group">
-            <label class="form-label">Position</label>
+            <label class="form-label">المركز</label>
             <select class="form-select" id="filter-position">
-              <option value="">All Positions</option>
-              <option value="GK">GK — Goalkeeper</option>
-              <option value="CB">CB — Centre Back</option>
-              <option value="LB">LB — Left Back</option>
-              <option value="RB">RB — Right Back</option>
-              <option value="CDM">CDM — Defensive Mid</option>
-              <option value="CM">CM — Central Mid</option>
-              <option value="CAM">CAM — Attacking Mid</option>
-              <option value="LW">LW — Left Wing</option>
-              <option value="RW">RW — Right Wing</option>
-              <option value="ST">ST — Striker</option>
+              <option value="">جميع المراكز</option>
+              <option value="GK">GK — حارس مرمى</option>
+              <option value="CB">CB — مدافع وسط</option>
+              <option value="LB">LB — ظهير أيسر</option>
+              <option value="RB">RB — ظهير أيمن</option>
+              <option value="CDM">CDM — وسط دفاعي</option>
+              <option value="CM">CM — وسط</option>
+              <option value="CAM">CAM — وسط هجومي</option>
+              <option value="LW">LW — جناح أيسر</option>
+              <option value="RW">RW — جناح أيمن</option>
+              <option value="ST">ST — مهاجم</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Nationality</label>
-            <input class="form-input" type="text" id="filter-nationality" placeholder="e.g. Brazilian">
+            <label class="form-label">الجنسية</label>
+            <input class="form-input" type="text" id="filter-nationality" placeholder="مثال: سعودي، برازيلي">
           </div>
           <div class="form-group">
-            <label class="form-label">Preferred Foot</label>
+            <label class="form-label">القدم المفضلة</label>
             <select class="form-select" id="filter-foot">
-              <option value="">Any</option>
-              <option value="left">Left</option>
-              <option value="right">Right</option>
-              <option value="both">Both</option>
+              <option value="">أي قدم</option>
+              <option value="left">اليسرى</option>
+              <option value="right">اليمنى</option>
+              <option value="both">كلتاهما</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Age Min</label>
-            <input class="form-input" type="number" id="filter-age-min" placeholder="16" min="14" max="45">
+            <label class="form-label">العمر (من)</label>
+            <input class="form-input" type="number" id="filter-age-min" placeholder="١٦" min="14" max="45">
           </div>
           <div class="form-group">
-            <label class="form-label">Age Max</label>
-            <input class="form-input" type="number" id="filter-age-max" placeholder="35" min="14" max="45">
+            <label class="form-label">العمر (إلى)</label>
+            <input class="form-input" type="number" id="filter-age-max" placeholder="٣٥" min="14" max="45">
           </div>
-          <div class="form-group">
-            <label class="form-label">Min Height (cm)</label>
-            <input class="form-input" type="number" id="filter-height-min" placeholder="160" min="150" max="220">
-          </div>
-          <div style="align-self:flex-end">
-            <button id="search-btn" class="btn btn--primary">Search</button>
+          <div class="filter-actions">
+            <button class="btn btn--primary btn--full" id="search-btn" onclick="searchPlayers(1)">
+              بحث
+            </button>
           </div>
         </div>
 
-        <div class="search-header">
-          <span class="results-count" id="results-count">Loading…</span>
-          <button class="btn btn--ghost btn--sm" onclick="clearFilters()">Clear Filters</button>
+        <div class="results-header">
+          <span id="results-count" class="results-count"></span>
         </div>
 
-        <div class="grid-auto" id="players-grid">
-          <div class="flex-center" style="padding:var(--sp-16);grid-column:1/-1">
-            <div class="loader"></div>
-          </div>
-        </div>
-
+        <div id="players-grid" class="players-grid" aria-live="polite" aria-label="نتائج البحث"></div>
         <div id="pagination"></div>
       </section>
 
       <!-- SECTION: Saved Players -->
-      <section id="section-saved" class="dashboard-section" style="display:none">
+      <section id="section-saved" class="dashboard-section">
         <div class="page-header">
-          <h1 class="page-header__title">Saved Players</h1>
-          <p class="page-header__subtitle">Players you've bookmarked for easy access.</p>
+          <h1 class="page-header__title">اللاعبون المحفوظون</h1>
+          <p class="page-header__subtitle">اللاعبون الذين حفظتهم للمراجعة لاحقاً.</p>
         </div>
-        <div id="saved-players">
-          <div class="flex-center" style="padding:var(--sp-16)">
-            <div class="loader"></div>
-          </div>
-        </div>
+        <div id="saved-players" class="saved-list" aria-live="polite"></div>
       </section>
 
       <!-- SECTION: Sent Requests -->
-      <section id="section-requests" class="dashboard-section" style="display:none">
+      <section id="section-requests" class="dashboard-section">
         <div class="page-header">
-          <h1 class="page-header__title">Contact Requests</h1>
-          <p class="page-header__subtitle">Track the status of your outgoing player contact requests.</p>
+          <h1 class="page-header__title">الطلبات المرسلة</h1>
+          <p class="page-header__subtitle">سجل طلبات التواصل التي أرسلها ناديك.</p>
         </div>
-        <div id="sent-requests">
-          <div class="flex-center" style="padding:var(--sp-16)">
-            <div class="loader"></div>
-          </div>
-        </div>
+        <div id="sent-requests" class="requests-list" aria-live="polite"></div>
       </section>
 
     </main>
   </div>
 
   <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
   <script src="/js/club.js"></script>
   <script>
-    function showSection(name, linkEl) {
-      document.querySelectorAll('.dashboard-section').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
-      document.getElementById(`section-${name}`).style.display = 'block';
-      linkEl.classList.add('active');
+    function showSection(name, link) {
+      document.querySelectorAll('.dashboard-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.sidebar__link').forEach(function(l) { l.classList.remove('active'); });
+
+      var sec = document.getElementById('section-' + name);
+      if (sec) sec.classList.add('active');
+      if (link) link.classList.add('active');
 
       if (name === 'saved')    loadSavedPlayers();
       if (name === 'requests') loadSentRequests();
     }
-
-    function clearFilters() {
-      ['filter-position','filter-nationality','filter-foot','filter-age-min','filter-age-max','filter-height-min'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-      });
-      searchPlayers(1);
-    }
-
-    // Load club info for sidebar
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const club = await apiRequest('/api/club/profile.php');
-        document.getElementById('club-name').textContent = club.club_name;
-        document.getElementById('club-country').textContent = `${club.country}${club.league_division ? ' · ' + club.league_division : ''}`;
-        document.getElementById('club-verified-badge').innerHTML = verifiedBadge();
-        if (club.logo_url) {
-          const img = document.getElementById('club-logo');
-          img.src = club.logo_url;
-          img.style.display = 'block';
-          document.getElementById('club-logo-placeholder').style.display = 'none';
-        }
-      } catch { /* handled by club.js auth check */ }
-    });
   </script>
-
 </body>
 </html>

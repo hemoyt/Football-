@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sign in to your GOG account — Gateway of Goals football scouting platform.">
+  <meta name="description" content="تسجيل الدخول إلى حسابك في GOG — بوابة الأهداف.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0A0A0A">
-  <title>Login — GOG</title>
+  <title>تسجيل الدخول — GOG</title>
 
-  <!-- CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
 
   <style>
-    /* ── Auth page layout ── */
     .auth-page {
       min-height: 100vh;
       display: flex;
@@ -23,7 +25,7 @@
       justify-content: center;
       padding: var(--sp-8) var(--sp-4);
       background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.06), transparent),
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.07), transparent),
         var(--bg-primary);
     }
 
@@ -33,22 +35,16 @@
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius-card);
-      padding: var(--sp-8) var(--sp-8);
+      padding: var(--sp-10) var(--sp-8);
       box-shadow: var(--shadow-elevated);
-      animation: fadeSlideUp 0.45s ease both;
+      animation: fadeSlideUp 0.4s ease both;
     }
 
     .auth-card__logo {
       font-family: var(--font-display);
       font-size: 3.5rem;
       letter-spacing: 0.08em;
-      background: linear-gradient(
-        135deg,
-        var(--gold-dim) 0%,
-        var(--gold-primary) 40%,
-        var(--gold-light) 60%,
-        var(--gold-primary) 100%
-      );
+      background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold-primary) 40%, var(--gold-light) 60%, var(--gold-primary) 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -56,13 +52,13 @@
       animation: shimmer 4s linear infinite;
       text-align: center;
       display: block;
-      margin-bottom: var(--sp-6);
+      margin-bottom: var(--sp-4);
       text-decoration: none;
     }
 
     .auth-card__heading {
-      font-family: var(--font-display);
-      font-size: 2rem;
+      font-size: 1.6rem;
+      font-weight: 700;
       text-align: center;
       color: var(--text-primary);
       margin-bottom: var(--sp-1);
@@ -71,11 +67,11 @@
     .auth-card__sub {
       text-align: center;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       margin-bottom: var(--sp-8);
+      line-height: 1.6;
     }
 
-    /* Password field wrapper */
     .password-field {
       position: relative;
       display: flex;
@@ -83,12 +79,12 @@
     }
 
     .password-field .form-input {
-      padding-right: 48px;
+      padding-left: 48px;
     }
 
     .password-toggle {
       position: absolute;
-      right: 0;
+      left: 0;
       top: 0;
       height: 100%;
       width: 46px;
@@ -100,130 +96,126 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 0 var(--radius-input) var(--radius-input) 0;
+      border-radius: var(--radius-input) 0 0 var(--radius-input);
       transition: color var(--transition-fast);
     }
 
-    .password-toggle:hover {
-      color: var(--gold-primary);
-    }
+    .password-toggle:hover { color: var(--gold-primary); }
 
     .auth-forgot {
       display: block;
-      text-align: right;
+      text-align: start;
       font-size: 0.82rem;
       color: var(--text-secondary);
       margin-top: calc(-1 * var(--sp-2));
       margin-bottom: var(--sp-6);
-      cursor: default;
-      pointer-events: none;
       opacity: 0.5;
     }
 
-    .auth-divider {
-      height: 1px;
-      background: var(--border);
-      margin: var(--sp-6) 0;
+    .auth-divider { height: 1px; background: var(--border); margin: var(--sp-6) 0; }
+
+    .auth-footer-link { text-align: center; font-size: 0.88rem; color: var(--text-secondary); }
+    .auth-footer-link a { color: var(--gold-primary); font-weight: 700; }
+    .auth-footer-link a:hover { color: var(--gold-light); }
+
+    .auth-links-row {
+      display: flex;
+      gap: var(--sp-3);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--sp-4);
     }
 
-    .auth-footer-link {
-      text-align: center;
-      font-size: 0.88rem;
+    .auth-links-row a {
+      font-size: 0.82rem;
       color: var(--text-secondary);
+      text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      transition: all var(--transition-fast);
     }
 
-    .auth-footer-link a {
+    .auth-links-row a:hover {
+      border-color: var(--gold-dim);
       color: var(--gold-primary);
-      font-weight: 600;
-    }
-
-    .auth-footer-link a:hover {
-      color: var(--gold-light);
     }
 
     @media (max-width: 480px) {
-      .auth-card {
-        padding: var(--sp-6) var(--sp-6);
-      }
+      .auth-card { padding: var(--sp-8) var(--sp-5); }
     }
   </style>
 </head>
 <body data-page="login">
 
-  <!-- Navbar -->
   <div id="navbar-placeholder"></div>
 
   <main class="auth-page">
     <div class="auth-card">
 
-      <!-- Logo -->
-      <a href="/index.html" class="auth-card__logo" aria-label="GOG — Gateway of Goals">GOG</a>
+      <a href="/index.html" class="auth-card__logo" aria-label="GOG — بوابة الأهداف">GOG</a>
 
-      <!-- Heading -->
-      <h1 class="auth-card__heading">Welcome Back</h1>
-      <p class="auth-card__sub">Sign in to your GOG account</p>
+      <h1 class="auth-card__heading">أهلاً بعودتك 👋</h1>
+      <p class="auth-card__sub">سجّل دخولك للوصول إلى ملفك في GOG</p>
 
-      <!-- Login Form -->
       <form id="login-form" novalidate>
 
-        <!-- Email -->
         <div class="form-group">
-          <label class="form-label" for="email">Email Address</label>
+          <label class="form-label" for="email">البريد الإلكتروني</label>
           <input
             class="form-input"
             type="email"
             id="email"
             name="email"
-            placeholder="you@example.com"
+            placeholder="example@email.com"
             autocomplete="email"
             required
+            dir="ltr"
           >
         </div>
 
-        <!-- Password -->
         <div class="form-group">
-          <label class="form-label" for="password">Password</label>
+          <label class="form-label" for="password">كلمة المرور</label>
           <div class="password-field">
             <input
               class="form-input"
               type="password"
               id="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="أدخل كلمة المرور"
               autocomplete="current-password"
               required
+              dir="ltr"
             >
-            <button
-              type="button"
-              class="password-toggle"
-              aria-label="Toggle password visibility"
-            >👁</button>
+            <button type="button" class="password-toggle" aria-label="إظهار كلمة المرور">👁</button>
           </div>
         </div>
 
-        <!-- Forgot password -->
-        <span class="auth-forgot" title="Password reset coming soon">Forgot password?</span>
+        <span class="auth-forgot">نسيت كلمة المرور؟</span>
 
-        <!-- Submit -->
         <button type="submit" class="btn btn--primary btn--full btn--lg">
-          Sign In
+          تسجيل الدخول
         </button>
 
       </form>
 
       <div class="auth-divider"></div>
 
-      <!-- Footer link -->
       <p class="auth-footer-link">
-        Don't have an account?
-        <a href="/player/register.html">Get Started</a>
+        ليس لديك حساب؟
+        <a href="/player/register.html">ابدأ الآن</a>
       </p>
+
+      <div class="auth-links-row">
+        <a href="/player/register.html">تسجيل لاعب</a>
+        <a href="/club/register.html">تسجيل نادٍ</a>
+      </div>
 
     </div>
   </main>
 
-  <!-- Scripts -->
   <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
   <script src="/js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {

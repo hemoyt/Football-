@@ -1,5 +1,5 @@
 /**
- * GOG — Auth Logic
+ * Got — Auth Logic
  * Handles login, registration form submissions, and role detection.
  */
 
@@ -10,18 +10,18 @@
    ═══════════════════════════════════════ */
 async function handleLogin(e) {
   e.preventDefault();
-  const form = e.target;
+  const form     = e.target;
   const email    = form.querySelector('#email').value.trim();
   const password = form.querySelector('#password').value;
 
   if (!email || !password) {
-    renderToast('Please fill in all fields.', 'error');
+    renderToast('يرجى ملء جميع الحقول.', 'error');
     return;
   }
 
   const btn = form.querySelector('[type="submit"]');
-  btn.disabled = true;
-  btn.textContent = 'Signing in…';
+  btn.disabled    = true;
+  btn.textContent = 'جارٍ الدخول…';
 
   try {
     const res = await apiRequest('/api/auth/login.php', {
@@ -29,9 +29,8 @@ async function handleLogin(e) {
       body: JSON.stringify({ email, password }),
     });
 
-    renderToast('Welcome back!', 'success');
+    renderToast('أهلاً بك! 🎉', 'success');
 
-    // Redirect based on role
     setTimeout(() => {
       if      (res.role === 'player') window.location.href = '/player/dashboard.html';
       else if (res.role === 'club')   window.location.href = '/club/dashboard.html';
@@ -40,9 +39,9 @@ async function handleLogin(e) {
     }, 800);
 
   } catch (err) {
-    renderToast(err.message || 'Invalid credentials.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Sign In';
+    renderToast(err.message || 'بيانات الدخول غير صحيحة.', 'error');
+    btn.disabled    = false;
+    btn.textContent = 'تسجيل الدخول';
   }
 }
 
@@ -62,25 +61,24 @@ async function handlePlayerRegister(e) {
     nationality:        form.querySelector('#nationality').value.trim(),
     country_residence:  form.querySelector('#country_residence').value.trim(),
     position_primary:   form.querySelector('#position_primary').value,
-    position_secondary: form.querySelector('#position_secondary').value || null,
+    position_secondary: form.querySelector('#position_secondary')?.value || null,
     preferred_foot:     form.querySelector('#preferred_foot').value,
-    height_cm:          form.querySelector('#height_cm').value || null,
-    weight_kg:          form.querySelector('#weight_kg').value || null,
+    height_cm:          form.querySelector('#height_cm')?.value || null,
+    weight_kg:          form.querySelector('#weight_kg')?.value || null,
   };
 
-  // Client validation
-  if (!data.full_name || !data.email || !data.password || !data.date_of_birth || !data.position_primary) {
-    renderToast('Please fill in all required fields.', 'error');
+  if (!data.full_name || !data.email || !data.password || !data.date_of_birth || !data.position_primary || !data.nationality || !data.country_residence || !data.preferred_foot) {
+    renderToast('يرجى ملء جميع الحقول المطلوبة.', 'error');
     return;
   }
 
   if (data.password !== data.confirm_password) {
-    renderToast('Passwords do not match.', 'error');
+    renderToast('كلمتا المرور غير متطابقتين.', 'error');
     return;
   }
 
   if (data.password.length < 8) {
-    renderToast('Password must be at least 8 characters.', 'error');
+    renderToast('كلمة المرور يجب أن تكون ٨ أحرف على الأقل.', 'error');
     return;
   }
 
@@ -95,12 +93,12 @@ async function handlePlayerRegister(e) {
     });
 
     hideLoader();
-    renderToast('Account created! Build your profile.', 'success');
+    renderToast('تم إنشاء حسابك! ابنِ ملفك الآن.', 'success');
     setTimeout(() => { window.location.href = '/player/profile.html'; }, 1200);
 
   } catch (err) {
     hideLoader();
-    renderToast(err.message || 'Registration failed.', 'error');
+    renderToast(err.message || 'فشل التسجيل. حاول مرة أخرى.', 'error');
     btn.disabled = false;
   }
 }
@@ -111,20 +109,23 @@ async function handlePlayerRegister(e) {
 async function handleClubRegister(e) {
   e.preventDefault();
   const form = e.target;
-  const formData = new FormData(form);
 
-  const email    = form.querySelector('#email').value.trim();
+  const email   = form.querySelector('#email').value.trim();
   const password = form.querySelector('#password').value;
   const confirm  = form.querySelector('#confirm_password').value;
-  const docFile  = form.querySelector('#doc_file').files[0];
 
-  if (!docFile) {
-    renderToast('Please upload a verification document.', 'error');
+  if (!email || !password) {
+    renderToast('يرجى ملء جميع الحقول المطلوبة.', 'error');
     return;
   }
 
   if (password !== confirm) {
-    renderToast('Passwords do not match.', 'error');
+    renderToast('كلمتا المرور غير متطابقتين.', 'error');
+    return;
+  }
+
+  if (password.length < 8) {
+    renderToast('كلمة المرور يجب أن تكون ٨ أحرف على الأقل.', 'error');
     return;
   }
 
@@ -133,19 +134,20 @@ async function handleClubRegister(e) {
   renderLoader();
 
   try {
+    const formData = new FormData(form);
     await apiRequest('/api/auth/register-club.php', {
       method: 'POST',
       body: formData,
-      headers: {}, // let browser set Content-Type for FormData
+      headers: {},
     });
 
     hideLoader();
-    renderToast('Application submitted! You will be notified within 48 hours.', 'success', 5000);
+    renderToast('تم إرسال طلبك! ستتلقى إشعاراً خلال ٤٨ ساعة.', 'success', 5000);
     setTimeout(() => { window.location.href = '/club/pending.html'; }, 1500);
 
   } catch (err) {
     hideLoader();
-    renderToast(err.message || 'Registration failed.', 'error');
+    renderToast(err.message || 'فشل التسجيل. حاول مرة أخرى.', 'error');
     btn.disabled = false;
   }
 }
@@ -155,14 +157,14 @@ async function handleClubRegister(e) {
    ═══════════════════════════════════════ */
 async function handleAdminLogin(e) {
   e.preventDefault();
-  const form = e.target;
+  const form     = e.target;
   const email    = form.querySelector('#email').value.trim();
   const password = form.querySelector('#password').value;
   const secret   = form.querySelector('#admin_secret')?.value || '';
 
   const btn = form.querySelector('[type="submit"]');
-  btn.disabled = true;
-  btn.textContent = 'Authenticating…';
+  btn.disabled    = true;
+  btn.textContent = 'جارٍ المصادقة…';
 
   try {
     const res = await apiRequest('/api/auth/admin-login.php', {
@@ -170,15 +172,15 @@ async function handleAdminLogin(e) {
       body: JSON.stringify({ email, password, secret }),
     });
 
-    if (res.role !== 'admin') throw new Error('Unauthorized access.');
+    if (res.role !== 'admin') throw new Error('وصول غير مصرح.');
 
-    renderToast('Welcome, Administrator.', 'success');
+    renderToast('أهلاً بك، المدير.', 'success');
     setTimeout(() => { window.location.href = '/admin/dashboard.html'; }, 800);
 
   } catch (err) {
-    renderToast(err.message || 'Access denied.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Access Admin Panel';
+    renderToast(err.message || 'وصول مرفوض.', 'error');
+    btn.disabled    = false;
+    btn.textContent = 'دخول لوحة الإدارة';
   }
 }
 
@@ -189,7 +191,7 @@ function initPasswordToggles() {
   document.querySelectorAll('.password-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const input = btn.previousElementSibling;
-      if (!input) return;
+      if (!input || input.tagName !== 'INPUT') return;
       if (input.type === 'password') {
         input.type = 'text';
         btn.textContent = '🙈';
@@ -207,10 +209,10 @@ function initPasswordToggles() {
 document.addEventListener('DOMContentLoaded', () => {
   initPasswordToggles();
 
-  const loginForm         = document.getElementById('login-form');
-  const playerRegForm     = document.getElementById('player-register-form');
-  const clubRegForm       = document.getElementById('club-register-form');
-  const adminLoginForm    = document.getElementById('admin-login-form');
+  const loginForm      = document.getElementById('login-form');
+  const playerRegForm  = document.getElementById('player-register-form');
+  const clubRegForm    = document.getElementById('club-register-form');
+  const adminLoginForm = document.getElementById('admin-login-form');
 
   if (loginForm)      loginForm.addEventListener('submit', handleLogin);
   if (playerRegForm)  playerRegForm.addEventListener('submit', handlePlayerRegister);

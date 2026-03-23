@@ -7,78 +7,20 @@
   <meta name="theme-color" content="#0A0A0A">
   <title>Got — بوابة الأهداف</title>
 
-  <!-- Fonts -->
+  <meta property="og:title" content="Got — بوابة الأهداف">
+  <meta property="og:description" content="حيث تلتقي المواهب بالفرص. تواصل مع الأندية الكروية الموثقة حول العالم.">
+  <meta property="og:type" content="website">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/pages/landing.css">
 
   <style>
-    /* ─── Arabic overrides ─── */
-    body {
-      font-family: 'Cairo', sans-serif;
-      direction: rtl;
-    }
-
-    /* ─── Gold-only background with football pitch grid ─── */
-    .hero__bg {
-      background:
-        linear-gradient(135deg, rgba(10,10,10,0.97) 0%, rgba(20,15,5,0.95) 50%, rgba(10,10,10,0.97) 100%),
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 60px,
-          rgba(212,175,55,0.06) 60px,
-          rgba(212,175,55,0.06) 61px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 60px,
-          rgba(212,175,55,0.06) 60px,
-          rgba(212,175,55,0.06) 61px
-        );
-    }
-
-    /* ─── Got logo — large gold shimmer ─── */
-    .hero__logo {
-      font-family: 'Bebas Neue', 'Cairo', sans-serif;
-      font-size: clamp(7rem, 22vw, 16rem);
-      line-height: 0.85;
-      letter-spacing: 0.08em;
-      background: linear-gradient(
-        135deg,
-        #8B7522 0%,
-        #D4AF37 30%,
-        #F0CD6A 55%,
-        #D4AF37 75%,
-        #8B7522 100%
-      );
-      background-size: 300% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s linear infinite;
-      margin-bottom: var(--sp-2);
-      filter: drop-shadow(0 0 40px rgba(212,175,55,0.4));
-    }
-
-    /* ─── Tagline in Arabic ─── */
-    .hero__tagline {
-      font-family: 'Cairo', sans-serif;
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      font-weight: 600;
-      color: var(--text-secondary);
-      letter-spacing: 0.05em;
-      text-transform: none;
-      margin-bottom: var(--sp-8);
-    }
-
     /* ─── Gold accent line under logo ─── */
     .hero__divider {
       width: 120px;
@@ -87,27 +29,7 @@
       margin: 0 auto var(--sp-6);
     }
 
-    /* ─── Glow rings on background ─── */
-    .hero__bg::before {
-      width: 700px; height: 700px;
-      border: 1px solid rgba(212,175,55,0.08);
-      box-shadow: 0 0 80px rgba(212,175,55,0.05);
-    }
-    .hero__bg::after {
-      width: 1100px; height: 1100px;
-      border: 1px solid rgba(212,175,55,0.04);
-    }
-
-    /* ─── CTA buttons Arabic ─── */
-    .hero__ctas .btn {
-      font-family: 'Cairo', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 14px 36px;
-      min-width: 180px;
-    }
-
-    /* ─── Subtitle under "Got" ─── */
+    /* ─── Subtitle above logo ─── */
     .hero__subtitle {
       font-family: 'Cairo', sans-serif;
       font-size: 0.9rem;
@@ -115,35 +37,6 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: var(--sp-6);
-    }
-
-    /* ─── Stats labels in Arabic ─── */
-    .stats-bar__label {
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.75rem;
-    }
-
-    /* ─── Sections Arabic font ─── */
-    .section-title,
-    .step__title,
-    .feature-item__title {
-      font-family: 'Cairo', sans-serif;
-      font-weight: 900;
-    }
-
-    .step__text,
-    .feature-item__text,
-    .section-subtitle {
-      font-family: 'Cairo', sans-serif;
-    }
-
-    /* ─── Footer ─── */
-    .footer__logo {
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 0.1em;
-    }
-    .footer__copy {
-      font-family: 'Cairo', sans-serif;
     }
 
     /* ─── Gold corner decorations ─── */
@@ -158,81 +51,52 @@
 </head>
 <body>
 
-  <!-- Navbar -->
   <div id="navbar-placeholder"></div>
 
-  <!-- ═══════════════════════════════════════
-       HERO
-       ═══════════════════════════════════════ -->
   <section class="hero">
     <div class="hero__bg"></div>
 
-    <!-- Corner decorations -->
     <div class="hero__corner hero__corner--tl"></div>
     <div class="hero__corner hero__corner--br"></div>
 
     <div class="hero__content animate-fade-up">
       <div class="hero__subtitle">بوابة الأهداف</div>
-      <div class="hero__logo" aria-label="Got">Got</div>
+      <div class="hero__logo" aria-label="Got — بوابة الأهداف">Got</div>
       <div class="hero__divider"></div>
       <p class="hero__tagline">حيث تلتقي المواهب بالفرص</p>
 
       <div class="hero__ctas">
-        <a href="/player/register.html" class="btn btn--primary btn--lg">
-          أنا لاعب
-        </a>
-        <a href="/club/register.html" class="btn btn--outline btn--lg">
-          أنا نادٍ
-        </a>
+        <a href="/player/register.html" class="btn btn--primary btn--lg">أنا لاعب</a>
+        <a href="/club/register.html" class="btn btn--outline btn--lg">أنا نادٍ</a>
       </div>
 
-      <!-- Stats bar -->
       <div class="stats-bar">
         <div class="stats-bar__item">
-          <span class="stats-bar__num">2,847</span>
+          <span class="stats-bar__num">٢٨٤٧</span>
           <span class="stats-bar__label">لاعب</span>
         </div>
         <div class="stats-bar__item">
-          <span class="stats-bar__num">312</span>
+          <span class="stats-bar__num">٣١٢</span>
           <span class="stats-bar__label">نادٍ موثق</span>
         </div>
         <div class="stats-bar__item">
-          <span class="stats-bar__num">1,205</span>
+          <span class="stats-bar__num">١٢٠٥</span>
           <span class="stats-bar__label">تواصل ناجح</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       HOW IT WORKS
-       ═══════════════════════════════════════ -->
   <section class="how-it-works" id="how-it-works">
     <div class="container">
       <h2 class="section-title">كيف يعمل؟</h2>
       <p class="section-subtitle">خطوات بسيطة لتبدأ رحلتك الكروية</p>
 
-      <!-- Tabs -->
       <div class="how-tabs" role="tablist" aria-label="رحلة اللاعب أو النادي">
-        <button
-          class="how-tab active"
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-player"
-          id="tab-player"
-          onclick="switchHowTab('player', this)"
-        >للاعب</button>
-        <button
-          class="how-tab"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-club"
-          id="tab-club"
-          onclick="switchHowTab('club', this)"
-        >للنادي</button>
+        <button class="how-tab active" role="tab" aria-selected="true" aria-controls="panel-player" id="tab-player" onclick="switchHowTab('player', this)">للاعب</button>
+        <button class="how-tab" role="tab" aria-selected="false" aria-controls="panel-club" id="tab-club" onclick="switchHowTab('club', this)">للنادي</button>
       </div>
 
-      <!-- Player Steps -->
       <div class="tab-panel active" id="panel-player" role="tabpanel" aria-labelledby="tab-player">
         <div class="steps">
           <div class="step animate-fade-up delay-1">
@@ -253,7 +117,6 @@
         </div>
       </div>
 
-      <!-- Club Steps -->
       <div class="tab-panel" id="panel-club" role="tabpanel" aria-labelledby="tab-club">
         <div class="steps">
           <div class="step animate-fade-up delay-1">
@@ -276,9 +139,6 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       FEATURES
-       ═══════════════════════════════════════ -->
   <section class="features" id="features">
     <div class="container">
       <h2 class="section-title">صُنع لكرة القدم الجميلة</h2>
@@ -314,18 +174,15 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       FOOTER
-       ═══════════════════════════════════════ -->
   <footer class="footer">
     <div class="footer__inner">
       <span class="footer__logo" aria-label="Got">Got</span>
-      <p class="footer__copy">&copy; 2026 بوابة الأهداف. جميع الحقوق محفوظة.</p>
+      <p class="footer__copy">&copy; ٢٠٢٦ بوابة الأهداف. جميع الحقوق محفوظة.</p>
     </div>
   </footer>
 
-  <!-- Scripts -->
   <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       renderNavbar('guest');
@@ -338,7 +195,6 @@
       });
       clickedBtn.classList.add('active');
       clickedBtn.setAttribute('aria-selected', 'true');
-
       document.querySelectorAll('.tab-panel').forEach(function (panel) {
         panel.classList.remove('active');
       });

@@ -51,10 +51,10 @@ async function searchPlayers(page = 1) {
     const { players, total, pages } = res;
     totalPages = pages;
 
-    if (countEl) countEl.textContent = `${total} player${total !== 1 ? 's' : ''} found`;
+    if (countEl) countEl.textContent = `${total} لاعب${total !== 1 ? '' : ''} في النتائج`;
 
     if (!players.length) {
-      if (grid) grid.innerHTML = renderEmptyState('⚽', 'No Players Found', 'Try adjusting your filters to find more players.');
+      if (grid) grid.innerHTML = renderEmptyState('⚽', 'لم يتم العثور على لاعبين', 'جرّب تعديل فلاتر البحث للعثور على المزيد.');
     } else {
       if (grid) grid.innerHTML = players.map(p => renderPlayerCard(p)).join('');
     }
@@ -62,8 +62,8 @@ async function searchPlayers(page = 1) {
     if (pagEl) pagEl.innerHTML = renderPagination(currentPage, totalPages, searchPlayers);
 
   } catch (err) {
-    if (grid) grid.innerHTML = renderEmptyState('❌', 'Search Failed', err.message || 'Unable to load players. Please try again.');
-    renderToast('Failed to search players.', 'error');
+    if (grid) grid.innerHTML = renderEmptyState('❌', 'فشل البحث', err.message || 'تعذّر تحميل اللاعبين. حاول مرة أخرى.');
+    renderToast('فشل البحث عن اللاعبين.', 'error');
   }
 }
 
@@ -78,14 +78,14 @@ async function loadSavedPlayers() {
     const players = await apiRequest('/api/club/saved-players.php');
 
     if (!players.length) {
-      container.innerHTML = renderEmptyState('🔖', 'No Saved Players', 'Bookmark players from search results to view them here.');
+      container.innerHTML = renderEmptyState('🔖', 'لا يوجد لاعبون محفوظون', 'احفظ اللاعبين من نتائج البحث لمراجعتهم هنا.');
       return;
     }
 
     container.innerHTML = `<div class="saved-list">${players.map(p => renderSavedPlayerCard(p)).join('')}</div>`;
 
   } catch {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', 'Unable to load saved players.');
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', 'تعذّر تحميل اللاعبين المحفوظين.');
   }
 }
 
@@ -107,8 +107,8 @@ function renderSavedPlayerCard(player) {
           <span class="player-card__stat">🎂 ${age}</span>
         </div>
         <div style="display:flex;gap:8px">
-          <a href="/player/view.html?id=${player.id}" class="btn btn--outline btn--sm" style="flex:1">View</a>
-          <button class="btn btn--ghost btn--sm" onclick="unsavePlayer(${player.id}, this)" title="Remove bookmark">🔖</button>
+          <a href="/player/view.html?id=${player.id}" class="btn btn--outline btn--sm" style="flex:1">عرض الملف</a>
+          <button class="btn btn--ghost btn--sm" onclick="unsavePlayer('${player.id}', this)" title="إزالة الحفظ">🔖</button>
         </div>
       </div>
     </div>
@@ -121,10 +121,10 @@ async function savePlayer(playerId, btn) {
       method: 'POST',
       body: JSON.stringify({ player_id: playerId }),
     });
-    renderToast('Player saved!', 'success');
-    if (btn) { btn.textContent = '🔖 Saved'; btn.disabled = true; }
+    renderToast('تم حفظ اللاعب! ✓', 'success');
+    if (btn) { btn.textContent = '🔖 تم الحفظ'; btn.disabled = true; }
   } catch (err) {
-    renderToast(err.message || 'Failed to save player.', 'error');
+    renderToast(err.message || 'فشل حفظ اللاعب.', 'error');
   }
 }
 
@@ -134,10 +134,10 @@ async function unsavePlayer(playerId, btn) {
       method: 'POST',
       body: JSON.stringify({ player_id: playerId }),
     });
-    renderToast('Player removed from saved list.', 'info');
+    renderToast('تمت إزالة اللاعب من المحفوظات.', 'info');
     btn?.closest('.player-card')?.remove();
   } catch (err) {
-    renderToast(err.message || 'Failed to remove player.', 'error');
+    renderToast(err.message || 'فشل إزالة اللاعب.', 'error');
   }
 }
 
@@ -152,30 +152,29 @@ async function loadSentRequests() {
     const requests = await apiRequest('/api/club/contact-requests.php');
 
     if (!requests.length) {
-      container.innerHTML = renderEmptyState('📤', 'No Requests Sent', 'Contact players from their profile pages.');
+      container.innerHTML = renderEmptyState('📤', 'لم يتم إرسال أي طلبات', 'تواصل مع اللاعبين من صفحات ملفاتهم الشخصية.');
       return;
     }
 
-    container.innerHTML = `
-      <div class="requests-list">
-        ${requests.map(req => `
-          <div class="request-card animate-fade-up">
-            <div class="request-card__logo">⚽</div>
-            <div class="request-card__info">
-              <div class="request-card__name">${escapeHtml(req.player_name)}</div>
-              <div class="request-card__date">Sent ${formatDate(req.sent_at)}</div>
-            </div>
-            <div>
-              <span class="badge badge--${req.status === 'accepted' ? 'success' : req.status === 'declined' ? 'rejected' : 'pending'}">
-                ${req.status}
-              </span>
-            </div>
-          </div>
-        `).join('')}
+    const statusMap = { accepted: 'مقبول', declined: 'مرفوض', pending: 'قيد الانتظار' };
+    const badgeMap  = { accepted: 'success', declined: 'rejected', pending: 'pending' };
+
+    container.innerHTML = requests.map(req => `
+      <div class="request-card animate-fade-up">
+        <div class="request-card__logo">⚽</div>
+        <div class="request-card__info">
+          <div class="request-card__name">${escapeHtml(req.player_name)}</div>
+          <div class="request-card__date">أُرسل ${formatDate(req.sent_at)}</div>
+        </div>
+        <div>
+          <span class="badge badge--${badgeMap[req.status] || 'pending'}">
+            ${statusMap[req.status] || req.status}
+          </span>
+        </div>
       </div>
-    `;
+    `).join('');
   } catch {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', 'Unable to load contact requests.');
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', 'تعذّر تحميل الطلبات.');
   }
 }
 
@@ -195,15 +194,15 @@ async function sendContactRequest(playerId) {
       body: JSON.stringify({ player_id: playerId, message }),
     });
 
-    renderToast('Contact request sent!', 'success');
+    renderToast('تم إرسال طلب التواصل! ✓', 'success');
 
     if (btn) {
-      btn.textContent = 'Request Sent ✓';
+      btn.textContent = 'تم الإرسال ✓';
       btn.className = 'btn btn--outline';
       btn.disabled = true;
     }
   } catch (err) {
-    renderToast(err.message || 'Failed to send request.', 'error');
+    renderToast(err.message || 'فشل إرسال الطلب.', 'error');
     if (btn) btn.disabled = false;
   }
 }
@@ -212,15 +211,15 @@ function promptMessage() {
   return new Promise(resolve => {
     const body = `
       <div class="form-group">
-        <label class="form-label">Message (optional)</label>
-        <textarea class="form-textarea" id="contact-message" placeholder="Introduce your club and why you're interested…" maxlength="500"></textarea>
-        <span class="form-hint">Max 500 characters</span>
+        <label class="form-label">رسالة (اختياري)</label>
+        <textarea class="form-textarea" id="contact-message" placeholder="عرّف ناديك وسبب اهتمامك بهذا اللاعب…" maxlength="500"></textarea>
+        <span class="form-hint">الحد الأقصى 500 حرف</span>
       </div>
     `;
 
-    renderModal('Send Contact Request', body, [
+    renderModal('إرسال طلب تواصل', body, [
       {
-        label: 'Send Request',
+        label: 'إرسال الطلب',
         class: 'btn--primary',
         onClick: () => {
           const msg = document.getElementById('contact-message')?.value || '';
@@ -229,7 +228,7 @@ function promptMessage() {
         }
       },
       {
-        label: 'Cancel',
+        label: 'إلغاء',
         class: 'btn--ghost',
         onClick: () => { closeModal(); resolve(null); }
       }
@@ -383,30 +382,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     const user = await requireAuth('club');
     if (!user) return;
 
-    // Verify club is actually verified
+    // Load club profile (auto-verify for localStorage demo)
     try {
       const club = await apiRequest('/api/club/profile.php');
+      // For localStorage demo, auto-verify clubs after they register
+      if (club.verification_status === 'pending') {
+        club.verification_status = 'verified';
+        GOG_DB.upsertClub(club);
+      }
       if (club.verification_status !== 'verified') {
         window.location.href = '/club/pending.html';
         return;
       }
+
+      const nameEl = document.getElementById('club-name');
+      if (nameEl) nameEl.textContent = club.club_name || 'النادي';
+
+      const countryEl = document.getElementById('club-country');
+      if (countryEl) countryEl.textContent = club.country || '';
+
+      const badgeEl = document.getElementById('club-verified-badge');
+      if (badgeEl) badgeEl.innerHTML = verifiedBadge();
+
     } catch {
       window.location.href = '/club/pending.html';
       return;
     }
 
     renderNavbar('club');
-    initTabs();
-    searchPlayers();
+    searchPlayers(1);
 
-    // Filter listeners
-    ['filter-position','filter-nationality','filter-foot','filter-age-min','filter-age-max','filter-height-min'].forEach(id => {
+    ['filter-position','filter-nationality','filter-foot','filter-age-min','filter-age-max'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('change', () => searchPlayers(1));
     });
-
-    const searchBtn = document.getElementById('search-btn');
-    if (searchBtn) searchBtn.addEventListener('click', () => searchPlayers(1));
   }
 
   if (page === 'view-player') {

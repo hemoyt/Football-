@@ -45,8 +45,12 @@
 
   /* Typography */
   --font-display: 'Bebas Neue', 'Arial Black', sans-serif;
-  --font-body:    'DM Sans', 'Segoe UI', sans-serif;
-  --font-arabic:  'Cairo', 'DM Sans', sans-serif;
+  --font-body:    'Cairo', 'DM Sans', 'Segoe UI', sans-serif;
+  --font-arabic:  'Cairo', sans-serif;
+
+  /* Spacing additions */
+  --sp-5:  20px;
+  --sp-10: 40px;
 
   /* Transitions */
   --transition-fast:   150ms ease;
