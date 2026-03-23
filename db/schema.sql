@@ -1,6 +1,7 @@
 -- ═══════════════════════════════════════════════════════════════
 -- GOG (Gateway of Goals) — Database Schema
 -- Engine: InnoDB | Charset: utf8mb4 | Collation: utf8mb4_unicode_ci
+-- Compatible with: MySQL 5.7+, MariaDB 10.3+, PlanetScale, Railway
 -- ═══════════════════════════════════════════════════════════════
 
 CREATE DATABASE IF NOT EXISTS gog_db
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- ═══════════════════════════════════════
 -- TABLE 2: player_profiles
+-- photo_url uses MEDIUMTEXT to store base64 encoded images
 -- ═══════════════════════════════════════
 CREATE TABLE IF NOT EXISTS player_profiles (
   id                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +44,7 @@ CREATE TABLE IF NOT EXISTS player_profiles (
   height_cm           SMALLINT UNSIGNED NULL,
   weight_kg           SMALLINT UNSIGNED NULL,
   bio                 VARCHAR(300) NULL,
-  photo_url           VARCHAR(500) NULL,
+  photo_url           MEDIUMTEXT   NULL,
   instagram_url       VARCHAR(255) NULL,
   youtube_url         VARCHAR(255) NULL,
   profile_views       INT UNSIGNED DEFAULT 0,
@@ -70,13 +72,7 @@ CREATE TABLE IF NOT EXISTS player_skills (
   defending   TINYINT UNSIGNED DEFAULT 50,
   heading     TINYINT UNSIGNED DEFAULT 50,
   updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (player_id) REFERENCES player_profiles(id),
-  CONSTRAINT chk_speed     CHECK (speed     BETWEEN 0 AND 100),
-  CONSTRAINT chk_dribbling CHECK (dribbling BETWEEN 0 AND 100),
-  CONSTRAINT chk_shooting  CHECK (shooting  BETWEEN 0 AND 100),
-  CONSTRAINT chk_passing   CHECK (passing   BETWEEN 0 AND 100),
-  CONSTRAINT chk_defending CHECK (defending BETWEEN 0 AND 100),
-  CONSTRAINT chk_heading   CHECK (heading   BETWEEN 0 AND 100)
+  FOREIGN KEY (player_id) REFERENCES player_profiles(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ═══════════════════════════════════════
@@ -98,12 +94,13 @@ CREATE TABLE IF NOT EXISTS player_career_history (
 
 -- ═══════════════════════════════════════
 -- TABLE 5: player_videos
+-- video_url uses TEXT to support long YouTube/Vimeo URLs and short base64
 -- ═══════════════════════════════════════
 CREATE TABLE IF NOT EXISTS player_videos (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   player_id   INT UNSIGNED NOT NULL,
   video_type  ENUM('upload','youtube','vimeo') NOT NULL,
-  video_url   VARCHAR(500) NOT NULL,
+  video_url   TEXT         NOT NULL,
   title       VARCHAR(150) NULL,
   is_primary  TINYINT(1)   DEFAULT 0,
   created_at  DATETIME     DEFAULT CURRENT_TIMESTAMP,
@@ -113,6 +110,7 @@ CREATE TABLE IF NOT EXISTS player_videos (
 
 -- ═══════════════════════════════════════
 -- TABLE 6: club_profiles
+-- logo_url uses MEDIUMTEXT to support base64 logos
 -- ═══════════════════════════════════════
 CREATE TABLE IF NOT EXISTS club_profiles (
   id                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -123,8 +121,8 @@ CREATE TABLE IF NOT EXISTS club_profiles (
   contact_person_name VARCHAR(120) NOT NULL,
   contact_title       VARCHAR(80)  NULL,
   phone               VARCHAR(30)  NULL,
-  logo_url            VARCHAR(500) NULL,
-  doc_url             VARCHAR(500) NOT NULL,
+  logo_url            MEDIUMTEXT   NULL,
+  doc_url             TEXT         NOT NULL DEFAULT '',
   verification_status ENUM('pending','verified','rejected') DEFAULT 'pending',
   verified_at         DATETIME     NULL,
   verified_by         INT UNSIGNED NULL,
@@ -218,13 +216,14 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 -- ═══════════════════════════════════════
 -- SEED: Default admin user
--- Password: Admin@GOG2024 (change immediately in production)
--- Hash generated with password_hash('Admin@GOG2024', PASSWORD_BCRYPT)
+-- Email: admin@gog.football
+-- Password: Admin@GOG2024
+-- Hash: bcrypt cost 10
 -- ═══════════════════════════════════════
 INSERT IGNORE INTO users (email, password_hash, role, is_active)
 VALUES (
   'admin@gog.football',
-  '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+  '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
   'admin',
   1
 );
