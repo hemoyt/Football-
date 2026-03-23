@@ -36,7 +36,7 @@ try {
 
     $stmt = $db->prepare(
         "SELECT status FROM contact_requests
-         WHERE club_profile_id = ? AND player_profile_id = ?
+         WHERE club_id = ? AND player_id = ?
          LIMIT 1"
     );
     $stmt->execute([$club['id'], $playerId]);

@@ -39,7 +39,7 @@ try {
     }
 
     $delStmt = $db->prepare(
-        "DELETE FROM saved_players WHERE club_profile_id = ? AND player_profile_id = ?"
+        "DELETE FROM saved_players WHERE club_id = ? AND player_id = ?"
     );
     $delStmt->execute([$club['id'], $playerId]);
 

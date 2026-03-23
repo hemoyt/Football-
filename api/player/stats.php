@@ -34,7 +34,7 @@ try {
 
     // Count total contact requests
     $totalStmt = $db->prepare(
-        "SELECT COUNT(*) AS total FROM contact_requests WHERE player_profile_id = ?"
+        "SELECT COUNT(*) AS total FROM contact_requests WHERE player_id = ?"
     );
     $totalStmt->execute([$profileId]);
     $totalRow = $totalStmt->fetch();
@@ -42,7 +42,7 @@ try {
     // Count accepted contact requests
     $acceptedStmt = $db->prepare(
         "SELECT COUNT(*) AS total FROM contact_requests
-         WHERE player_profile_id = ? AND status = 'accepted'"
+         WHERE player_id = ? AND status = 'accepted'"
     );
     $acceptedStmt->execute([$profileId]);
     $acceptedRow = $acceptedStmt->fetch();

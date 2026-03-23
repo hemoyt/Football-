@@ -50,9 +50,9 @@ try {
         jsonError('Player not found.', 404);
     }
 
-    // INSERT IGNORE silently handles duplicate (unique constraint on club_profile_id + player_profile_id)
+    // INSERT IGNORE silently handles duplicate (unique constraint on club_id + player_id)
     $insStmt = $db->prepare(
-        "INSERT IGNORE INTO saved_players (club_profile_id, player_profile_id, saved_at)
+        "INSERT IGNORE INTO saved_players (club_id, player_id, saved_at)
          VALUES (?, ?, NOW())"
     );
     $insStmt->execute([$club['id'], $playerId]);

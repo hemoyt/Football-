@@ -45,27 +45,20 @@ try {
         jsonError('Player not found.', 404);
     }
 
-    // Fetch the club_profile id for the viewing club
-    $cStmt = $db->prepare("SELECT id FROM club_profiles WHERE user_id = ? LIMIT 1");
-    $cStmt->execute([$session['user_id']]);
-    $club = $cStmt->fetch();
+    // Log this view
+    $logStmt = $db->prepare(
+        "INSERT INTO profile_views_log (player_id, viewed_by, viewed_at)
+         VALUES (?, ?, NOW())"
+    );
+    $logStmt->execute([$playerId, $session['user_id']]);
 
-    if ($club) {
-        // Log this view
-        $logStmt = $db->prepare(
-            "INSERT INTO profile_views_log (player_profile_id, club_profile_id, viewed_at)
-             VALUES (?, ?, NOW())"
-        );
-        $logStmt->execute([$playerId, $club['id']]);
+    // Increment view counter
+    $updStmt = $db->prepare(
+        "UPDATE player_profiles SET profile_views = profile_views + 1 WHERE id = ?"
+    );
+    $updStmt->execute([$playerId]);
 
-        // Increment view counter
-        $updStmt = $db->prepare(
-            "UPDATE player_profiles SET profile_views = profile_views + 1 WHERE id = ?"
-        );
-        $updStmt->execute([$playerId]);
-
-        $player['profile_views'] = (int)$player['profile_views'] + 1;
-    }
+    $player['profile_views'] = (int)$player['profile_views'] + 1;
 
     jsonSuccess($player);
 

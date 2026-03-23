@@ -1,22 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GOG — Gateway of Goals. The football scouting platform where talent meets opportunity. Connect players with verified clubs worldwide.">
+  <meta name="description" content="Got — منصة الكشافة الكروية. حيث تلتقي المواهب بالفرص. اربط لاعبيك مع الأندية الموثقة حول العالم.">
   <meta name="theme-color" content="#0A0A0A">
-  <title>GOG — Gateway of Goals</title>
+  <title>Got — بوابة الأهداف</title>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="GOG — Gateway of Goals">
-  <meta property="og:description" content="Where talent meets opportunity. Connect with verified football clubs worldwide.">
-  <meta property="og:type" content="website">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/pages/landing.css">
+
+  <style>
+    /* ─── Arabic overrides ─── */
+    body {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+    }
+
+    /* ─── Gold-only background with football pitch grid ─── */
+    .hero__bg {
+      background:
+        linear-gradient(135deg, rgba(10,10,10,0.97) 0%, rgba(20,15,5,0.95) 50%, rgba(10,10,10,0.97) 100%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(212,175,55,0.06) 60px,
+          rgba(212,175,55,0.06) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(212,175,55,0.06) 60px,
+          rgba(212,175,55,0.06) 61px
+        );
+    }
+
+    /* ─── Got logo — large gold shimmer ─── */
+    .hero__logo {
+      font-family: 'Bebas Neue', 'Cairo', sans-serif;
+      font-size: clamp(7rem, 22vw, 16rem);
+      line-height: 0.85;
+      letter-spacing: 0.08em;
+      background: linear-gradient(
+        135deg,
+        #8B7522 0%,
+        #D4AF37 30%,
+        #F0CD6A 55%,
+        #D4AF37 75%,
+        #8B7522 100%
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+      margin-bottom: var(--sp-2);
+      filter: drop-shadow(0 0 40px rgba(212,175,55,0.4));
+    }
+
+    /* ─── Tagline in Arabic ─── */
+    .hero__tagline {
+      font-family: 'Cairo', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      text-transform: none;
+      margin-bottom: var(--sp-8);
+    }
+
+    /* ─── Gold accent line under logo ─── */
+    .hero__divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+      margin: 0 auto var(--sp-6);
+    }
+
+    /* ─── Glow rings on background ─── */
+    .hero__bg::before {
+      width: 700px; height: 700px;
+      border: 1px solid rgba(212,175,55,0.08);
+      box-shadow: 0 0 80px rgba(212,175,55,0.05);
+    }
+    .hero__bg::after {
+      width: 1100px; height: 1100px;
+      border: 1px solid rgba(212,175,55,0.04);
+    }
+
+    /* ─── CTA buttons Arabic ─── */
+    .hero__ctas .btn {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      min-width: 180px;
+    }
+
+    /* ─── Subtitle under "Got" ─── */
+    .hero__subtitle {
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-6);
+    }
+
+    /* ─── Stats labels in Arabic ─── */
+    .stats-bar__label {
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.75rem;
+    }
+
+    /* ─── Sections Arabic font ─── */
+    .section-title,
+    .step__title,
+    .feature-item__title {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 900;
+    }
+
+    .step__text,
+    .feature-item__text,
+    .section-subtitle {
+      font-family: 'Cairo', sans-serif;
+    }
+
+    /* ─── Footer ─── */
+    .footer__logo {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.1em;
+    }
+    .footer__copy {
+      font-family: 'Cairo', sans-serif;
+    }
+
+    /* ─── Gold corner decorations ─── */
+    .hero__corner {
+      position: absolute;
+      width: 80px; height: 80px;
+      opacity: 0.3;
+    }
+    .hero__corner--tl { top: 40px; right: 40px; border-top: 2px solid #D4AF37; border-right: 2px solid #D4AF37; }
+    .hero__corner--br { bottom: 40px; left: 40px; border-bottom: 2px solid #D4AF37; border-left: 2px solid #D4AF37; }
+  </style>
 </head>
 <body>
 
@@ -29,32 +167,38 @@
   <section class="hero">
     <div class="hero__bg"></div>
 
+    <!-- Corner decorations -->
+    <div class="hero__corner hero__corner--tl"></div>
+    <div class="hero__corner hero__corner--br"></div>
+
     <div class="hero__content animate-fade-up">
-      <div class="hero__logo" aria-label="GOG — Gateway of Goals">GOG</div>
-      <p class="hero__tagline">Where talent meets opportunity</p>
+      <div class="hero__subtitle">بوابة الأهداف</div>
+      <div class="hero__logo" aria-label="Got">Got</div>
+      <div class="hero__divider"></div>
+      <p class="hero__tagline">حيث تلتقي المواهب بالفرص</p>
 
       <div class="hero__ctas">
         <a href="/player/register.html" class="btn btn--primary btn--lg">
-          I'm a Player
+          أنا لاعب
         </a>
         <a href="/club/register.html" class="btn btn--outline btn--lg">
-          I'm a Club
+          أنا نادٍ
         </a>
       </div>
 
-      <!-- Stats bar inside hero, anchored at bottom of content -->
+      <!-- Stats bar -->
       <div class="stats-bar">
         <div class="stats-bar__item">
           <span class="stats-bar__num">2,847</span>
-          <span class="stats-bar__label">Players</span>
+          <span class="stats-bar__label">لاعب</span>
         </div>
         <div class="stats-bar__item">
           <span class="stats-bar__num">312</span>
-          <span class="stats-bar__label">Verified Clubs</span>
+          <span class="stats-bar__label">نادٍ موثق</span>
         </div>
         <div class="stats-bar__item">
           <span class="stats-bar__num">1,205</span>
-          <span class="stats-bar__label">Connections Made</span>
+          <span class="stats-bar__label">تواصل ناجح</span>
         </div>
       </div>
     </div>
@@ -65,11 +209,11 @@
        ═══════════════════════════════════════ -->
   <section class="how-it-works" id="how-it-works">
     <div class="container">
-      <h2 class="section-title">How It Works</h2>
-      <p class="section-subtitle">Simple steps to kickstart your football journey</p>
+      <h2 class="section-title">كيف يعمل؟</h2>
+      <p class="section-subtitle">خطوات بسيطة لتبدأ رحلتك الكروية</p>
 
       <!-- Tabs -->
-      <div class="how-tabs" role="tablist" aria-label="Player or Club journey">
+      <div class="how-tabs" role="tablist" aria-label="رحلة اللاعب أو النادي">
         <button
           class="how-tab active"
           role="tab"
@@ -77,7 +221,7 @@
           aria-controls="panel-player"
           id="tab-player"
           onclick="switchHowTab('player', this)"
-        >Player</button>
+        >للاعب</button>
         <button
           class="how-tab"
           role="tab"
@@ -85,26 +229,26 @@
           aria-controls="panel-club"
           id="tab-club"
           onclick="switchHowTab('club', this)"
-        >Club</button>
+        >للنادي</button>
       </div>
 
       <!-- Player Steps -->
       <div class="tab-panel active" id="panel-player" role="tabpanel" aria-labelledby="tab-player">
         <div class="steps">
           <div class="step animate-fade-up delay-1">
-            <div class="step__number">1</div>
-            <h3 class="step__title">Create Profile</h3>
-            <p class="step__text">Sign up and build your complete player profile — stats, position, nationality, and more.</p>
+            <div class="step__number">١</div>
+            <h3 class="step__title">أنشئ ملفك</h3>
+            <p class="step__text">سجّل وأنشئ ملفك الكامل — المركز، الجنسية، الإحصائيات، وكل ما يميزك.</p>
           </div>
           <div class="step animate-fade-up delay-2">
-            <div class="step__number">2</div>
-            <h3 class="step__title">Upload Highlights</h3>
-            <p class="step__text">Share your best moments. Upload match videos and photos to showcase your abilities.</p>
+            <div class="step__number">٢</div>
+            <h3 class="step__title">ارفع مقاطعك</h3>
+            <p class="step__text">شارك أفضل لحظاتك. ارفع فيديوهات المباريات وصورك لتعرض مهاراتك.</p>
           </div>
           <div class="step animate-fade-up delay-3">
-            <div class="step__number">3</div>
-            <h3 class="step__title">Get Scouted</h3>
-            <p class="step__text">Verified clubs browse your profile and reach out directly when they find their next star.</p>
+            <div class="step__number">٣</div>
+            <h3 class="step__title">تواصل مع الأندية</h3>
+            <p class="step__text">الأندية الموثقة تتصفح ملفك وتتواصل معك مباشرة عندما تجد نجمها القادم.</p>
           </div>
         </div>
       </div>
@@ -113,19 +257,19 @@
       <div class="tab-panel" id="panel-club" role="tabpanel" aria-labelledby="tab-club">
         <div class="steps">
           <div class="step animate-fade-up delay-1">
-            <div class="step__number">1</div>
-            <h3 class="step__title">Register Club</h3>
-            <p class="step__text">Create your club account and submit your official details and documentation for review.</p>
+            <div class="step__number">١</div>
+            <h3 class="step__title">سجّل ناديك</h3>
+            <p class="step__text">أنشئ حساب ناديك وقدّم بياناتك الرسمية ووثائقك للمراجعة.</p>
           </div>
           <div class="step animate-fade-up delay-2">
-            <div class="step__number">2</div>
-            <h3 class="step__title">Get Verified</h3>
-            <p class="step__text">Our admin team reviews your submission within 48 hours and grants verified club status.</p>
+            <div class="step__number">٢</div>
+            <h3 class="step__title">احصل على التوثيق</h3>
+            <p class="step__text">فريقنا يراجع طلبك خلال 48 ساعة ويمنحك صفة النادي الموثق.</p>
           </div>
           <div class="step animate-fade-up delay-3">
-            <div class="step__number">3</div>
-            <h3 class="step__title">Scout Players</h3>
-            <p class="step__text">Browse our full roster of talented players. Filter by position, age, nationality, and foot.</p>
+            <div class="step__number">٣</div>
+            <h3 class="step__title">اكتشف المواهب</h3>
+            <p class="step__text">تصفح قائمة كاملة من اللاعبين الموهوبين. فلتر بالمركز، العمر، الجنسية، والقدم المفضلة.</p>
           </div>
         </div>
       </div>
@@ -137,33 +281,33 @@
        ═══════════════════════════════════════ -->
   <section class="features" id="features">
     <div class="container">
-      <h2 class="section-title">Built for the Beautiful Game</h2>
-      <p class="section-subtitle">Everything a player and a club needs — nothing they don't</p>
+      <h2 class="section-title">صُنع لكرة القدم الجميلة</h2>
+      <p class="section-subtitle">كل ما يحتاجه اللاعب والنادي — بدون تعقيد</p>
 
       <div class="features-grid">
 
         <div class="feature-item animate-fade-up delay-1">
           <div class="feature-item__icon" aria-hidden="true">🛡</div>
-          <h3 class="feature-item__title">Verified Clubs Only</h3>
-          <p class="feature-item__text">Every club on GOG goes through a strict verification process. Players never have to worry about fake interest or fraudulent approaches.</p>
+          <h3 class="feature-item__title">أندية موثقة فقط</h3>
+          <p class="feature-item__text">كل نادٍ في Got يمر بعملية توثيق صارمة. لا تقلق من عروض وهمية أو احتيال.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-2">
           <div class="feature-item__icon" aria-hidden="true">⚽</div>
-          <h3 class="feature-item__title">Player Showcase</h3>
-          <p class="feature-item__text">Your profile is your stage. Upload highlight reels, photos, and stats to craft a compelling football CV that speaks for itself.</p>
+          <h3 class="feature-item__title">عرض موهبتك</h3>
+          <p class="feature-item__text">ملفك هو منصتك. ارفع الفيديوهات والصور والإحصائيات لتصنع سيرتك الكروية الاحترافية.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-3">
           <div class="feature-item__icon" aria-hidden="true">📨</div>
-          <h3 class="feature-item__title">Direct Contact</h3>
-          <p class="feature-item__text">No middlemen. Verified clubs send connection requests directly. When both sides agree, contact details are exchanged securely.</p>
+          <h3 class="feature-item__title">تواصل مباشر</h3>
+          <p class="feature-item__text">بدون وسطاء. الأندية الموثقة ترسل طلبات تواصل مباشرة. عند الموافقة تُتبادل بيانات الاتصال بأمان.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-4">
           <div class="feature-item__icon" aria-hidden="true">🔒</div>
-          <h3 class="feature-item__title">Privacy First</h3>
-          <p class="feature-item__text">Your personal contact information remains private until you choose to share it. You are always in control of who sees your details.</p>
+          <h3 class="feature-item__title">خصوصيتك أولاً</h3>
+          <p class="feature-item__text">بياناتك الشخصية تبقى سرية حتى تقرر مشاركتها. أنت دائماً تتحكم بمن يرى معلوماتك.</p>
         </div>
 
       </div>
@@ -175,8 +319,8 @@
        ═══════════════════════════════════════ -->
   <footer class="footer">
     <div class="footer__inner">
-      <span class="footer__logo" aria-label="GOG">GOG</span>
-      <p class="footer__copy">&copy; 2026 Gateway of Goals. All rights reserved.</p>
+      <span class="footer__logo" aria-label="Got">Got</span>
+      <p class="footer__copy">&copy; 2026 بوابة الأهداف. جميع الحقوق محفوظة.</p>
     </div>
   </footer>
 
@@ -188,7 +332,6 @@
     });
 
     function switchHowTab(tab, clickedBtn) {
-      // Update tab buttons
       document.querySelectorAll('.how-tab').forEach(function (btn) {
         btn.classList.remove('active');
         btn.setAttribute('aria-selected', 'false');
@@ -196,7 +339,6 @@
       clickedBtn.classList.add('active');
       clickedBtn.setAttribute('aria-selected', 'true');
 
-      // Update panels
       document.querySelectorAll('.tab-panel').forEach(function (panel) {
         panel.classList.remove('active');
       });

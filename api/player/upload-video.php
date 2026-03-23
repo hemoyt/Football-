@@ -83,7 +83,7 @@ try {
     $title = isset($_POST['title']) ? trim((string)$_POST['title']) : null;
 
     $insStmt = $db->prepare(
-        "INSERT INTO player_videos (player_profile_id, url, type, title, created_at)
+        "INSERT INTO player_videos (player_id, video_url, video_type, title, created_at)
          VALUES (?, ?, 'upload', ?, NOW())"
     );
     $insStmt->execute([$profile['id'], $videoUrl, $title]);

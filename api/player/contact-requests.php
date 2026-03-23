@@ -30,12 +30,12 @@ try {
 
     $stmt = $db->prepare(
         "SELECT cr.id, cr.status, cr.message, cr.sent_at, cr.responded_at,
-                cp.id AS club_profile_id, cp.club_name, cp.country, cp.city, cp.logo_url,
+                cp.id AS club_id, cp.club_name, cp.country, cp.logo_url,
                 u.email AS club_email
          FROM contact_requests cr
-         JOIN club_profiles cp ON cp.id = cr.club_profile_id
+         JOIN club_profiles cp ON cp.id = cr.club_id
          JOIN users u ON u.id = cp.user_id
-         WHERE cr.player_profile_id = ?
+         WHERE cr.player_id = ?
          ORDER BY cr.sent_at DESC"
     );
     $stmt->execute([$profile['id']]);

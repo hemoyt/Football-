@@ -32,8 +32,8 @@ if ($message === '') {
     jsonError('A message is required.');
 }
 
-if (mb_strlen($message) > 2000) {
-    jsonError('Message must not exceed 2000 characters.');
+if (mb_strlen($message) > 500) {
+    jsonError('Message must not exceed 500 characters.');
 }
 
 try {
@@ -71,7 +71,7 @@ try {
     // Check for existing request (before insert, to give a cleaner error)
     $dupStmt = $db->prepare(
         "SELECT id FROM contact_requests
-         WHERE club_profile_id = ? AND player_profile_id = ?
+         WHERE club_id = ? AND player_id = ?
          LIMIT 1"
     );
     $dupStmt->execute([$club['id'], $playerId]);
@@ -83,7 +83,7 @@ try {
 
     // Insert contact request
     $insStmt = $db->prepare(
-        "INSERT INTO contact_requests (club_profile_id, player_profile_id, message, status, sent_at)
+        "INSERT INTO contact_requests (club_id, player_id, message, status, sent_at)
          VALUES (?, ?, ?, 'pending', NOW())"
     );
     $insStmt->execute([$club['id'], $playerId, $message]);
@@ -91,10 +91,10 @@ try {
 
     // Notify the player
     $notifStmt = $db->prepare(
-        "INSERT INTO notifications (user_id, type, reference_id, message, is_read, created_at)
-         VALUES (?, 'contact_request', ?, 'A verified club has sent you a contact request.', 0, NOW())"
+        "INSERT INTO notifications (user_id, type, title, body, is_read, created_at)
+         VALUES (?, 'contact_request', 'New Contact Request', 'A verified club has sent you a contact request.', 0, NOW())"
     );
-    $notifStmt->execute([$player['user_id'], $requestId]);
+    $notifStmt->execute([$player['user_id']]);
 
     $db->commit();
 
