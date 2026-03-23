@@ -15,36 +15,35 @@
 function renderNavbar(role = 'guest') {
   const links = {
     guest: [
-      { href: '/index.html',          label: 'Home' },
-      { href: '/login.html',          label: 'Login' },
+      { href: '/index.html',          label: 'الرئيسية' },
+      { href: '/login.html',          label: 'تسجيل الدخول' },
     ],
     player: [
-      { href: '/player/dashboard.html', label: 'Dashboard' },
-      { href: '/player/profile.html',   label: 'My Profile' },
+      { href: '/player/dashboard.html', label: 'لوحة التحكم' },
+      { href: '/player/profile.html',   label: 'ملفي الشخصي' },
     ],
     club: [
-      { href: '/club/dashboard.html',   label: 'Dashboard' },
-      { href: '/club/dashboard.html#search', label: 'Find Players' },
+      { href: '/club/dashboard.html',   label: 'لوحة التحكم' },
     ],
     admin: [
-      { href: '/admin/dashboard.html',  label: 'Admin Panel' },
+      { href: '/admin/dashboard.html',  label: 'لوحة الإدارة' },
     ],
   };
 
   const actions = {
     guest: `
-      <a href="/login.html"          class="btn btn--ghost btn--sm">Login</a>
-      <a href="/player/register.html" class="btn btn--primary btn--sm">Get Started</a>
+      <a href="/login.html"           class="btn btn--ghost btn--sm">دخول</a>
+      <a href="/player/register.html" class="btn btn--primary btn--sm">ابدأ الآن</a>
     `,
     player: `
-      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">Logout</button>
+      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">خروج</button>
     `,
     club: `
-      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">Logout</button>
+      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">خروج</button>
     `,
     admin: `
-      <span class="badge badge--verified" style="margin-right:8px">ADMIN</span>
-      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">Logout</button>
+      <span class="badge badge--verified" style="margin-left:8px">مدير</span>
+      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">خروج</button>
     `,
   };
 
@@ -58,7 +57,7 @@ function renderNavbar(role = 'guest') {
   const html = `
     <nav class="navbar">
       <div class="navbar__inner">
-        <a href="/index.html" class="navbar__logo">GOG</a>
+        <a href="/index.html" class="navbar__logo">Got</a>
         <div class="navbar__links hide-mobile">
           ${navLinks}
         </div>
@@ -97,7 +96,7 @@ function getToastContainer() {
  * @param {string} type  - 'success' | 'error' | 'info'
  * @param {number} duration - ms before auto-dismiss (default 3000)
  */
-function renderToast(msg, type = 'info', duration = 3000) {
+function renderToast(msg, type = 'info', duration = 3500) {
   const icons = { success: '✓', error: '✕', info: 'ℹ' };
   const container = getToastContainer();
 
@@ -341,7 +340,7 @@ function renderPagination(current, total, onPage) {
  */
 function renderPlayerCard(player) {
   const photo = player.photo_url
-    ? `<img src="${player.photo_url}" class="player-card__photo" alt="${player.full_name}" loading="lazy">`
+    ? `<img src="${player.photo_url}" class="player-card__photo" alt="${escapeHtml(player.full_name)}" loading="lazy">`
     : `<div class="player-card__photo-placeholder">⚽</div>`;
 
   const age = player.date_of_birth
@@ -357,9 +356,9 @@ function renderPlayerCard(player) {
           ${positionBadge(player.position_primary)}
           <span class="player-card__stat">📍 ${escapeHtml(player.nationality)}</span>
           <span class="player-card__stat">🎂 ${age}</span>
-          ${player.height_cm ? `<span class="player-card__stat">📏 ${player.height_cm}cm</span>` : ''}
+          ${player.height_cm ? `<span class="player-card__stat">📏 ${player.height_cm} سم</span>` : ''}
         </div>
-        <a href="/player/view.html?id=${player.id}" class="btn btn--outline btn--sm btn--full">View Profile</a>
+        <a href="/player/view.html?id=${player.id}" class="btn btn--outline btn--sm btn--full">عرض الملف</a>
       </div>
     </div>
   `;
@@ -380,7 +379,7 @@ function escapeHtml(str) {
 
 function formatDate(dateStr) {
   if (!dateStr) return '—';
-  return new Date(dateStr).toLocaleDateString('en-GB', {
+  return new Date(dateStr).toLocaleDateString('ar-SA', {
     day: '2-digit', month: 'short', year: 'numeric'
   });
 }
