@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GOG — بوابة الأهداف. منصة الكشافة الكروية التي تربط المواهب بالأندية الموثقة حول العالم.">
+  <meta name="description" content="Got — منصة الكشافة الكروية. حيث تلتقي المواهب بالفرص. اربط لاعبيك مع الأندية الموثقة حول العالم.">
   <meta name="theme-color" content="#0A0A0A">
-  <title>GOG — بوابة الأهداف</title>
+  <title>Got — بوابة الأهداف</title>
 
-  <meta property="og:title" content="GOG — بوابة الأهداف">
+  <meta property="og:title" content="Got — بوابة الأهداف">
   <meta property="og:description" content="حيث تلتقي المواهب بالفرص. تواصل مع الأندية الكروية الموثقة حول العالم.">
   <meta property="og:type" content="website">
 
@@ -19,25 +19,55 @@
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/pages/landing.css">
+
+  <style>
+    /* ─── Gold accent line under logo ─── */
+    .hero__divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+      margin: 0 auto var(--sp-6);
+    }
+
+    /* ─── Subtitle above logo ─── */
+    .hero__subtitle {
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-6);
+    }
+
+    /* ─── Gold corner decorations ─── */
+    .hero__corner {
+      position: absolute;
+      width: 80px; height: 80px;
+      opacity: 0.3;
+    }
+    .hero__corner--tl { top: 40px; right: 40px; border-top: 2px solid #D4AF37; border-right: 2px solid #D4AF37; }
+    .hero__corner--br { bottom: 40px; left: 40px; border-bottom: 2px solid #D4AF37; border-left: 2px solid #D4AF37; }
+  </style>
 </head>
 <body>
 
   <div id="navbar-placeholder"></div>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero__bg"></div>
+
+    <div class="hero__corner hero__corner--tl"></div>
+    <div class="hero__corner hero__corner--br"></div>
+
     <div class="hero__content animate-fade-up">
-      <div class="hero__logo" aria-label="GOG — بوابة الأهداف">GOG</div>
+      <div class="hero__subtitle">بوابة الأهداف</div>
+      <div class="hero__logo" aria-label="Got — بوابة الأهداف">Got</div>
+      <div class="hero__divider"></div>
       <p class="hero__tagline">حيث تلتقي المواهب بالفرص</p>
 
       <div class="hero__ctas">
-        <a href="/player/register.html" class="btn btn--primary btn--lg">
-          أنا لاعب
-        </a>
-        <a href="/club/register.html" class="btn btn--outline btn--lg">
-          أنا نادٍ
-        </a>
+        <a href="/player/register.html" class="btn btn--primary btn--lg">أنا لاعب</a>
+        <a href="/club/register.html" class="btn btn--outline btn--lg">أنا نادٍ</a>
       </div>
 
       <div class="stats-bar">
@@ -57,47 +87,32 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section class="how-it-works" id="how-it-works">
     <div class="container">
       <h2 class="section-title">كيف يعمل؟</h2>
-      <p class="section-subtitle">خطوات بسيطة لبدء رحلتك الكروية</p>
+      <p class="section-subtitle">خطوات بسيطة لتبدأ رحلتك الكروية</p>
 
       <div class="how-tabs" role="tablist" aria-label="رحلة اللاعب أو النادي">
-        <button
-          class="how-tab active"
-          role="tab"
-          aria-selected="true"
-          aria-controls="panel-player"
-          id="tab-player"
-          onclick="switchHowTab('player', this)"
-        >اللاعب</button>
-        <button
-          class="how-tab"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-club"
-          id="tab-club"
-          onclick="switchHowTab('club', this)"
-        >النادي</button>
+        <button class="how-tab active" role="tab" aria-selected="true" aria-controls="panel-player" id="tab-player" onclick="switchHowTab('player', this)">للاعب</button>
+        <button class="how-tab" role="tab" aria-selected="false" aria-controls="panel-club" id="tab-club" onclick="switchHowTab('club', this)">للنادي</button>
       </div>
 
       <div class="tab-panel active" id="panel-player" role="tabpanel" aria-labelledby="tab-player">
         <div class="steps">
           <div class="step animate-fade-up delay-1">
             <div class="step__number">١</div>
-            <h3 class="step__title">أنشئ ملفك الشخصي</h3>
-            <p class="step__text">سجّل وابنِ ملفك الكامل — الإحصائيات والمركز والجنسية والمزيد.</p>
+            <h3 class="step__title">أنشئ ملفك</h3>
+            <p class="step__text">سجّل وأنشئ ملفك الكامل — المركز، الجنسية، الإحصائيات، وكل ما يميزك.</p>
           </div>
           <div class="step animate-fade-up delay-2">
             <div class="step__number">٢</div>
             <h3 class="step__title">ارفع مقاطعك</h3>
-            <p class="step__text">شارك أفضل لحظاتك. ارفع مقاطع الفيديو والصور لعرض مهاراتك.</p>
+            <p class="step__text">شارك أفضل لحظاتك. ارفع فيديوهات المباريات وصورك لتعرض مهاراتك.</p>
           </div>
           <div class="step animate-fade-up delay-3">
             <div class="step__number">٣</div>
-            <h3 class="step__title">اكتشفك الأندية</h3>
-            <p class="step__text">الأندية الموثقة تتصفح ملفك وتتواصل معك مباشرةً عندما يجدون نجمهم القادم.</p>
+            <h3 class="step__title">تواصل مع الأندية</h3>
+            <p class="step__text">الأندية الموثقة تتصفح ملفك وتتواصل معك مباشرة عندما تجد نجمها القادم.</p>
           </div>
         </div>
       </div>
@@ -107,63 +122,61 @@
           <div class="step animate-fade-up delay-1">
             <div class="step__number">١</div>
             <h3 class="step__title">سجّل ناديك</h3>
-            <p class="step__text">أنشئ حساب ناديك وقدّم تفاصيلك الرسمية ووثائقك للمراجعة.</p>
+            <p class="step__text">أنشئ حساب ناديك وقدّم بياناتك الرسمية ووثائقك للمراجعة.</p>
           </div>
           <div class="step animate-fade-up delay-2">
             <div class="step__number">٢</div>
             <h3 class="step__title">احصل على التوثيق</h3>
-            <p class="step__text">يراجع فريقنا طلبك خلال ٤٨ ساعة ويمنحك صفة النادي الموثق.</p>
+            <p class="step__text">فريقنا يراجع طلبك خلال 48 ساعة ويمنحك صفة النادي الموثق.</p>
           </div>
           <div class="step animate-fade-up delay-3">
             <div class="step__number">٣</div>
-            <h3 class="step__title">اكتشف اللاعبين</h3>
-            <p class="step__text">تصفح قائمة المواهب الكاملة. صفّح حسب المركز والعمر والجنسية والقدم.</p>
+            <h3 class="step__title">اكتشف المواهب</h3>
+            <p class="step__text">تصفح قائمة كاملة من اللاعبين الموهوبين. فلتر بالمركز، العمر، الجنسية، والقدم المفضلة.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
   <section class="features" id="features">
     <div class="container">
       <h2 class="section-title">صُنع لكرة القدم الجميلة</h2>
-      <p class="section-subtitle">كل ما يحتاجه اللاعب والنادي — لا أكثر ولا أقل</p>
+      <p class="section-subtitle">كل ما يحتاجه اللاعب والنادي — بدون تعقيد</p>
 
       <div class="features-grid">
 
         <div class="feature-item animate-fade-up delay-1">
           <div class="feature-item__icon" aria-hidden="true">🛡</div>
           <h3 class="feature-item__title">أندية موثقة فقط</h3>
-          <p class="feature-item__text">كل نادٍ في GOG يمر بعملية توثيق صارمة. اللاعبون لن يقلقوا أبداً من اهتمام مزيف أو مقاربات احتيالية.</p>
+          <p class="feature-item__text">كل نادٍ في Got يمر بعملية توثيق صارمة. لا تقلق من عروض وهمية أو احتيال.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-2">
           <div class="feature-item__icon" aria-hidden="true">⚽</div>
-          <h3 class="feature-item__title">عرض اللاعب</h3>
-          <p class="feature-item__text">ملفك الشخصي هو مسرحك. ارفع مقاطع الأهداف والصور والإحصائيات لتصنع سيرة كروية تتكلم عنك.</p>
+          <h3 class="feature-item__title">عرض موهبتك</h3>
+          <p class="feature-item__text">ملفك هو منصتك. ارفع الفيديوهات والصور والإحصائيات لتصنع سيرتك الكروية الاحترافية.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-3">
           <div class="feature-item__icon" aria-hidden="true">📨</div>
           <h3 class="feature-item__title">تواصل مباشر</h3>
-          <p class="feature-item__text">بلا وسطاء. الأندية الموثقة ترسل طلبات تواصل مباشرة. عند الموافقة المتبادلة تُتبادل بيانات الاتصال بأمان.</p>
+          <p class="feature-item__text">بدون وسطاء. الأندية الموثقة ترسل طلبات تواصل مباشرة. عند الموافقة تُتبادل بيانات الاتصال بأمان.</p>
         </div>
 
         <div class="feature-item animate-fade-up delay-4">
           <div class="feature-item__icon" aria-hidden="true">🔒</div>
-          <h3 class="feature-item__title">الخصوصية أولاً</h3>
-          <p class="feature-item__text">بيانات تواصلك تبقى سرية حتى تختار مشاركتها. أنت دائماً من يتحكم بمن يرى تفاصيلك.</p>
+          <h3 class="feature-item__title">خصوصيتك أولاً</h3>
+          <p class="feature-item__text">بياناتك الشخصية تبقى سرية حتى تقرر مشاركتها. أنت دائماً تتحكم بمن يرى معلوماتك.</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__inner">
-      <span class="footer__logo" aria-label="GOG">GOG</span>
+      <span class="footer__logo" aria-label="Got">Got</span>
       <p class="footer__copy">&copy; ٢٠٢٦ بوابة الأهداف. جميع الحقوق محفوظة.</p>
     </div>
   </footer>
@@ -182,7 +195,6 @@
       });
       clickedBtn.classList.add('active');
       clickedBtn.setAttribute('aria-selected', 'true');
-
       document.querySelectorAll('.tab-panel').forEach(function (panel) {
         panel.classList.remove('active');
       });
