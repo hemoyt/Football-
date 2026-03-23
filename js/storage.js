@@ -439,6 +439,78 @@ const GOG_API = {
     const req = GOG_DB.getRequests().find(r => r.club_id === c.id && r.player_id === playerId);
     return { status: req ? req.status : null };
   },
+
+  /* ── Admin ── */
+  async adminStats() {
+    const clubs   = GOG_DB.getClubs();
+    const players = GOG_DB.getPlayers();
+    return {
+      total_players:  players.length,
+      pending_clubs:  clubs.filter(c => c.verification_status === 'pending').length,
+      verified_clubs: clubs.filter(c => c.verification_status === 'verified').length,
+      rejected_clubs: clubs.filter(c => c.verification_status === 'rejected').length,
+    };
+  },
+
+  async adminPendingClubs() {
+    return GOG_DB.getClubs().filter(c => c.verification_status === 'pending');
+  },
+
+  async adminPlayers(params) {
+    const page    = parseInt(params.page)     || 1;
+    const perPage = parseInt(params.per_page) || 25;
+    const players = GOG_DB.getPlayers();
+    const total   = players.length;
+    const pages   = Math.max(1, Math.ceil(total / perPage));
+    const start   = (page - 1) * perPage;
+    return { players: players.slice(start, start + perPage).map(p => ({ ...p, is_active: true })), total, pages };
+  },
+
+  async adminClubs(params) {
+    const page    = parseInt(params.page)     || 1;
+    const perPage = parseInt(params.per_page) || 25;
+    const clubs   = GOG_DB.getClubs();
+    const total   = clubs.length;
+    const pages   = Math.max(1, Math.ceil(total / perPage));
+    const start   = (page - 1) * perPage;
+    return { clubs: clubs.slice(start, start + perPage), total, pages };
+  },
+
+  async adminVerifyClub(data) {
+    const clubs = GOG_DB.getClubs();
+    const club  = clubs.find(c => c.id === data.club_id);
+    if (!club) throw new Error('النادي غير موجود');
+    if (data.action === 'verify')  club.verification_status = 'verified';
+    if (data.action === 'reject')  club.verification_status = 'rejected';
+    if (data.action === 'revoke')  club.verification_status = 'pending';
+    GOG_DB.upsertClub(club);
+    return { ok: true };
+  },
+
+  async adminUserAction(data) {
+    if (data.action === 'delete') {
+      // Remove player or club records for this user
+      GOG_DB._savePlayers(GOG_DB.getPlayers().filter(p => p.user_id !== data.user_id));
+      GOG_DB._saveClubs(GOG_DB.getClubs().filter(c => c.user_id !== data.user_id));
+      GOG_DB._saveUsers(GOG_DB.getUsers().filter(u => u.id !== data.user_id));
+    }
+    return { ok: true };
+  },
+
+  async adminLogs(params) {
+    // In localStorage mode, logs are synthetic from existing data
+    const logs = [];
+    GOG_DB.getClubs().forEach(c => {
+      if (c.verification_status !== 'pending') {
+        logs.push({ created_at: c.created_at, action: c.verification_status === 'verified' ? 'verify_club' : 'reject_club', target_type: 'club', target_id: c.id, actor_email: 'admin' });
+      }
+    });
+    logs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const page    = parseInt(params.page)     || 1;
+    const perPage = parseInt(params.per_page) || 50;
+    const pages   = Math.max(1, Math.ceil(logs.length / perPage));
+    return { logs: logs.slice((page - 1) * perPage, page * perPage), pages };
+  },
 };
 
 /* ═══════════════════════════════════════
@@ -492,6 +564,15 @@ async function apiRequest(url, options = {}) {
       case '/api/club/contact-requests.php': return await GOG_API.clubContactRequests();
       case '/api/club/request-status.php':   return await GOG_API.requestStatus(params.player_id);
 
+      /* Admin */
+      case '/api/admin/stats.php':           return await GOG_API.adminStats();
+      case '/api/admin/pending-clubs.php':   return await GOG_API.adminPendingClubs();
+      case '/api/admin/players.php':         return await GOG_API.adminPlayers(params);
+      case '/api/admin/clubs.php':           return await GOG_API.adminClubs(params);
+      case '/api/admin/verify-club.php':     return await GOG_API.adminVerifyClub(body);
+      case '/api/admin/user-action.php':     return await GOG_API.adminUserAction(body);
+      case '/api/admin/logs.php':            return await GOG_API.adminLogs(params);
+
       default:
         throw new Error('مسار API غير معروف: ' + path);
     }
@@ -526,7 +607,7 @@ async function requireAuth(requiredRole) {
 function handleLogout() {
   renderModal(
     'تسجيل الخروج',
-    '<p style="color:var(--text-secondary)">هل أنت متأكد من أنك تريد تسجيل الخروج من GOG؟</p>',
+    '<p style="color:var(--text-secondary)">هل أنت متأكد من أنك تريد تسجيل الخروج من Got؟</p>',
     [
       {
         label: 'تسجيل الخروج',
@@ -540,3 +621,12 @@ function handleLogout() {
     ]
   );
 }
+
+/* ═══════════════════════════════════════
+   SEED ADMIN USER (demo mode)
+   ═══════════════════════════════════════ */
+(function _seedAdmin() {
+  if (!GOG_DB.findUserByEmail('admin@got.com')) {
+    GOG_DB.addUser({ email: 'admin@got.com', password: 'admin123', role: 'admin', full_name: 'المشرف' });
+  }
+})();

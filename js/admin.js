@@ -1,6 +1,6 @@
 /**
- * GOG — Admin JS
- * Admin dashboard: stats, club verification queue, user management, system logs.
+ * Got — Admin JS
+ * لوحة تحكم المشرف: الإحصائيات، طابور التحقق، إدارة المستخدمين، السجلات.
  */
 
 'use strict';
@@ -22,7 +22,7 @@ async function loadAdminStats() {
       if (el) el.textContent = val;
     });
   } catch {
-    renderToast('Failed to load stats.', 'error');
+    renderToast('فشل تحميل الإحصائيات.', 'error');
   }
 }
 
@@ -37,7 +37,7 @@ async function loadVerificationQueue() {
     const clubs = await apiRequest('/api/admin/pending-clubs.php');
 
     if (!clubs.length) {
-      container.innerHTML = renderEmptyState('✅', 'Queue Empty', 'All club applications have been reviewed.');
+      container.innerHTML = renderEmptyState('✅', 'الطابور فارغ', 'تمت مراجعة جميع طلبات الأندية.');
       return;
     }
 
@@ -45,35 +45,26 @@ async function loadVerificationQueue() {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Club Name</th>
-            <th>Country</th>
-            <th>Contact</th>
-            <th>Submitted</th>
-            <th>Document</th>
-            <th>Actions</th>
+            <th>اسم النادي</th>
+            <th>الدولة</th>
+            <th>البريد الإلكتروني</th>
+            <th>تاريخ التقديم</th>
+            <th>الإجراءات</th>
           </tr></thead>
           <tbody>
             ${clubs.map(c => `
               <tr data-club-id="${c.id}">
                 <td>
                   <div style="font-weight:600">${escapeHtml(c.club_name)}</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(c.league_division || '')}</div>
+                  <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(c.league || '')}</div>
                 </td>
                 <td>${escapeHtml(c.country)}</td>
-                <td>
-                  <div>${escapeHtml(c.contact_person_name)}</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(c.email)}</div>
-                </td>
+                <td style="font-size:0.85rem;color:var(--text-secondary)">${escapeHtml(c.email)}</td>
                 <td>${formatDate(c.created_at)}</td>
                 <td>
-                  <a href="${escapeHtml(c.doc_url)}" target="_blank" rel="noopener" class="doc-link">
-                    📄 View Doc
-                  </a>
-                </td>
-                <td>
-                  <div class="queue-actions">
-                    <button class="btn btn--success btn--sm" onclick="verifyClub(${c.id})">Verify ✓</button>
-                    <button class="btn btn--danger btn--sm"  onclick="rejectClub(${c.id})">Reject ✗</button>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn btn--success btn--sm" onclick="verifyClub('${c.id}')">توثيق ✓</button>
+                    <button class="btn btn--danger btn--sm"  onclick="rejectClub('${c.id}')">رفض ✗</button>
                   </div>
                 </td>
               </tr>
@@ -84,17 +75,17 @@ async function loadVerificationQueue() {
     `;
 
   } catch (err) {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', err.message || 'Unable to load verification queue.');
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', err.message || 'تعذّر تحميل طابور التحقق.');
   }
 }
 
 async function verifyClub(clubId) {
   renderModal(
-    'Verify Club',
-    '<p>Confirm that this club\'s documentation is legitimate and they meet GOG\'s requirements?</p>',
+    'توثيق النادي',
+    '<p style="color:var(--text-secondary)">هل تؤكد أن وثائق هذا النادي صحيحة وأنه يستوفي متطلبات Got؟</p>',
     [
       {
-        label: 'Verify Club',
+        label: 'توثيق النادي',
         class: 'btn--success',
         onClick: async () => {
           closeModal();
@@ -103,15 +94,15 @@ async function verifyClub(clubId) {
               method: 'POST',
               body: JSON.stringify({ club_id: clubId, action: 'verify' }),
             });
-            renderToast('Club verified successfully.', 'success');
+            renderToast('تم توثيق النادي بنجاح. ✓', 'success');
             loadVerificationQueue();
             loadAdminStats();
           } catch (err) {
-            renderToast(err.message || 'Verification failed.', 'error');
+            renderToast(err.message || 'فشل التوثيق.', 'error');
           }
         }
       },
-      { label: 'Cancel', class: 'btn--ghost', onClick: closeModal }
+      { label: 'إلغاء', class: 'btn--ghost', onClick: closeModal }
     ]
   );
 }
@@ -119,22 +110,22 @@ async function verifyClub(clubId) {
 async function rejectClub(clubId) {
   const body = `
     <div class="form-group">
-      <label class="form-label">Rejection Reason</label>
-      <textarea class="form-textarea" id="rejection-reason" placeholder="Explain why the club application is being rejected…" required></textarea>
+      <label class="form-label">سبب الرفض</label>
+      <textarea class="form-textarea" id="rejection-reason" placeholder="اشرح سبب رفض طلب النادي…" required></textarea>
     </div>
   `;
 
   renderModal(
-    'Reject Club Application',
+    'رفض طلب النادي',
     body,
     [
       {
-        label: 'Reject Application',
+        label: 'رفض الطلب',
         class: 'btn--danger',
         onClick: async () => {
           const reason = document.getElementById('rejection-reason')?.value.trim();
           if (!reason) {
-            renderToast('Please provide a rejection reason.', 'error');
+            renderToast('يرجى إدخال سبب الرفض.', 'error');
             return;
           }
           closeModal();
@@ -143,15 +134,15 @@ async function rejectClub(clubId) {
               method: 'POST',
               body: JSON.stringify({ club_id: clubId, action: 'reject', reason }),
             });
-            renderToast('Club application rejected.', 'info');
+            renderToast('تم رفض طلب النادي.', 'info');
             loadVerificationQueue();
             loadAdminStats();
           } catch (err) {
-            renderToast(err.message || 'Action failed.', 'error');
+            renderToast(err.message || 'فشل تنفيذ الإجراء.', 'error');
           }
         }
       },
-      { label: 'Cancel', class: 'btn--ghost', onClick: closeModal }
+      { label: 'إلغاء', class: 'btn--ghost', onClick: closeModal }
     ]
   );
 }
@@ -168,7 +159,7 @@ async function loadPlayersManagement(page = 1) {
     const { players, total, pages } = res;
 
     if (!players.length) {
-      container.innerHTML = renderEmptyState('👤', 'No Players', 'No players registered yet.');
+      container.innerHTML = renderEmptyState('👤', 'لا يوجد لاعبون', 'لم يسجّل أي لاعب بعد.');
       return;
     }
 
@@ -176,12 +167,12 @@ async function loadPlayersManagement(page = 1) {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Player</th>
-            <th>Position</th>
-            <th>Nationality</th>
-            <th>Registered</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>اللاعب</th>
+            <th>المركز</th>
+            <th>الجنسية</th>
+            <th>تاريخ التسجيل</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
           </tr></thead>
           <tbody>
             ${players.map(p => `
@@ -191,21 +182,13 @@ async function loadPlayersManagement(page = 1) {
                   <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(p.email)}</div>
                 </td>
                 <td>${positionBadge(p.position_primary)}</td>
-                <td>${escapeHtml(p.nationality)}</td>
+                <td>${escapeHtml(p.nationality || '—')}</td>
                 <td>${formatDate(p.created_at)}</td>
+                <td><span class="badge badge--success">نشط</span></td>
                 <td>
-                  <span class="badge badge--${p.is_active ? 'success' : 'rejected'}">
-                    ${p.is_active ? 'Active' : 'Suspended'}
-                  </span>
-                </td>
-                <td>
-                  <div class="queue-actions">
-                    <a href="/player/view.html?id=${p.player_id}" class="btn btn--ghost btn--sm" target="_blank">View</a>
-                    ${p.is_active
-                      ? `<button class="btn btn--danger btn--sm" onclick="suspendUser(${p.user_id})">Suspend</button>`
-                      : `<button class="btn btn--success btn--sm" onclick="activateUser(${p.user_id})">Activate</button>`
-                    }
-                    <button class="btn btn--danger btn--sm" onclick="deleteUser(${p.user_id}, 'player')">Delete</button>
+                  <div style="display:flex;gap:8px">
+                    <a href="/player/view.html?id=${p.id}" class="btn btn--ghost btn--sm" target="_blank">عرض</a>
+                    <button class="btn btn--danger btn--sm" onclick="deleteUser('${p.user_id}', 'player')">حذف</button>
                   </div>
                 </td>
               </tr>
@@ -217,7 +200,7 @@ async function loadPlayersManagement(page = 1) {
     `;
 
   } catch (err) {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', err.message);
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', err.message);
   }
 }
 
@@ -228,12 +211,15 @@ async function loadClubsManagement(page = 1) {
   const container = document.getElementById('clubs-management');
   if (!container) return;
 
+  const statusMap = { verified: 'موثّق', pending: 'قيد الانتظار', rejected: 'مرفوض' };
+  const badgeMap  = { verified: 'verified', pending: 'pending', rejected: 'rejected' };
+
   try {
     const res = await apiRequest(`/api/admin/clubs.php?page=${page}&per_page=25`);
     const { clubs, total, pages } = res;
 
     if (!clubs.length) {
-      container.innerHTML = renderEmptyState('🏟', 'No Clubs', 'No clubs registered yet.');
+      container.innerHTML = renderEmptyState('🏟', 'لا توجد أندية', 'لم يسجّل أي نادٍ بعد.');
       return;
     }
 
@@ -241,40 +227,33 @@ async function loadClubsManagement(page = 1) {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Club</th>
-            <th>Country</th>
-            <th>Contact</th>
-            <th>Status</th>
-            <th>Verified</th>
-            <th>Actions</th>
+            <th>النادي</th>
+            <th>الدولة</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
           </tr></thead>
           <tbody>
             ${clubs.map(c => `
               <tr>
                 <td>
                   <div style="font-weight:600">${escapeHtml(c.club_name)}</div>
-                  <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(c.league_division || '')}</div>
-                </td>
-                <td>${escapeHtml(c.country)}</td>
-                <td>
-                  <div>${escapeHtml(c.contact_person_name)}</div>
                   <div style="font-size:0.8rem;color:var(--text-secondary)">${escapeHtml(c.email)}</div>
                 </td>
+                <td>${escapeHtml(c.country || '—')}</td>
                 <td>
-                  <span class="badge badge--${c.verification_status === 'verified' ? 'verified' : c.verification_status === 'pending' ? 'pending' : 'rejected'}">
-                    ${c.verification_status}
+                  <span class="badge badge--${badgeMap[c.verification_status] || 'pending'}">
+                    ${statusMap[c.verification_status] || c.verification_status}
                   </span>
                 </td>
-                <td>${c.verified_at ? formatDate(c.verified_at) : '—'}</td>
                 <td>
-                  <div class="queue-actions">
+                  <div style="display:flex;gap:8px">
                     ${c.verification_status === 'verified'
-                      ? `<button class="btn btn--danger btn--sm" onclick="revokeClub(${c.id})">Revoke</button>`
+                      ? `<button class="btn btn--danger btn--sm" onclick="revokeClub('${c.id}')">سحب التوثيق</button>`
                       : c.verification_status === 'pending'
-                        ? `<button class="btn btn--success btn--sm" onclick="verifyClub(${c.id})">Verify</button>`
+                        ? `<button class="btn btn--success btn--sm" onclick="verifyClub('${c.id}')">توثيق</button>`
                         : ''
                     }
-                    <button class="btn btn--danger btn--sm" onclick="deleteUser(${c.user_id}, 'club')">Delete</button>
+                    <button class="btn btn--danger btn--sm" onclick="deleteUser('${c.user_id}', 'club')">حذف</button>
                   </div>
                 </td>
               </tr>
@@ -286,47 +265,21 @@ async function loadClubsManagement(page = 1) {
     `;
 
   } catch (err) {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', err.message);
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', err.message);
   }
 }
 
 /* ═══════════════════════════════════════
    USER ACTIONS
    ═══════════════════════════════════════ */
-async function suspendUser(userId) {
-  if (!confirm('Suspend this user? They will lose access to their account.')) return;
-  try {
-    await apiRequest('/api/admin/user-action.php', {
-      method: 'POST',
-      body: JSON.stringify({ user_id: userId, action: 'suspend' }),
-    });
-    renderToast('User suspended.', 'info');
-    loadPlayersManagement();
-  } catch (err) {
-    renderToast(err.message || 'Action failed.', 'error');
-  }
-}
-
-async function activateUser(userId) {
-  try {
-    await apiRequest('/api/admin/user-action.php', {
-      method: 'POST',
-      body: JSON.stringify({ user_id: userId, action: 'activate' }),
-    });
-    renderToast('User activated.', 'success');
-    loadPlayersManagement();
-  } catch (err) {
-    renderToast(err.message || 'Action failed.', 'error');
-  }
-}
-
 async function deleteUser(userId, type) {
+  const typeLabel = type === 'player' ? 'اللاعب' : 'النادي';
   renderModal(
-    'Delete User',
-    `<p>This will <strong>permanently delete</strong> this ${type} account and all associated data. This action cannot be undone.</p>`,
+    'حذف المستخدم',
+    `<p style="color:var(--text-secondary)">سيُحذف حساب ${typeLabel} وجميع بياناته <strong>نهائياً</strong>. هذا الإجراء لا يمكن التراجع عنه.</p>`,
     [
       {
-        label: 'Delete Permanently',
+        label: 'حذف نهائي',
         class: 'btn--danger',
         onClick: async () => {
           closeModal();
@@ -335,25 +288,26 @@ async function deleteUser(userId, type) {
               method: 'POST',
               body: JSON.stringify({ user_id: userId, action: 'delete' }),
             });
-            renderToast('User deleted.', 'info');
+            renderToast('تم حذف المستخدم.', 'info');
             type === 'player' ? loadPlayersManagement() : loadClubsManagement();
+            loadAdminStats();
           } catch (err) {
-            renderToast(err.message || 'Delete failed.', 'error');
+            renderToast(err.message || 'فشل الحذف.', 'error');
           }
         }
       },
-      { label: 'Cancel', class: 'btn--ghost', onClick: closeModal }
+      { label: 'إلغاء', class: 'btn--ghost', onClick: closeModal }
     ]
   );
 }
 
 async function revokeClub(clubId) {
   renderModal(
-    'Revoke Club Verification',
-    '<p>Revoking verification will prevent this club from accessing the player search and sending contact requests.</p>',
+    'سحب توثيق النادي',
+    '<p style="color:var(--text-secondary)">سحب التوثيق سيمنع هذا النادي من الوصول إلى البحث عن اللاعبين وإرسال طلبات التواصل.</p>',
     [
       {
-        label: 'Revoke Verification',
+        label: 'سحب التوثيق',
         class: 'btn--danger',
         onClick: async () => {
           closeModal();
@@ -362,15 +316,15 @@ async function revokeClub(clubId) {
               method: 'POST',
               body: JSON.stringify({ club_id: clubId, action: 'revoke' }),
             });
-            renderToast('Club verification revoked.', 'info');
+            renderToast('تم سحب توثيق النادي.', 'info');
             loadClubsManagement();
             loadAdminStats();
           } catch (err) {
-            renderToast(err.message || 'Action failed.', 'error');
+            renderToast(err.message || 'فشل تنفيذ الإجراء.', 'error');
           }
         }
       },
-      { label: 'Cancel', class: 'btn--ghost', onClick: closeModal }
+      { label: 'إلغاء', class: 'btn--ghost', onClick: closeModal }
     ]
   );
 }
@@ -382,12 +336,14 @@ async function loadSystemLogs(page = 1) {
   const container = document.getElementById('system-logs');
   if (!container) return;
 
+  const actionMap = { verify_club: 'توثيق نادٍ', reject_club: 'رفض نادٍ', revoke_club: 'سحب توثيق' };
+
   try {
     const res = await apiRequest(`/api/admin/logs.php?page=${page}&per_page=50`);
     const { logs, pages } = res;
 
     if (!logs.length) {
-      container.innerHTML = renderEmptyState('📋', 'No Logs', 'No system events recorded yet.');
+      container.innerHTML = renderEmptyState('📋', 'لا توجد سجلات', 'لم يتم تسجيل أي عمليات بعد.');
       return;
     }
 
@@ -395,18 +351,18 @@ async function loadSystemLogs(page = 1) {
       <div class="table-wrap">
         <table class="table">
           <thead><tr>
-            <th>Time</th>
-            <th>Action</th>
-            <th>Target</th>
-            <th>Admin</th>
+            <th>الوقت</th>
+            <th>الإجراء</th>
+            <th>الهدف</th>
+            <th>المشرف</th>
           </tr></thead>
           <tbody>
             ${logs.map(l => `
               <tr>
                 <td style="white-space:nowrap;font-size:0.85rem">${formatDate(l.created_at)}</td>
-                <td><span class="log-action">${escapeHtml(l.action)}</span></td>
+                <td>${escapeHtml(actionMap[l.action] || l.action)}</td>
                 <td style="font-size:0.85rem">${escapeHtml(l.target_type || '')} ${l.target_id ? '#'+l.target_id : ''}</td>
-                <td style="font-size:0.85rem;color:var(--text-secondary)">${escapeHtml(l.actor_email || 'System')}</td>
+                <td style="font-size:0.85rem;color:var(--text-secondary)">${escapeHtml(l.actor_email || 'النظام')}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -416,32 +372,8 @@ async function loadSystemLogs(page = 1) {
     `;
 
   } catch (err) {
-    container.innerHTML = renderEmptyState('❌', 'Failed to Load', err.message);
+    container.innerHTML = renderEmptyState('❌', 'فشل التحميل', err.message);
   }
-}
-
-/* ═══════════════════════════════════════
-   TABS
-   ═══════════════════════════════════════ */
-function initAdminTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const panel = btn.dataset.panel;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(panel)?.classList.add('active');
-
-      // Lazy load panel content
-      if (panel === 'queue')   loadVerificationQueue();
-      if (panel === 'players') loadPlayersManagement();
-      if (panel === 'clubs')   loadClubsManagement();
-      if (panel === 'logs')    loadSystemLogs();
-    });
-  });
-
-  // Activate first tab (verification queue)
-  document.querySelector('.tab-btn')?.click();
 }
 
 /* ═══════════════════════════════════════
@@ -453,8 +385,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (page === 'admin-dashboard') {
     const user = await requireAuth('admin');
     if (!user) return;
-    renderNavbar('admin');
     loadAdminStats();
-    initAdminTabs();
+    loadVerificationQueue();
   }
 });
