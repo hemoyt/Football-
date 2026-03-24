@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GOT — منصة الكشافة الكروية. حيث تلتقي المواهب بالفرص. اربط لاعبيك مع الأندية الموثقة حول العالم.">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>GOT — بوابة الأهداف</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/landing.css">
+
+  <style>
+    .hero__divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      margin: 0 auto var(--sp-6);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-arabic);
+      font-size: 0.9rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-6);
+    }
+
+    .hero__corner {
+      position: absolute;
+      width: 80px; height: 80px;
+      opacity: 0.3;
+    }
+    .hero__corner--tl { top: 40px; right: 40px; border-top: 2px solid var(--gold-primary); border-right: 2px solid var(--gold-primary); }
+    .hero__corner--br { bottom: 40px; left: 40px; border-bottom: 2px solid var(--gold-primary); border-left: 2px solid var(--gold-primary); }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <section class="hero">
+    <div class="hero__bg"></div>
+
+    <div class="hero__corner hero__corner--tl"></div>
+    <div class="hero__corner hero__corner--br"></div>
+
+    <div class="hero__content animate-fade-up">
+      <div class="hero__subtitle">بوابة الأهداف</div>
+      <div class="hero__logo" aria-label="GOT">GOT</div>
+      <div class="hero__divider"></div>
+      <p class="hero__tagline">حيث تلتقي المواهب بالفرص</p>
+
+      <div class="hero__ctas" style="margin-top:20px;">
+        <a href="/player/register.html" class="btn btn--primary btn--lg">أنا لاعب</a>
+        <a href="/club/register.html" class="btn btn--outline btn--lg">أنا نادٍ</a>
+      </div>
+
+      <div class="stats-bar" style="margin-top:40px;">
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">+500</span>
+          <span class="stats-bar__label">لاعب</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">+20</span>
+          <span class="stats-bar__label">نادٍ موثق</span>
+        </div>
+        <div class="stats-bar__item">
+          <span class="stats-bar__num">+300</span>
+          <span class="stats-bar__label">فيديو</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <h2 class="section-title">كيف يعمل؟</h2>
+      <p class="section-subtitle">خطوات بسيطة لتبدأ رحلتك الكروية</p>
+
+      <div class="how-tabs" role="tablist">
+        <button class="how-tab active" role="tab" aria-selected="true" onclick="switchHowTab('player', this)">للاعب</button>
+        <button class="how-tab" role="tab" aria-selected="false" onclick="switchHowTab('club', this)">للنادي</button>
+      </div>
+
+      <div class="tab-panel active" id="panel-player">
+        <div class="steps">
+          <div class="step animate-fade-up delay-1">
+            <div class="step__number">١</div>
+            <h3 class="step__title">أنشئ ملفك</h3>
+            <p class="step__text">سجّل وأنشئ ملفك الكامل — المركز، الجنسية، والإحصائيات.</p>
+          </div>
+          <div class="step animate-fade-up delay-2">
+            <div class="step__number">٢</div>
+            <h3 class="step__title">ارفع مقاطعك</h3>
+            <p class="step__text">ارفع فيديوهات مبارياتك لعرض مهاراتك بشكل احترافي.</p>
+          </div>
+          <div class="step animate-fade-up delay-3">
+            <div class="step__number">٣</div>
+            <h3 class="step__title">تواصل مع الأندية</h3>
+            <p class="step__text">الفرصة الآن بين يديك.. تواصل مباشرة مع الأندية الموثقة.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-club">
+        <div class="steps">
+          <div class="step animate-fade-up delay-1">
+            <div class="step__number">١</div>
+            <h3 class="step__title">سجّل ناديك</h3>
+            <p class="step__text">أنشئ حساباً وقدم وثائق النادي الرسمية للمراجعة.</p>
+          </div>
+          <div class="step animate-fade-up delay-2">
+            <div class="step__number">٢</div>
+            <h3 class="step__title">احصل على التوثيق</h3>
+            <p class="step__text">فريقنا سيراجع الطلب للتأكد من الموثوقية والمصداقية.</p>
+          </div>
+          <div class="step animate-fade-up delay-3">
+            <div class="step__number">٣</div>
+            <h3 class="step__title">اكتشف المواهب</h3>
+            <p class="step__text">تصفح وفلتر اللاعبين واصطد موهبتك القادمة بكل سهولة.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__logo">GOT</span>
+      <p class="footer__copy">&copy; ٢٠٢٦ GOT. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderNavbar('guest');
+    });
+
+    function switchHowTab(tab, clickedBtn) {
+      document.querySelectorAll('.how-tab').forEach(function (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      clickedBtn.classList.add('active');
+      clickedBtn.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('.tab-panel').forEach(function (panel) {
+        panel.classList.remove('active');
+      });
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+  </script>
+</body>
+</html>

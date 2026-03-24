@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل نادٍ — Got</title>
+  <meta name="description" content="سجّل ناديك في Got لاكتشاف اللاعبين الموثقين حول العالم.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/profile.css">
+
+  <style>
+    .register-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+
+    .register-panel {
+      background: linear-gradient(160deg, #0A0A0A 0%, #111111 100%);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: var(--sp-12); position: sticky; top: 0; height: 100vh;
+    }
+
+    .register-panel__logo {
+      font-family: var(--font-display); font-size: 6rem;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1; margin-bottom: var(--sp-6);
+      animation: shimmer 5s linear infinite; background-size: 200% auto;
+    }
+
+    .register-panel__tagline { font-size: 1.1rem; color: var(--text-secondary); text-align: center; margin-bottom: var(--sp-8); font-weight: 600; }
+
+    .register-panel__note {
+      background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);
+      border-radius: var(--radius-card); padding: var(--sp-4) var(--sp-6); max-width: 340px;
+    }
+
+    .register-panel__note p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+    .register-panel__note strong { color: var(--gold-primary); }
+
+    .register-form-panel {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: var(--sp-10) var(--sp-6); overflow-y: auto; background: var(--bg-primary);
+    }
+
+    .register-form-card { width: 100%; max-width: 540px; padding: var(--sp-6) 0; }
+    .register-form-card__title { font-size: 2rem; font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-2); }
+    .register-form-card__subtitle { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: var(--sp-8); line-height: 1.6; }
+
+    .password-field { position: relative; display: flex; align-items: center; }
+    .password-field .form-input { padding-left: 48px; }
+    .password-toggle {
+      position: absolute; left: 0; top: 0; height: 100%; width: 46px;
+      background: transparent; border: none; cursor: pointer; font-size: 1rem;
+      color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-input) 0 0 var(--radius-input); transition: color var(--transition-fast);
+    }
+    .password-toggle:hover { color: var(--gold-primary); }
+
+    .form-alert {
+      padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-input); font-size: 0.9rem;
+      margin-bottom: var(--sp-4); border-right: 3px solid var(--danger);
+      background: rgba(192,57,43,0.08); color: var(--danger);
+    }
+
+    .form-section-divider {
+      display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-6) 0 var(--sp-4);
+    }
+    .form-section-divider::before,
+    .form-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .form-section-divider__label { font-size: 0.82rem; color: var(--gold-dim); white-space: nowrap; font-weight: 700; }
+
+    .file-upload-area {
+      border: 2px dashed var(--border); border-radius: var(--radius-input);
+      padding: var(--sp-6); text-align: center; cursor: pointer;
+      transition: border-color var(--transition-base);
+    }
+    .file-upload-area:hover { border-color: var(--gold-dim); }
+    .file-upload-area__icon { font-size: 2rem; margin-bottom: var(--sp-2); color: var(--gold-dim); }
+    .file-upload-area__text { font-size: 0.9rem; color: var(--text-secondary); }
+    .file-upload-area__text strong { color: var(--gold-primary); }
+
+    .register-footer { text-align: center; margin-top: var(--sp-6); font-size: 0.9rem; color: var(--text-secondary); }
+    .required-mark { color: var(--gold-primary); margin-right: 2px; }
+    .optional-tag { font-size: 0.75rem; color: var(--text-secondary); margin-right: 4px; }
+
+    @media (max-width: 768px) { .register-layout { grid-template-columns: 1fr; } .register-panel { display: none; } }
+  </style>
+</head>
+<body data-page="club-register">
+
+  <div class="register-layout">
+
+    <!-- Left panel -->
+    <aside class="register-panel" aria-hidden="true">
+      <span class="register-panel__logo">Got</span>
+      <p class="register-panel__tagline">بوابة الأهداف</p>
+      <div class="register-panel__note">
+        <p>
+          بمجرد إرسال طلبك، سيراجع فريقنا وثائقك خلال
+          <strong>٤٨ ساعة</strong>.
+          ستتمكن من الوصول لقاعدة بيانات اللاعبين فور التوثيق.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Right form -->
+    <main class="register-form-panel">
+      <div class="register-form-card">
+
+        <h1 class="register-form-card__title">سجّل ناديك</h1>
+        <p class="register-form-card__subtitle">أكمل النموذج وسنراجع طلبك قريباً</p>
+
+        <div id="club-alert" class="form-alert" role="alert" aria-live="polite" hidden></div>
+
+        <form id="club-register-form" enctype="multipart/form-data" novalidate>
+
+          <div class="form-section-divider">
+            <span class="form-section-divider__label">بيانات النادي</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="club_name">اسم النادي<span class="required-mark">*</span></label>
+              <input class="form-input" type="text" id="club_name" name="club_name" placeholder="الاسم الرسمي للنادي" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="country">البلد<span class="required-mark">*</span></label>
+              <input class="form-input" type="text" id="country" name="country" placeholder="مثال: السعودية، مصر، إسبانيا" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="league">الدوري / القسم<span class="optional-tag">(اختياري)</span></label>
+              <input class="form-input" type="text" id="league" name="league" placeholder="مثال: دوري روشن، الدوري الممتاز" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact_person">اسم مسؤول التواصل<span class="required-mark">*</span></label>
+              <input class="form-input" type="text" id="contact_person" name="contact_person" placeholder="الاسم الكامل" required />
+            </div>
+          </div>
+
+          <div class="form-section-divider">
+            <span class="form-section-divider__label">بيانات الحساب</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">البريد الإلكتروني الرسمي<span class="required-mark">*</span></label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="club@example.com" autocomplete="email" required dir="ltr" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="password">كلمة المرور<span class="required-mark">*</span></label>
+              <div class="password-field">
+                <input class="form-input" type="password" id="password" name="password" placeholder="كلمة مرور قوية" autocomplete="new-password" required dir="ltr" />
+                <button type="button" class="password-toggle" aria-label="إظهار كلمة المرور">👁</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">تأكيد كلمة المرور<span class="required-mark">*</span></label>
+              <div class="password-field">
+                <input class="form-input" type="password" id="confirm_password" name="confirm_password" placeholder="أعد كتابة كلمة المرور" autocomplete="new-password" required dir="ltr" />
+                <button type="button" class="password-toggle" aria-label="إظهار التأكيد">👁</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section-divider">
+            <span class="form-section-divider__label">وثيقة التوثيق</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="doc_file">
+              وثيقة رسمية للنادي<span class="required-mark">*</span>
+              <span class="optional-tag">(PDF أو صورة)</span>
+            </label>
+            <div class="file-upload-area" onclick="document.getElementById('doc_file').click()">
+              <div class="file-upload-area__icon">📄</div>
+              <p class="file-upload-area__text">انقر لرفع وثيقة التوثيق<br><strong>PDF أو JPG أو PNG</strong> — حد أقصى 10 ميغابايت</p>
+              <p id="doc-file-name" style="margin-top:8px;font-size:0.85rem;color:var(--gold-primary)"></p>
+            </div>
+            <input type="file" id="doc_file" name="doc_file" accept=".pdf,image/*" class="sr-only" required
+              onchange="document.getElementById('doc-file-name').textContent = this.files[0]?.name || ''" />
+          </div>
+
+          <div style="margin-top:var(--sp-8)">
+            <button type="submit" class="btn btn--primary btn--full btn--lg" id="club-submit-btn">
+              إرسال الطلب ←
+            </button>
+          </div>
+
+        </form>
+
+        <footer class="register-footer">
+          <p>لديك حساب بالفعل؟ <a href="/login.html">سجّل الدخول</a></p>
+        </footer>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    // Password toggles
+    document.querySelectorAll('.password-toggle').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var input = btn.previousElementSibling;
+        if (!input) return;
+        input.type = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? '👁' : '🙈';
+      });
+    });
+  </script>
+</body>
+</html>

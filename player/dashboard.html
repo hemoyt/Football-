@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="لوحة تحكم اللاعب — Got بوابة الأهداف." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>لوحة التحكم — Got</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/pages/dashboard.css" />
+
+  <style>
+    .topbar {
+      position: sticky; top: 0; z-index: var(--z-nav);
+      background: rgba(10,10,10,0.96);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 var(--sp-6); height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .topbar__logo {
+      font-family: var(--font-display); font-size: 2rem; letter-spacing: 0.06em;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; text-decoration: none;
+    }
+
+    .topbar__right { display: flex; align-items: center; gap: var(--sp-4); }
+    .topbar__greeting { font-size: 0.88rem; color: var(--text-secondary); }
+
+    .sidebar__profile {
+      text-align: center; padding-bottom: var(--sp-6);
+      border-bottom: 1px solid var(--border); margin-bottom: var(--sp-6);
+    }
+
+    .sidebar-avatar-wrap { position: relative; display: inline-block; margin-bottom: var(--sp-3); }
+
+    #sidebar-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold-dim); display: block; }
+
+    .avatar-placeholder {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--bg-elevated); border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold-dim); font-size: 2rem;
+    }
+
+    .sidebar__name { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-primary); display: block; margin-bottom: var(--sp-1); }
+    .sidebar__position { font-size: 0.8rem; color: var(--text-secondary); display: block; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-8); }
+
+    .stat-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-card); padding: var(--sp-6); text-align: center;
+      transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    }
+
+    .stat-card:hover { border-color: var(--gold-dim); box-shadow: var(--shadow-gold); }
+    .stat-card__number { font-family: var(--font-display); font-size: 2.8rem; color: var(--gold-primary); line-height: 1; margin-bottom: var(--sp-2); }
+    .stat-card__label { font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; }
+    .stat-card--ring { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
+
+    .progress-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .progress-ring svg { transform: rotate(-90deg); }
+    .progress-ring__bg  { fill: none; stroke: var(--border); stroke-width: 6; }
+    .progress-ring__fill { fill: none; stroke: var(--gold-primary); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset var(--transition-slow); }
+    .progress-ring__label { position: absolute; font-family: var(--font-display); font-size: 1rem; color: var(--gold-primary); }
+
+    .status-badge { display: inline-flex; align-items: center; gap: var(--sp-2); padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; }
+    .status-badge--active { background: rgba(30,132,73,0.15); color: #27ae60; border: 1px solid rgba(30,132,73,0.3); }
+    .status-badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .tabs { display: flex; border-bottom: 1px solid var(--border); gap: var(--sp-1); margin-bottom: var(--sp-6); flex-wrap: wrap; }
+
+    .tab-btn {
+      padding: 10px 20px; background: transparent; border: none;
+      color: var(--text-secondary); font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: all var(--transition-fast); white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: var(--gold-primary); border-bottom-color: var(--gold-primary); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-4); }
+
+    .chart-placeholder {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-card); padding: var(--sp-8); text-align: center;
+      min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-3);
+    }
+
+    .chart-placeholder__icon { font-size: 3rem; color: var(--gold-dim); }
+    .chart-placeholder__label { color: var(--text-secondary); font-size: 0.9rem; }
+
+    .page-header { margin-bottom: var(--sp-8); }
+    .page-header__title { font-size: 1.9rem; font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-1); }
+    .page-header__subtitle { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+    @media (max-width: 900px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } .topbar { padding: 0 var(--sp-4); } }
+  </style>
+</head>
+<body data-page="player-dashboard">
+
+  <header class="topbar" role="banner">
+    <a href="/index.html" class="topbar__logo" aria-label="Got — بوابة الأهداف">Got</a>
+    <div class="topbar__right">
+      <span class="topbar__greeting" id="topbar-greeting" aria-live="polite"></span>
+      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">تسجيل الخروج</button>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="الشريط الجانبي للاعب">
+
+      <div class="sidebar__profile">
+        <div class="sidebar-avatar-wrap">
+          <img id="sidebar-photo" src="" alt="صورتك الشخصية" hidden />
+          <div class="avatar-placeholder" id="sidebar-photo-placeholder" aria-hidden="true">⚽</div>
+        </div>
+        <span id="sidebar-name" class="sidebar__name"></span>
+        <span id="sidebar-position" class="sidebar__position"></span>
+      </div>
+
+      <nav class="sidebar__nav" aria-label="قائمة اللاعب">
+        <a href="/player/dashboard.html" class="sidebar__link active" aria-current="page">
+          <span aria-hidden="true">◉</span> لوحة التحكم
+        </a>
+        <a href="/player/profile.html" class="sidebar__link">
+          <span aria-hidden="true">👤</span> ملفي الشخصي
+        </a>
+        <a href="#tab-videos" class="sidebar__link" id="nav-videos-link">
+          <span aria-hidden="true">🎬</span> مقاطعي
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dashboard-main" id="main-content">
+
+      <div class="page-header">
+        <h1 class="page-header__title">لوحة التحكم</h1>
+        <p class="page-header__subtitle">تابع ظهورك وأدر حضورك في Got</p>
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-row" role="region" aria-label="إحصائيات الملف الشخصي">
+
+        <div class="stat-card">
+          <div class="stat-card__number" id="profile-views" aria-live="polite">—</div>
+          <div class="stat-card__label">مشاهدات الملف</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__number" id="total-requests" aria-live="polite">—</div>
+          <div class="stat-card__label">طلبات التواصل</div>
+        </div>
+
+        <div class="stat-card stat-card--ring">
+          <div id="completion-ring" class="progress-ring" aria-label="اكتمال الملف الشخصي">
+            <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+              <circle class="progress-ring__bg" cx="36" cy="36" r="30" />
+              <circle class="progress-ring__fill" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5" stroke-dashoffset="188.5" id="completion-ring-fill" />
+            </svg>
+            <span class="progress-ring__label" id="completion-pct" aria-live="polite">0%</span>
+          </div>
+          <div class="stat-card__label">اكتمال الملف</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__number" style="font-size:1.2rem;padding-top:var(--sp-3)">
+            <span class="status-badge status-badge--active">
+              <span class="status-badge__dot"></span>
+              نشط
+            </span>
+          </div>
+          <div class="stat-card__label" style="margin-top:var(--sp-3)">حالة الحساب</div>
+        </div>
+
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist" aria-label="أقسام لوحة التحكم">
+        <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-requests" data-panel="tab-requests" id="tab-btn-requests">
+          طلبات التواصل
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-videos" data-panel="tab-videos" id="tab-btn-videos">
+          مقاطعي
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-stats" data-panel="tab-stats" id="tab-btn-stats">
+          الإحصائيات
+        </button>
+      </div>
+
+      <!-- Tab: Contact Requests -->
+      <div class="tab-panel active" id="tab-requests" role="tabpanel" aria-labelledby="tab-btn-requests">
+        <div id="contact-requests" class="requests-list" aria-live="polite" aria-label="طلبات التواصل من الأندية">
+          <!-- injected by player.js -->
+        </div>
+      </div>
+
+      <!-- Tab: Videos -->
+      <div class="tab-panel" id="tab-videos" role="tabpanel" aria-labelledby="tab-btn-videos">
+        <div id="videos-list" class="videos-grid" aria-label="مقاطع الهايلايت" aria-live="polite">
+          <!-- injected by player.js -->
+        </div>
+        <button type="button" class="btn btn--ghost btn--sm" id="add-video-btn" aria-label="رفع مقطع جديد">
+          ▶ رفع مقطع
+        </button>
+        <input type="file" id="video-file-input" name="videos" accept="video/*" multiple class="sr-only" aria-label="اختر ملفات الفيديو" />
+      </div>
+
+      <!-- Tab: Stats -->
+      <div class="tab-panel" id="tab-stats" role="tabpanel" aria-labelledby="tab-btn-stats">
+        <div id="profile-views-chart" class="chart-placeholder" aria-label="مشاهدات الملف الشخصي خلال 30 يوماً">
+          <div class="chart-placeholder__icon" aria-hidden="true">📈</div>
+          <p class="chart-placeholder__label">المشاهدات خلال آخر 30 يوماً</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/player.js"></script>
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panelId = btn.getAttribute('data-panel');
+        document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        var panel = document.getElementById(panelId);
+        if (panel) panel.classList.add('active');
+      });
+    });
+
+    var navVideosLink = document.getElementById('nav-videos-link');
+    if (navVideosLink) {
+      navVideosLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var videosTab = document.querySelector('[data-panel="tab-videos"]');
+        if (videosTab) videosTab.click();
+      });
+    }
+  </script>
+</body>
+</html>

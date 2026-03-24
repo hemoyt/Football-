@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>في انتظار التوثيق — Got</title>
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <style>
+    .pending-page { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg-primary); }
+    .pending-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: var(--sp-8) var(--sp-4); }
+
+    .pending-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-card); padding: var(--sp-10);
+      max-width: 580px; width: 100%; text-align: center;
+      box-shadow: var(--shadow-elevated); animation: fadeSlideUp 0.5s ease;
+    }
+
+    .pending-icon { font-size: 5rem; margin-bottom: var(--sp-6); display: block; animation: pulse 2.5s ease infinite; }
+    .pending-title { font-size: 2rem; font-weight: 900; color: var(--gold-primary); margin-bottom: var(--sp-4); }
+    .pending-desc { color: var(--text-secondary); font-size: 1rem; line-height: 1.8; margin-bottom: var(--sp-8); max-width: 440px; margin-inline: auto; }
+
+    .pending-steps {
+      background: var(--bg-elevated); border-radius: var(--radius-card);
+      padding: var(--sp-6); margin-bottom: var(--sp-8); text-align: start;
+    }
+
+    .pending-steps__title { font-size: 0.82rem; color: var(--text-secondary); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--sp-4); }
+
+    .pending-step { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; color: var(--text-secondary); }
+    .pending-step:last-child { border-bottom: none; }
+    .pending-step--done { color: var(--success); }
+
+    .pending-step__icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; }
+    .pending-step--done    .pending-step__icon { background: rgba(30,132,73,0.2); color: var(--success); }
+    .pending-step--current .pending-step__icon { background: rgba(212,175,55,0.15); color: var(--gold-primary); animation: pulse 2s ease infinite; }
+    .pending-step--future  .pending-step__icon { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); }
+
+    .contact-note {
+      background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.15);
+      border-radius: var(--radius-card); padding: var(--sp-4);
+      font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--sp-6);
+      line-height: 1.7;
+    }
+
+    .contact-note a { color: var(--gold-primary); }
+  </style>
+</head>
+<body data-page="club-pending" class="pending-page">
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="pending-content">
+    <div class="pending-card">
+      <span class="pending-icon">⏳</span>
+      <h1 class="pending-title">تم إرسال الطلب</h1>
+      <p class="pending-desc">
+        شكراً لتسجيل ناديك في Got. طلبك قيد المراجعة حالياً.
+        نوثّق جميع الأندية للحفاظ على جودة المنصة وأمانها.
+      </p>
+
+      <div class="pending-steps">
+        <div class="pending-steps__title">مراحل التوثيق</div>
+
+        <div class="pending-step pending-step--done">
+          <div class="pending-step__icon">✓</div>
+          <span>تم إرسال الطلب مع وثيقة التوثيق</span>
+        </div>
+
+        <div class="pending-step pending-step--current">
+          <div class="pending-step__icon">◉</div>
+          <span>فريق Got يراجع وثائقك <em>(حتى ٤٨ ساعة)</em></span>
+        </div>
+
+        <div class="pending-step pending-step--future">
+          <div class="pending-step__icon">○</div>
+          <span>إرسال إشعار بريد إلكتروني بنتيجة المراجعة</span>
+        </div>
+
+        <div class="pending-step pending-step--future">
+          <div class="pending-step__icon">○</div>
+          <span>وصول كامل إلى البحث عن اللاعبين ونظام التواصل</span>
+        </div>
+      </div>
+
+      <div class="contact-note">
+        <p>تحتاج مساعدة؟ تواصل معنا على <a href="mailto:support@got.football">support@got.football</a></p>
+        <p style="margin-top:var(--sp-2)">تحقق من مجلد الرسائل غير المرغوب فيها بحثاً عن بريدنا.</p>
+      </div>
+
+      <div style="display:flex;gap:var(--sp-3);justify-content:center;flex-wrap:wrap">
+        <a href="/login.html" class="btn btn--outline">العودة لتسجيل الدخول</a>
+        <button class="btn btn--ghost" onclick="checkStatus()">تحقق من الحالة</button>
+      </div>
+
+      <div id="status-result" style="margin-top:var(--sp-4)"></div>
+    </div>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      renderNavbar('guest');
+    });
+
+    async function checkStatus() {
+      var btn = event.target;
+      btn.disabled = true;
+      btn.textContent = 'جارٍ التحقق…';
+
+      try {
+        var res = await apiRequest('/api/club/profile.php');
+        var el  = document.getElementById('status-result');
+
+        if (res.verification_status === 'verified') {
+          el.innerHTML = '<div class="badge badge--verified" style="font-size:1rem;padding:8px 16px">🛡 تم التوثيق! جارٍ التحويل…</div>';
+          setTimeout(function() { window.location.href = '/club/dashboard.html'; }, 1500);
+        } else if (res.verification_status === 'rejected') {
+          el.innerHTML = '<div class="badge badge--rejected" style="font-size:0.9rem;padding:8px 16px">تم رفض الطلب' + (res.rejection_reason ? ': ' + res.rejection_reason : '') + '</div>';
+          btn.disabled = false;
+          btn.textContent = 'تحقق من الحالة';
+        } else {
+          renderToast('طلبك لا يزال قيد المراجعة. تحقق لاحقاً.', 'info');
+          btn.disabled = false;
+          btn.textContent = 'تحقق من الحالة';
+        }
+      } catch {
+        renderToast('يرجى تسجيل الدخول للتحقق من الحالة.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'تحقق من الحالة';
+      }
+    }
+  </script>
+</body>
+</html>

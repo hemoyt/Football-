@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ابنِ ملفك الشخصي في Got — بوابة الأهداف." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>ملفي الشخصي — Got</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/pages/profile.css" />
+
+  <style>
+    .profile-builder-page {
+      min-height: 100vh;
+      padding: var(--sp-12) var(--sp-4);
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 60%);
+    }
+
+    .profile-builder-header { text-align: center; margin-bottom: var(--sp-10); }
+    .profile-builder-header__title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-3); }
+    .profile-builder-header__subtitle { color: var(--text-secondary); font-size: 1rem; max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+    .form-alert {
+      padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-input); font-size: 0.9rem;
+      margin-bottom: var(--sp-6); border-right: 3px solid var(--danger);
+      background: rgba(192,57,43,0.08); color: var(--danger);
+    }
+
+    .profile-section {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: var(--radius-card); padding: var(--sp-8); margin-bottom: var(--sp-6);
+      transition: border-color var(--transition-base);
+    }
+
+    .profile-section:hover { border-color: var(--gold-dim); }
+    .profile-section__title { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--sp-2); }
+    .profile-section__description { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--sp-6); line-height: 1.6; }
+
+    .photo-upload-wrapper { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
+
+    .photo-upload-area {
+      position: relative; width: 140px; height: 140px; border-radius: 50%;
+      border: 3px dashed var(--gold-dim); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; cursor: pointer; transition: border-color var(--transition-base);
+    }
+
+    .photo-upload-area:hover { border-color: var(--gold-primary); }
+
+    .photo-upload-area__placeholder { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); color: var(--gold-dim); text-align: center; }
+    .photo-upload-area__placeholder-icon { font-size: 2.5rem; }
+    .photo-upload-area__placeholder-text { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    #photo-preview { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
+    .photo-upload-area__overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold-primary); font-size: 1.6rem; opacity: 0; transition: opacity var(--transition-fast);
+    }
+
+    .photo-upload-area:hover .photo-upload-area__overlay { opacity: 1; }
+
+    .textarea-wrapper { position: relative; }
+    .char-counter { position: absolute; bottom: var(--sp-2); left: var(--sp-3); font-size: 0.75rem; color: var(--text-secondary); pointer-events: none; }
+    .form-textarea { padding-bottom: var(--sp-8); }
+
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6) var(--sp-8); }
+
+    .skill-slider-group__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-2); }
+    .skill-slider-group__label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); }
+    .skill-slider-group__value { font-size: 0.9rem; font-weight: 700; color: var(--gold-primary); min-width: 28px; text-align: start; }
+
+    .career-table-wrapper { border: 1px solid var(--border); border-radius: var(--radius-input); overflow: hidden; margin-bottom: var(--sp-4); }
+
+    .career-table-header {
+      display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr auto;
+      gap: var(--sp-3); padding: var(--sp-3) var(--sp-4);
+      background: var(--bg-elevated); border-bottom: 1px solid var(--border);
+    }
+
+    .career-col { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; color: var(--text-secondary); }
+
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-4); }
+
+    .form-actions--profile { display: flex; justify-content: flex-start; padding: var(--sp-4) 0 var(--sp-12); }
+
+    @media (max-width: 640px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .career-table-header { display: none; }
+      .form-actions--profile { justify-content: stretch; }
+      .form-actions--profile .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body data-page="player-profile-builder">
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="profile-builder-page">
+    <div class="container" style="max-width: 800px;">
+
+      <header class="profile-builder-header">
+        <h1 class="profile-builder-header__title">ابنِ ملفك الشخصي</h1>
+        <p class="profile-builder-header__subtitle">أكمل ملفك ليكتشفك الأندية الموثقة وتحظى بفرص احترافية</p>
+      </header>
+
+      <div id="profile-alert" class="form-alert" role="alert" aria-live="polite" hidden></div>
+
+      <form id="profile-form" novalidate>
+
+        <!-- Section 1: Photo -->
+        <section class="profile-section" aria-labelledby="section-photo-title">
+          <h2 class="profile-section__title" id="section-photo-title">📷 الصورة الشخصية</h2>
+          <p class="profile-section__description">صورة واضحة تساعد الأندية على التعرف عليك</p>
+
+          <div class="photo-upload-wrapper">
+            <div id="photo-upload-area" class="photo-upload-area" role="button" tabindex="0"
+              aria-label="رفع صورة شخصية — انقر أو اضغط Enter لاختيار ملف" aria-describedby="photo-upload-hint">
+              <img id="photo-preview" src="" alt="معاينة صورتك الشخصية" hidden />
+              <div class="photo-upload-area__placeholder" id="photo-placeholder">
+                <span class="photo-upload-area__placeholder-icon" aria-hidden="true">📸</span>
+                <span class="photo-upload-area__placeholder-text">ارفع صورة</span>
+              </div>
+              <div class="photo-upload-area__overlay" aria-hidden="true">✏️</div>
+            </div>
+
+            <input type="file" id="photo-input" name="photo" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-label="اختر ملف الصورة" />
+            <p id="photo-upload-hint" class="form-hint">JPG أو PNG أو WEBP. الحد الأقصى 5 ميغابايت.</p>
+          </div>
+        </section>
+
+        <!-- Section 2: Bio -->
+        <section class="profile-section" aria-labelledby="section-bio-title">
+          <h2 class="profile-section__title" id="section-bio-title">📝 نبذة عني</h2>
+          <p class="profile-section__description">أخبر الأندية عن أسلوبك في اللعب وطموحاتك وما يميزك</p>
+
+          <div class="form-group">
+            <label class="form-label" for="bio">السيرة الكروية</label>
+            <div class="textarea-wrapper">
+              <textarea class="form-textarea" id="bio" name="bio" maxlength="300" rows="5"
+                placeholder="صف أسلوبك في اللعب، نقاط قوتك، أهدافك المهنية..." aria-describedby="bio-char-count"></textarea>
+              <span class="char-counter" id="bio-char-count" aria-live="polite" aria-atomic="true">
+                <span id="bio-char-current">0</span>/300
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Skills -->
+        <section class="profile-section" aria-labelledby="section-skills-title">
+          <h2 class="profile-section__title" id="section-skills-title">⚡ المهارات</h2>
+          <p class="profile-section__description">قيّم مهاراتك من 0 إلى 100</p>
+
+          <div class="skills-grid">
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-speed">السرعة</label>
+                <output class="skill-slider-group__value" id="val-skill-speed" for="skill-speed">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-speed" name="speed" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-dribbling">المراوغة</label>
+                <output class="skill-slider-group__value" id="val-skill-dribbling" for="skill-dribbling">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-dribbling" name="dribbling" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-shooting">التسديد</label>
+                <output class="skill-slider-group__value" id="val-skill-shooting" for="skill-shooting">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-shooting" name="shooting" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-passing">التمرير</label>
+                <output class="skill-slider-group__value" id="val-skill-passing" for="skill-passing">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-passing" name="passing" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-defending">الدفاع</label>
+                <output class="skill-slider-group__value" id="val-skill-defending" for="skill-defending">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-defending" name="defending" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+            <div class="skill-slider-group">
+              <div class="skill-slider-group__header">
+                <label class="skill-slider-group__label" for="skill-heading">الرأسية</label>
+                <output class="skill-slider-group__value" id="val-skill-heading" for="skill-heading">50</output>
+              </div>
+              <input type="range" class="skill-slider" id="skill-heading" name="heading" min="0" max="100" value="50" style="--val:50%" />
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Section 4: Career -->
+        <section class="profile-section" aria-labelledby="section-career-title">
+          <h2 class="profile-section__title" id="section-career-title">🏟 السجل المهني</h2>
+          <p class="profile-section__description">أدرج أنديتك السابقة وإحصائياتك بكل موسم</p>
+
+          <div class="career-table-wrapper">
+            <div class="career-table-header" aria-hidden="true">
+              <span class="career-col">النادي</span>
+              <span class="career-col">الموسم</span>
+              <span class="career-col">م.م</span>
+              <span class="career-col">أهداف</span>
+              <span class="career-col">تمريرات</span>
+              <span class="career-col">حذف</span>
+            </div>
+            <div id="career-rows" class="career-rows"></div>
+          </div>
+
+          <button type="button" id="add-career-row" class="btn btn--ghost btn--sm" aria-label="أضف سجل مهني">
+            + أضف نادياً
+          </button>
+        </section>
+
+        <!-- Section 5: Videos -->
+        <section class="profile-section" aria-labelledby="section-videos-title">
+          <h2 class="profile-section__title" id="section-videos-title">🎬 مقاطع الهايلايت</h2>
+          <p class="profile-section__description">ارفع مقاطع تُظهر قدراتك على أرض الملعب</p>
+
+          <div id="videos-list" class="videos-grid" aria-label="المقاطع المرفوعة"></div>
+
+          <button type="button" id="add-video-btn" class="btn btn--ghost btn--sm" aria-label="رفع مقطع">
+            ▶ أضف مقطعاً
+          </button>
+
+          <input type="file" id="video-file-input" name="videos" accept="video/*" multiple class="sr-only" aria-label="اختر ملفات الفيديو" />
+        </section>
+
+        <!-- Section 6: Social -->
+        <section class="profile-section" aria-labelledby="section-social-title">
+          <h2 class="profile-section__title" id="section-social-title">🔗 روابط التواصل</h2>
+          <p class="profile-section__description">ساعد الأندية على إيجاد المزيد من محتواك</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="instagram_url">رابط إنستغرام</label>
+              <input class="form-input" type="url" id="instagram_url" name="instagram_url"
+                placeholder="https://instagram.com/yourusername" autocomplete="url" dir="ltr" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="youtube_url">رابط يوتيوب</label>
+              <input class="form-input" type="url" id="youtube_url" name="youtube_url"
+                placeholder="https://youtube.com/@yourchannel" autocomplete="url" dir="ltr" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Submit -->
+        <div class="form-actions form-actions--profile">
+          <button type="submit" class="btn btn--primary btn--lg" id="save-profile-btn">
+            حفظ الملف الشخصي ←
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/player.js"></script>
+  <script>
+    // Bio char counter
+    var bioTextarea = document.getElementById('bio');
+    var bioCounter  = document.getElementById('bio-char-current');
+    if (bioTextarea && bioCounter) {
+      bioTextarea.addEventListener('input', function () {
+        bioCounter.textContent = bioTextarea.value.length;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="أنشئ حسابك كلاعب في GOG — بوابة الأهداف." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>تسجيل لاعب — GOG</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/pages/profile.css" />
+
+  <style>
+    .register-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .register-panel {
+      background: linear-gradient(160deg, #0f0f0f 0%, #111111 60%, #0A0A0A 100%);
+      border-left: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-12) var(--sp-8);
+    }
+
+    .register-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(212,175,55,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .register-panel__inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .register-panel__logo {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold-primary) 45%, var(--gold-light) 65%, var(--gold-primary) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 5s linear infinite;
+      margin-bottom: var(--sp-4);
+      display: block;
+    }
+
+    .register-panel__name {
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: var(--sp-6);
+      font-weight: 600;
+    }
+
+    .register-panel__tagline {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      margin-bottom: var(--sp-10);
+    }
+
+    .register-panel__tagline strong { color: var(--gold-primary); font-weight: 700; }
+
+    .panel-decoration {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .panel-decoration--tl  { top:-80px; right:-80px; width:300px; height:300px; border:1px solid rgba(212,175,55,0.06); }
+    .panel-decoration--br  { bottom:-100px; left:-100px; width:400px; height:400px; border:1px solid rgba(212,175,55,0.04); }
+    .panel-decoration--mid { bottom:20%; right:-40px; width:180px; height:180px; border:1px solid rgba(212,175,55,0.05); }
+
+    .panel-stats { display: flex; justify-content: center; gap: var(--sp-8); }
+    .panel-stat__number { font-family: var(--font-display); font-size: 2rem; color: var(--gold-primary); line-height: 1; }
+    .panel-stat__label  { font-size: 0.75rem; color: var(--text-secondary); margin-top: var(--sp-1); }
+
+    .register-form-panel {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-6);
+      overflow-y: auto;
+      background: var(--bg-primary);
+    }
+
+    .register-form-card { width: 100%; max-width: 560px; padding: var(--sp-8) 0; }
+
+    .reg-steps { display: flex; align-items: center; margin-bottom: var(--sp-8); }
+    .reg-step  { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+
+    .reg-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      right: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .reg-step.done::after { background: var(--gold-primary); }
+
+    .reg-step__num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg-elevated); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);
+      position: relative; z-index: 1;
+      transition: all var(--transition-base);
+    }
+
+    .reg-step.active .reg-step__num { border-color: var(--gold-primary); background: var(--gold-primary); color: var(--bg-primary); }
+    .reg-step.done   .reg-step__num { border-color: var(--gold-primary); background: rgba(212,175,55,0.15); color: var(--gold-primary); }
+
+    .reg-step__label { font-size: 0.7rem; color: var(--text-secondary); margin-top: var(--sp-2); text-align: center; }
+    .reg-step.active .reg-step__label { color: var(--gold-primary); }
+
+    .register-form-card__title { font-size: 2rem; font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-2); }
+    .register-form-card__subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: var(--sp-6); }
+
+    .password-field { position: relative; display: flex; align-items: center; }
+    .password-field .form-input { padding-left: 48px; }
+
+    .password-toggle {
+      position: absolute; left: 0; top: 0; height: 100%; width: 46px;
+      background: transparent; border: none; cursor: pointer; color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      border-radius: var(--radius-input) 0 0 var(--radius-input);
+      transition: color var(--transition-fast);
+    }
+    .password-toggle:hover { color: var(--gold-primary); }
+
+    .form-alert {
+      padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-input); font-size: 0.9rem;
+      margin-bottom: var(--sp-4); border-right: 3px solid var(--danger);
+      background: rgba(192,57,43,0.08); color: var(--danger);
+    }
+
+    .form-section-divider {
+      display: flex; align-items: center; gap: var(--sp-3);
+      margin: var(--sp-6) 0 var(--sp-4);
+    }
+    .form-section-divider::before,
+    .form-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .form-section-divider__label { font-size: 0.82rem; color: var(--gold-dim); white-space: nowrap; font-weight: 600; }
+
+    .form-actions { margin-top: var(--sp-8); }
+    .register-footer { text-align: center; margin-top: var(--sp-6); font-size: 0.9rem; color: var(--text-secondary); }
+    .required-mark { color: var(--gold-primary); margin-right: 2px; }
+    .optional-tag { font-size: 0.75rem; color: var(--text-secondary); font-weight: 400; margin-right: 4px; }
+
+    @media (max-width: 768px) {
+      .register-layout { grid-template-columns: 1fr; }
+      .register-panel { display: none; }
+      .register-form-panel { padding: var(--sp-6) var(--sp-4); }
+    }
+  </style>
+</head>
+<body data-page="player-register">
+
+  <div class="register-layout">
+
+    <!-- Left decorative panel -->
+    <aside class="register-panel" aria-hidden="true">
+      <div class="panel-decoration panel-decoration--tl"></div>
+      <div class="panel-decoration panel-decoration--br"></div>
+      <div class="panel-decoration panel-decoration--mid"></div>
+
+      <div class="register-panel__inner">
+        <span class="register-panel__logo">GOG</span>
+        <p class="register-panel__name">بوابة الأهداف</p>
+        <p class="register-panel__tagline">
+          المنصة التي تجمع <strong>المواهب بالفرص</strong>.<br />
+          اكتشفك الأندية الموثقة حول العالم.
+        </p>
+        <div class="panel-stats">
+          <div class="panel-stat">
+            <div class="panel-stat__number">500+</div>
+            <div class="panel-stat__label">لاعب</div>
+          </div>
+          <div class="panel-stat">
+            <div class="panel-stat__number">80+</div>
+            <div class="panel-stat__label">نادٍ</div>
+          </div>
+          <div class="panel-stat">
+            <div class="panel-stat__number">30+</div>
+            <div class="panel-stat__label">دولة</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right form panel -->
+    <main class="register-form-panel">
+      <div class="register-form-card">
+
+        <nav aria-label="تقدم التسجيل">
+          <ol class="reg-steps" role="list">
+            <li class="reg-step active" data-step="1" aria-current="step">
+              <span class="reg-step__num" aria-hidden="true">١</span>
+              <span class="reg-step__label">الحساب</span>
+            </li>
+            <li class="reg-step" data-step="2">
+              <span class="reg-step__num" aria-hidden="true">٢</span>
+              <span class="reg-step__label">بيانات اللاعب</span>
+            </li>
+            <li class="reg-step" data-step="3">
+              <span class="reg-step__num" aria-hidden="true">٣</span>
+              <span class="reg-step__label">تم</span>
+            </li>
+          </ol>
+        </nav>
+
+        <h1 class="register-form-card__title">أنشئ حسابك</h1>
+        <p class="register-form-card__subtitle">انضم إلى GOG وابدأ رحلتك نحو القمة</p>
+
+        <div id="register-alert" class="form-alert" role="alert" aria-live="polite" hidden></div>
+
+        <form id="player-register-form" novalidate>
+
+          <div class="form-section-divider">
+            <span class="form-section-divider__label">بيانات الحساب</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="full_name">
+                الاسم الكامل<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input class="form-input" type="text" id="full_name" name="full_name"
+                placeholder="اسمك الكامل" autocomplete="name" required aria-required="true" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">
+                البريد الإلكتروني<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input class="form-input" type="email" id="email" name="email"
+                placeholder="example@email.com" autocomplete="email" required aria-required="true" dir="ltr" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="password">
+                كلمة المرور<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <div class="password-field">
+                <input class="form-input" type="password" id="password" name="password"
+                  placeholder="كلمة مرور قوية" autocomplete="new-password" required aria-required="true" dir="ltr" />
+                <button type="button" class="password-toggle" aria-label="إظهار كلمة المرور" data-target="password">👁</button>
+              </div>
+              <span class="form-hint">٨ أحرف على الأقل</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">
+                تأكيد كلمة المرور<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <div class="password-field">
+                <input class="form-input" type="password" id="confirm_password" name="confirm_password"
+                  placeholder="أعد كتابة كلمة المرور" autocomplete="new-password" required aria-required="true" dir="ltr" />
+                <button type="button" class="password-toggle" aria-label="إظهار تأكيد كلمة المرور" data-target="confirm_password">👁</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section-divider">
+            <span class="form-section-divider__label">بيانات اللاعب</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="date_of_birth">
+                تاريخ الميلاد<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input class="form-input" type="date" id="date_of_birth" name="date_of_birth" required aria-required="true" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="nationality">
+                الجنسية<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input class="form-input" type="text" id="nationality" name="nationality"
+                placeholder="مثال: سعودي، مصري، برازيلي" autocomplete="off" required aria-required="true" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="country_residence">
+                بلد الإقامة<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <input class="form-input" type="text" id="country_residence" name="country_residence"
+                placeholder="البلد الذي تقيم فيه حالياً" autocomplete="country-name" required aria-required="true" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="preferred_foot">
+                القدم المفضلة<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <select class="form-select" id="preferred_foot" name="preferred_foot" required aria-required="true">
+                <option value="" disabled selected>اختر القدم</option>
+                <option value="right">اليمنى</option>
+                <option value="left">اليسرى</option>
+                <option value="both">كلتاهما</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="position_primary">
+                المركز الأساسي<span class="required-mark" aria-hidden="true">*</span>
+              </label>
+              <select class="form-select" id="position_primary" name="position_primary" required aria-required="true">
+                <option value="" disabled selected>اختر المركز</option>
+                <option value="GK">GK — حارس مرمى</option>
+                <option value="CB">CB — مدافع وسط</option>
+                <option value="LB">LB — ظهير أيسر</option>
+                <option value="RB">RB — ظهير أيمن</option>
+                <option value="CDM">CDM — وسط دفاعي</option>
+                <option value="CM">CM — وسط</option>
+                <option value="CAM">CAM — وسط هجومي</option>
+                <option value="LW">LW — جناح أيسر</option>
+                <option value="RW">RW — جناح أيمن</option>
+                <option value="ST">ST — مهاجم</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="position_secondary">
+                المركز الثانوي<span class="optional-tag">(اختياري)</span>
+              </label>
+              <select class="form-select" id="position_secondary" name="position_secondary">
+                <option value="">لا يوجد</option>
+                <option value="GK">GK — حارس مرمى</option>
+                <option value="CB">CB — مدافع وسط</option>
+                <option value="LB">LB — ظهير أيسر</option>
+                <option value="RB">RB — ظهير أيمن</option>
+                <option value="CDM">CDM — وسط دفاعي</option>
+                <option value="CM">CM — وسط</option>
+                <option value="CAM">CAM — وسط هجومي</option>
+                <option value="LW">LW — جناح أيسر</option>
+                <option value="RW">RW — جناح أيمن</option>
+                <option value="ST">ST — مهاجم</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="height_cm">
+                الطول<span class="optional-tag">(اختياري)</span>
+              </label>
+              <input class="form-input" type="number" id="height_cm" name="height_cm"
+                placeholder="سم" min="140" max="230" step="1" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="weight_kg">
+                الوزن<span class="optional-tag">(اختياري)</span>
+              </label>
+              <input class="form-input" type="number" id="weight_kg" name="weight_kg"
+                placeholder="كغ" min="40" max="150" step="1" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary btn--full btn--lg" id="register-submit-btn">
+              إنشاء حساب اللاعب ←
+            </button>
+          </div>
+
+        </form>
+
+        <footer class="register-footer">
+          <p>لديك حساب بالفعل؟ <a href="/login.html">سجّل الدخول</a></p>
+        </footer>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

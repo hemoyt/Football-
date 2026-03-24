@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة النادي — Got</title>
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/dashboard.css">
+
+  <style>
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: var(--sp-4);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-5);
+      margin-bottom: var(--sp-6);
+    }
+
+    .filter-bar .form-group { margin-bottom: 0; }
+
+    .filter-bar .filter-actions {
+      display: flex; align-items: flex-end; gap: var(--sp-2);
+    }
+
+    .results-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--sp-4);
+    }
+
+    .results-count {
+      font-size: 0.88rem; color: var(--text-secondary);
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--sp-5);
+      margin-bottom: var(--sp-8);
+    }
+
+    .page-header { margin-bottom: var(--sp-6); }
+    .page-header__title { font-size: 1.9rem; font-weight: 900; color: var(--text-primary); margin-bottom: var(--sp-1); }
+    .page-header__subtitle { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+    .dashboard-section { display: none; }
+    .dashboard-section.active { display: block; }
+
+    #pagination { margin-top: var(--sp-4); }
+
+    .saved-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--sp-5);
+    }
+
+    .requests-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+  </style>
+</head>
+<body data-page="club-dashboard">
+
+  <div id="navbar-placeholder"></div>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar__profile">
+        <div class="avatar avatar--lg avatar-placeholder" id="club-logo-placeholder" style="width:72px;height:72px;margin:0 auto;font-size:2rem;border-radius:var(--radius-btn)">🏟</div>
+        <img id="club-logo" src="" alt="" class="avatar avatar--lg" style="display:none;margin:0 auto;border-radius:var(--radius-btn)">
+        <div class="sidebar__name" id="club-name">اسم النادي</div>
+        <div class="sidebar__role" id="club-country" style="font-size:0.8rem;color:var(--text-secondary)">جارٍ التحميل…</div>
+        <div style="margin-top:var(--sp-2)" id="club-verified-badge"></div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="#" class="sidebar__link active" data-section="search" onclick="showSection('search',this);return false">
+          <span>🔍</span> البحث عن لاعبين
+        </a>
+        <a href="#" class="sidebar__link" data-section="saved" onclick="showSection('saved',this);return false">
+          <span>🔖</span> اللاعبون المحفوظون
+        </a>
+        <a href="#" class="sidebar__link" data-section="requests" onclick="showSection('requests',this);return false">
+          <span>📤</span> الطلبات المرسلة
+        </a>
+        <div class="divider"></div>
+        <a href="#" class="sidebar__link" onclick="handleLogout();return false">
+          <span>🚪</span> تسجيل الخروج
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dashboard-main">
+
+      <!-- SECTION: Player Search -->
+      <section id="section-search" class="dashboard-section active">
+        <div class="page-header">
+          <h1 class="page-header__title">البحث عن لاعبين</h1>
+          <p class="page-header__subtitle">تصفّح قاعدة بيانات اللاعبين الموثقين وابحث عن موهبتك القادمة.</p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="form-group">
+            <label class="form-label">المركز</label>
+            <select class="form-select" id="filter-position">
+              <option value="">جميع المراكز</option>
+              <option value="GK">GK — حارس مرمى</option>
+              <option value="CB">CB — مدافع وسط</option>
+              <option value="LB">LB — ظهير أيسر</option>
+              <option value="RB">RB — ظهير أيمن</option>
+              <option value="CDM">CDM — وسط دفاعي</option>
+              <option value="CM">CM — وسط</option>
+              <option value="CAM">CAM — وسط هجومي</option>
+              <option value="LW">LW — جناح أيسر</option>
+              <option value="RW">RW — جناح أيمن</option>
+              <option value="ST">ST — مهاجم</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الجنسية</label>
+            <input class="form-input" type="text" id="filter-nationality" placeholder="مثال: سعودي، برازيلي">
+          </div>
+          <div class="form-group">
+            <label class="form-label">القدم المفضلة</label>
+            <select class="form-select" id="filter-foot">
+              <option value="">أي قدم</option>
+              <option value="left">اليسرى</option>
+              <option value="right">اليمنى</option>
+              <option value="both">كلتاهما</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">العمر (من)</label>
+            <input class="form-input" type="number" id="filter-age-min" placeholder="١٦" min="14" max="45">
+          </div>
+          <div class="form-group">
+            <label class="form-label">العمر (إلى)</label>
+            <input class="form-input" type="number" id="filter-age-max" placeholder="٣٥" min="14" max="45">
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn--primary btn--full" id="search-btn" onclick="searchPlayers(1)">
+              بحث
+            </button>
+          </div>
+        </div>
+
+        <div class="results-header">
+          <span id="results-count" class="results-count"></span>
+        </div>
+
+        <div id="players-grid" class="players-grid" aria-live="polite" aria-label="نتائج البحث"></div>
+        <div id="pagination"></div>
+      </section>
+
+      <!-- SECTION: Saved Players -->
+      <section id="section-saved" class="dashboard-section">
+        <div class="page-header">
+          <h1 class="page-header__title">اللاعبون المحفوظون</h1>
+          <p class="page-header__subtitle">اللاعبون الذين حفظتهم للمراجعة لاحقاً.</p>
+        </div>
+        <div id="saved-players" class="saved-list" aria-live="polite"></div>
+      </section>
+
+      <!-- SECTION: Sent Requests -->
+      <section id="section-requests" class="dashboard-section">
+        <div class="page-header">
+          <h1 class="page-header__title">الطلبات المرسلة</h1>
+          <p class="page-header__subtitle">سجل طلبات التواصل التي أرسلها ناديك.</p>
+        </div>
+        <div id="sent-requests" class="requests-list" aria-live="polite"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/club.js"></script>
+  <script>
+    function showSection(name, link) {
+      document.querySelectorAll('.dashboard-section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.sidebar__link').forEach(function(l) { l.classList.remove('active'); });
+
+      var sec = document.getElementById('section-' + name);
+      if (sec) sec.classList.add('active');
+      if (link) link.classList.add('active');
+
+      if (name === 'saved')    loadSavedPlayers();
+      if (name === 'requests') loadSentRequests();
+    }
+  </script>
+</body>
+</html>
