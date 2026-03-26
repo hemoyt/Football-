@@ -3,6 +3,11 @@
 -- Engine: InnoDB | Charset: utf8mb4 | Collation: utf8mb4_unicode_ci
 -- ═══════════════════════════════════════════════════════════════
 
+CREATE DATABASE IF NOT EXISTS gog_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE gog_db;
 
 -- ═══════════════════════════════════════
 -- TABLE 1: users (base auth table)

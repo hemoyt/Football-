@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="لوحة تحكم المشرف — Got بوابة الأهداف.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0A0A0A">
+  <title>المشرف — Got</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <style>
+    .admin-login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-4);
+      background: #000;
+    }
+
+    .admin-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: var(--sp-8);
+      box-shadow: var(--shadow-elevated);
+      animation: fadeSlideUp 0.4s ease both;
+    }
+
+    .admin-card__logo {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-primary);
+      text-align: center;
+      display: block;
+      margin-bottom: var(--sp-4);
+      text-decoration: none;
+    }
+
+    .admin-card__title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: var(--sp-1);
+    }
+
+    .admin-card__subtitle {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--sp-6);
+    }
+
+    .admin-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+      background: rgba(192, 57, 43, 0.08);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+      border-radius: var(--radius-btn);
+      padding: var(--sp-3) var(--sp-4);
+      margin-bottom: var(--sp-6);
+    }
+
+    .admin-warning__icon { font-size: 1rem; flex-shrink: 0; line-height: 1.5; }
+    .admin-warning__text { font-size: 0.8rem; color: #e74c3c; line-height: 1.5; }
+
+    .password-field { position: relative; display: flex; align-items: center; }
+
+    .password-field .form-input { padding-left: 48px; padding-right: 16px; }
+
+    .password-toggle {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 46px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-input) 0 0 var(--radius-input);
+      transition: color var(--transition-fast);
+    }
+
+    .password-toggle:hover { color: var(--gold-primary); }
+
+    .admin-divider { height: 1px; background: var(--border); margin: var(--sp-6) 0; }
+
+    .admin-hint {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: var(--sp-4);
+      opacity: 0.7;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body data-page="admin-login">
+
+  <main class="admin-login-page">
+    <div class="admin-card">
+
+      <a href="/index.html" class="admin-card__logo" aria-label="Got — بوابة الأهداف">Got</a>
+
+      <h1 class="admin-card__title">لوحة المشرف</h1>
+      <p class="admin-card__subtitle">وصول مقيّد — للمشرفين فقط</p>
+
+      <div class="admin-warning" role="alert">
+        <span class="admin-warning__icon">&#9888;</span>
+        <span class="admin-warning__text">محاولات الوصول غير المصرح بها مسجّلة وقد تترتب عليها تبعات قانونية.</span>
+      </div>
+
+      <form id="admin-login-form" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="email">البريد الإلكتروني</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="admin@got.com"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">كلمة المرور</label>
+          <div class="password-field">
+            <input
+              class="form-input"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="أدخل كلمة المرور"
+              autocomplete="current-password"
+              required
+            >
+            <button type="button" class="password-toggle" aria-label="إظهار/إخفاء كلمة المرور">&#128065;</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin_secret">مفتاح الوصول</label>
+          <div class="password-field">
+            <input
+              class="form-input"
+              type="password"
+              id="admin_secret"
+              name="admin_secret"
+              placeholder="أدخل مفتاح الوصول"
+              autocomplete="off"
+              required
+            >
+            <button type="button" class="password-toggle" aria-label="إظهار/إخفاء مفتاح الوصول">&#128065;</button>
+          </div>
+          <span class="form-hint">يُصدر المفتاح من قِبل مشرف النظام الرئيسي.</span>
+        </div>
+
+        <div class="admin-divider"></div>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="admin-submit-btn">
+          دخول لوحة المشرف
+        </button>
+
+      </form>
+
+      <p class="admin-hint">Got — بوابة الأهداف &mdash; النسخة التجريبية: admin@got.com / admin123 / got2025</p>
+
+    </div>
+  </main>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script>
+    // Password toggle buttons
+    document.querySelectorAll('.password-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = btn.closest('.password-field').querySelector('input');
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.textContent = isHidden ? '🙈' : '👁';
+      });
+    });
+
+    // Admin login form
+    document.getElementById('admin-login-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email  = document.getElementById('email').value.trim();
+      const pwd    = document.getElementById('password').value;
+      const secret = document.getElementById('admin_secret').value.trim();
+      const btn    = document.getElementById('admin-submit-btn');
+
+      if (!email || !pwd || !secret) {
+        renderToast('يرجى ملء جميع الحقول.', 'error');
+        return;
+      }
+
+      if (secret !== 'got2025') {
+        renderToast('مفتاح الوصول غير صحيح.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جارٍ التحقق…';
+
+      try {
+        const session = await apiRequest('/api/auth/login.php', {
+          method: 'POST',
+          body: JSON.stringify({ email, password: pwd }),
+        });
+
+        if (session.role !== 'admin') {
+          renderToast('هذا الحساب ليس حساب مشرف.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'دخول لوحة المشرف';
+          return;
+        }
+
+        renderToast('أهلاً بك أيها المشرف! 🛡', 'success');
+        setTimeout(() => { window.location.href = '/admin/dashboard.html'; }, 800);
+      } catch (err) {
+        renderToast(err.message || 'فشل تسجيل الدخول.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'دخول لوحة المشرف';
+      }
+    });
+  </script>
+</body>
+</html>

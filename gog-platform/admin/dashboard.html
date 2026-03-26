@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المشرف — Got</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages/dashboard.css">
+  <style>
+    .admin-header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: var(--sp-4) var(--sp-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-header__brand {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 64px);
+    }
+    .admin-sidebar {
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      padding: var(--sp-6) var(--sp-3);
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+    .admin-main { padding: var(--sp-8); overflow: auto; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-8);
+    }
+    @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .stats-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px)  { .admin-layout { grid-template-columns: 1fr; } .admin-sidebar { display: none; } }
+  </style>
+</head>
+<body data-page="admin-dashboard">
+
+  <header class="admin-header">
+    <div class="admin-header__brand">Got — المشرف</div>
+    <div style="display:flex;align-items:center;gap:var(--sp-4)">
+      <span class="badge badge--verified">🛡 مشرف النظام</span>
+      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">تسجيل الخروج</button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <nav class="sidebar__nav">
+        <a href="#" class="sidebar__link active" onclick="switchTab('queue',this);return false">
+          <span>📋</span> طلبات التحقق
+        </a>
+        <a href="#" class="sidebar__link" onclick="switchTab('players',this);return false">
+          <span>👤</span> اللاعبون
+        </a>
+        <a href="#" class="sidebar__link" onclick="switchTab('clubs',this);return false">
+          <span>🏟</span> الأندية
+        </a>
+        <a href="#" class="sidebar__link" onclick="switchTab('logs',this);return false">
+          <span>📊</span> سجل العمليات
+        </a>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card animate-fade-up delay-1">
+          <div class="stat-card__number" id="stat-total-players">—</div>
+          <div class="stat-card__label">إجمالي اللاعبين</div>
+        </div>
+        <div class="stat-card animate-fade-up delay-2">
+          <div class="stat-card__number" id="stat-pending-clubs" style="color:var(--gold-light)">—</div>
+          <div class="stat-card__label">أندية قيد الانتظار</div>
+        </div>
+        <div class="stat-card animate-fade-up delay-3">
+          <div class="stat-card__number" id="stat-verified-clubs" style="color:var(--success)">—</div>
+          <div class="stat-card__label">أندية موثّقة</div>
+        </div>
+        <div class="stat-card animate-fade-up delay-4">
+          <div class="stat-card__number" id="stat-rejected-clubs" style="color:var(--danger)">—</div>
+          <div class="stat-card__label">مرفوضة</div>
+        </div>
+      </div>
+
+      <!-- Mobile tabs -->
+      <div class="tabs hide-desktop" style="margin-bottom:var(--sp-6)">
+        <button class="tab-btn active" data-panel="queue"   onclick="switchTab('queue',this)">طلبات التحقق</button>
+        <button class="tab-btn"        data-panel="players" onclick="switchTab('players',this)">اللاعبون</button>
+        <button class="tab-btn"        data-panel="clubs"   onclick="switchTab('clubs',this)">الأندية</button>
+        <button class="tab-btn"        data-panel="logs"    onclick="switchTab('logs',this)">السجل</button>
+      </div>
+
+      <!-- Verification Queue -->
+      <section id="panel-queue">
+        <div class="page-header">
+          <h2 class="page-header__title">طلبات التحقق</h2>
+          <p class="page-header__subtitle">راجع طلبات الأندية واعتمدها أو ارفضها.</p>
+        </div>
+        <div id="verification-queue">
+          <div class="flex-center" style="padding:var(--sp-16)"><div class="loader"></div></div>
+        </div>
+      </section>
+
+      <!-- Players Management -->
+      <section id="panel-players" style="display:none">
+        <div class="page-header flex-between">
+          <div>
+            <h2 class="page-header__title">اللاعبون</h2>
+            <p class="page-header__subtitle">إدارة جميع حسابات اللاعبين المسجلين.</p>
+          </div>
+          <input class="form-input" type="search" id="player-search" placeholder="ابحث بالاسم…" style="max-width:240px" oninput="filterPlayerTable(this.value)">
+        </div>
+        <div id="players-management">
+          <div class="flex-center" style="padding:var(--sp-16)"><div class="loader"></div></div>
+        </div>
+      </section>
+
+      <!-- Clubs Management -->
+      <section id="panel-clubs" style="display:none">
+        <div class="page-header">
+          <h2 class="page-header__title">الأندية</h2>
+          <p class="page-header__subtitle">إدارة حسابات الأندية وحالة التحقق.</p>
+        </div>
+        <div id="clubs-management">
+          <div class="flex-center" style="padding:var(--sp-16)"><div class="loader"></div></div>
+        </div>
+      </section>
+
+      <!-- System Logs -->
+      <section id="panel-logs" style="display:none">
+        <div class="page-header flex-between">
+          <div>
+            <h2 class="page-header__title">سجل العمليات</h2>
+            <p class="page-header__subtitle">سجل تدقيق لجميع إجراءات المشرف.</p>
+          </div>
+          <button class="btn btn--ghost btn--sm" onclick="loadSystemLogs(1)">تحديث</button>
+        </div>
+        <div id="system-logs">
+          <div class="flex-center" style="padding:var(--sp-16)"><div class="loader"></div></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/admin.js"></script>
+  <script>
+    function switchTab(name, el) {
+      document.querySelectorAll('[id^="panel-"]').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
+      document.getElementById(`panel-${name}`).style.display = 'block';
+      el?.classList.add('active');
+
+      if (name === 'queue')   loadVerificationQueue();
+      if (name === 'players') loadPlayersManagement(1);
+      if (name === 'clubs')   loadClubsManagement(1);
+      if (name === 'logs')    loadSystemLogs(1);
+    }
+
+    function filterPlayerTable(query) {
+      const rows = document.querySelectorAll('#players-management tbody tr');
+      query = query.toLowerCase();
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

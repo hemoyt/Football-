@@ -1,8 +1,8 @@
 <?php
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'u611715919_hemoytgot');
-define('DB_USER', 'u611715919_hemoyt2005at');
-define('DB_PASS', 'Hemoyt47005@');
+define('DB_NAME', 'gog_db');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
 define('UPLOAD_BASE', dirname(__DIR__) . '/uploads/');
 define('UPLOAD_URL_BASE', '/uploads/');

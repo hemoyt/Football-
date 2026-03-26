@@ -1,0 +1,66 @@
+/* GOG — Design Tokens */
+:root {
+  /* Colors */
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #111111;
+  --bg-elevated: #1A1A1A;
+  --gold-primary: #D4AF37;
+  --gold-light: #F0CD6A;
+  --gold-dim: #8B7522;
+  --text-primary: #F5F0E8;
+  --text-secondary: #A09880;
+  --border: #2A2A2A;
+  --danger: #C0392B;
+  --success: #1E8449;
+
+  /* Position Colors */
+  --pos-gk: #7B2D8B;
+  --pos-def: #1A5276;
+  --pos-mid: #1E8449;
+  --pos-fwd: #D4AF37;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-24: 96px;
+
+  /* Border Radius */
+  --radius-card: 12px;
+  --radius-btn: 6px;
+  --radius-input: 8px;
+  --radius-badge: 4px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.15);
+  --shadow-gold-md: 0 0 30px rgba(212, 175, 55, 0.25);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.6);
+
+  /* Typography */
+  --font-display: 'Bebas Neue', 'Arial Black', sans-serif;
+  --font-body: 'DM Sans', 'Cairo', sans-serif;
+  --font-arabic: 'Cairo', sans-serif;
+
+  /* Spacing additions */
+  --sp-5: 20px;
+  --sp-10: 40px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Z-index */
+  --z-base: 1;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+  --z-nav: 50;
+}

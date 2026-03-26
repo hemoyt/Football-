@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ملف اللاعب — Got بوابة الأهداف." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>ملف اللاعب — Got</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/pages/profile.css" />
+
+  <style>
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: var(--z-nav);
+      background: rgba(10,10,10,0.96);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 var(--sp-6); height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo {
+      font-family: var(--font-display); font-size: 2rem; letter-spacing: 0.06em;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+    .topbar__back {
+      font-size: 0.88rem; color: var(--text-secondary);
+      display: flex; align-items: center; gap: var(--sp-2);
+      transition: color var(--transition-fast); text-decoration: none;
+    }
+    .topbar__back:hover { color: var(--gold-primary); }
+
+    /* ── Profile hero ── */
+    .profile-hero { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: var(--sp-12) 0; }
+    .profile-hero__inner {
+      max-width: 1000px; margin: 0 auto; padding: 0 var(--sp-6);
+      display: flex; gap: var(--sp-8); align-items: flex-start;
+    }
+    .profile-hero__photo-wrap { flex-shrink: 0; }
+    #player-photo { width: 160px; height: 160px; border-radius: var(--radius-card); object-fit: cover; border: 3px solid var(--gold-dim); display: block; }
+    #player-photo-placeholder { width: 160px; height: 160px; border-radius: var(--radius-card); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; color: var(--gold-dim); font-size: 4rem; border: 3px solid var(--border); }
+    .profile-hero__info { flex: 1; min-width: 0; }
+    #player-name { font-family: 'Cairo', sans-serif; font-weight: 900; font-size: clamp(2rem, 5vw, 3rem); color: var(--text-primary); margin-bottom: var(--sp-3); line-height: 1.05; }
+    #player-position { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-4); }
+    .profile-hero__meta { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+    .profile-hero__stat { display: flex; flex-direction: column; gap: 2px; }
+    .profile-hero__stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); }
+    .profile-hero__stat-value { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+    #player-bio { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--sp-6); max-width: 540px; }
+    .profile-hero__actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+
+    /* ── Profile body ── */
+    .profile-body { max-width: 1000px; margin: 0 auto; padding: var(--sp-8) var(--sp-6); display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-6); align-items: start; }
+    .profile-col { display: flex; flex-direction: column; gap: var(--sp-6); }
+    .profile-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-card); padding: var(--sp-6); }
+    .profile-card__title { font-family: 'Cairo', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--text-primary); margin-bottom: var(--sp-5); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--border); }
+
+    /* Skill bars */
+    .skill-bar { margin-bottom: var(--sp-4); } .skill-bar:last-child { margin-bottom: 0; }
+    .skill-bar__header { display: flex; justify-content: space-between; margin-bottom: var(--sp-2); }
+    .skill-bar__label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+    .skill-bar__value { font-size: 0.85rem; font-weight: 700; color: var(--gold-primary); }
+    .skill-bar__track { height: 8px; background: var(--border); border-radius: var(--radius-full); overflow: hidden; }
+    .skill-bar__fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold-primary)); border-radius: var(--radius-full); animation: barFill 1s ease both; }
+
+    /* Stat rows */
+    .stat-row { display: flex; justify-content: space-between; align-items: center; padding: var(--sp-3) 0; border-bottom: 1px solid var(--border); }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row__label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+    .stat-row__value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+    /* Social links */
+    .social-link { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) 0; color: var(--text-secondary); font-size: 0.9rem; text-decoration: none; border-bottom: 1px solid var(--border); transition: color var(--transition-fast); }
+    .social-link:last-child { border-bottom: none; }
+    .social-link:hover { color: var(--gold-primary); }
+    .social-link__icon { width: 36px; height: 36px; border-radius: var(--radius-btn); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .social-link__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .social-link--empty { opacity: 0.4; pointer-events: none; }
+
+    /* Videos grid */
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--sp-4); }
+
+    /* Career table */
+    .career-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .career-table th { text-align: right; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--border); }
+    .career-table td { padding: var(--sp-3); border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: middle; }
+    .career-table tr:last-child td { border-bottom: none; }
+    .career-table tbody tr { transition: background var(--transition-fast); }
+    .career-table tbody tr:hover { background: var(--bg-elevated); }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: var(--sp-8) var(--sp-4); }
+    .empty-state__icon { font-size: 2.5rem; color: var(--gold-dim); margin-bottom: var(--sp-3); }
+    .empty-state__text { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* PDF export button */
+    .btn--pdf {
+      background: transparent; border: 1px solid var(--gold-dim); color: var(--gold-primary);
+      font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 0.9rem;
+      padding: 10px 22px; border-radius: var(--radius-btn); cursor: pointer;
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      transition: background var(--transition-fast), border-color var(--transition-fast); text-decoration: none;
+    }
+    .btn--pdf:hover { background: rgba(212,175,55,0.08); border-color: var(--gold-primary); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-hero__inner { flex-direction: column; align-items: center; text-align: center; }
+      .profile-hero__meta  { justify-content: center; }
+      .profile-hero__actions { justify-content: center; }
+      #player-position { justify-content: center; }
+      .profile-body { grid-template-columns: 1fr; padding: var(--sp-6) var(--sp-4); }
+      .topbar { padding: 0 var(--sp-4); }
+    }
+
+    /* ── Print / PDF styles ── */
+    @media print {
+      @page { size: A4 portrait; margin: 18mm 20mm; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #fff !important; color: #111 !important; direction: rtl; font-family: 'Cairo', Arial, sans-serif; }
+      .topbar, .profile-hero__actions, .no-print { display: none !important; }
+      .profile-hero { background: #fff !important; border: none !important; padding: 0 0 12mm !important; }
+      .profile-hero__inner { max-width: 100% !important; padding: 0 !important; border-bottom: 2px solid #D4AF37; padding-bottom: 10mm !important; }
+      #player-photo { width: 100px !important; height: 100px !important; border: 2px solid #D4AF37 !important; }
+      #player-name { font-size: 2rem !important; color: #111 !important; }
+      .profile-hero__stat-label { color: #888 !important; }
+      .profile-hero__stat-value { color: #111 !important; }
+      #player-bio { color: #444 !important; }
+      .profile-body { display: block !important; max-width: 100% !important; padding: 0 !important; margin-top: 8mm !important; }
+      .profile-col { display: block !important; }
+      .profile-card { background: #fff !important; border: 1px solid #ddd !important; margin-bottom: 6mm !important; page-break-inside: avoid; }
+      .profile-card__title { color: #D4AF37 !important; border-bottom: 1px solid #eee !important; }
+      .skill-bar__track { background: #eee !important; }
+      .skill-bar__fill  { background: #D4AF37 !important; }
+      .skill-bar__label { color: #555 !important; }
+      .skill-bar__value { color: #D4AF37 !important; }
+      .stat-row__label  { color: #888 !important; }
+      .stat-row__value  { color: #111 !important; }
+      .career-table th, .career-table td { color: #111 !important; }
+      .career-table th { color: #888 !important; font-size: 0.7rem !important; }
+      body::before { content: 'Got — بوابة الأهداف'; display: block; font-family: 'Bebas Neue', 'Cairo', sans-serif; font-size: 1.8rem; color: #D4AF37; text-align: center; margin-bottom: 6mm; letter-spacing: 0.1em; }
+    }
+  </style>
+</head>
+<body data-page="view-player">
+
+  <header class="topbar" role="banner">
+    <a href="/index.html" class="topbar__logo" aria-label="Got — بوابة الأهداف">Got</a>
+    <a href="javascript:history.back()" class="topbar__back" aria-label="العودة للبحث">
+      &#8594; العودة للبحث
+    </a>
+  </header>
+
+  <section class="profile-hero" aria-label="معلومات اللاعب">
+    <div class="profile-hero__inner">
+
+      <div class="profile-hero__photo-wrap">
+        <img id="player-photo" src="" alt="صورة اللاعب" hidden />
+        <div id="player-photo-placeholder" aria-hidden="true">&#9917;</div>
+      </div>
+
+      <div class="profile-hero__info">
+
+        <h1 id="player-name">جارٍ التحميل…</h1>
+
+        <div id="player-position" aria-label="مركز اللاعب"></div>
+
+        <div class="profile-hero__meta" role="list" aria-label="تفاصيل اللاعب">
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">الجنسية</span>
+            <span class="profile-hero__stat-value" id="stat-nationality">—</span>
+          </div>
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">العمر</span>
+            <span class="profile-hero__stat-value" id="stat-age">—</span>
+          </div>
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">الطول</span>
+            <span class="profile-hero__stat-value" id="stat-height">—</span>
+          </div>
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">الوزن</span>
+            <span class="profile-hero__stat-value" id="stat-weight">—</span>
+          </div>
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">القدم المفضلة</span>
+            <span class="profile-hero__stat-value" id="stat-foot">—</span>
+          </div>
+          <div class="profile-hero__stat" role="listitem">
+            <span class="profile-hero__stat-label">بلد الإقامة</span>
+            <span class="profile-hero__stat-value" id="stat-country">—</span>
+          </div>
+        </div>
+
+        <p id="player-bio" aria-label="نبذة عن اللاعب"></p>
+
+        <div class="profile-hero__actions">
+          <button type="button" id="contact-request-btn" class="btn btn--primary" aria-label="إرسال طلب تواصل">
+            إرسال طلب تواصل
+          </button>
+          <button type="button" id="save-player-btn" class="btn btn--outline" onclick="handleSavePlayer(this)" aria-label="حفظ اللاعب في قائمتك">
+            &#9733; حفظ اللاعب
+          </button>
+          <button type="button" class="btn--pdf no-print" onclick="window.print()" aria-label="تحميل ملف اللاعب كـ PDF">
+            &#128438; تحميل PDF
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="profile-body" role="main">
+
+    <div class="profile-col">
+
+      <article class="profile-card" aria-labelledby="skills-card-title">
+        <h2 class="profile-card__title" id="skills-card-title">المهارات</h2>
+        <div id="player-skills" aria-label="مهارات اللاعب"></div>
+      </article>
+
+      <article class="profile-card" aria-labelledby="career-card-title">
+        <h2 class="profile-card__title" id="career-card-title">المسيرة المهنية</h2>
+        <div id="player-career" aria-label="السجل المهني"></div>
+      </article>
+
+      <article class="profile-card no-print" aria-labelledby="videos-card-title">
+        <h2 class="profile-card__title" id="videos-card-title">مقاطع الهايلايت</h2>
+        <div id="player-videos" class="videos-grid" aria-label="مقاطع الفيديو" aria-live="polite"></div>
+      </article>
+
+    </div>
+
+    <div class="profile-col">
+
+      <article class="profile-card" aria-labelledby="stats-card-title">
+        <h2 class="profile-card__title" id="stats-card-title">إحصائيات اللاعب</h2>
+        <dl>
+          <div class="stat-row">
+            <dt class="stat-row__label">المركز الأساسي</dt>
+            <dd class="stat-row__value" id="detail-position">—</dd>
+          </div>
+          <div class="stat-row">
+            <dt class="stat-row__label">القدم المفضلة</dt>
+            <dd class="stat-row__value" id="detail-foot">—</dd>
+          </div>
+          <div class="stat-row">
+            <dt class="stat-row__label">الطول</dt>
+            <dd class="stat-row__value" id="detail-height">—</dd>
+          </div>
+          <div class="stat-row">
+            <dt class="stat-row__label">الوزن</dt>
+            <dd class="stat-row__value" id="detail-weight">—</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="profile-card no-print" aria-labelledby="social-card-title">
+        <h2 class="profile-card__title" id="social-card-title">التواصل الاجتماعي</h2>
+        <a id="social-instagram" href="#" class="social-link social-link--empty" target="_blank" rel="noopener noreferrer" aria-label="انستغرام">
+          <span class="social-link__icon" aria-hidden="true">&#128247;</span>
+          <span class="social-link__text">انستغرام</span>
+        </a>
+        <a id="social-youtube" href="#" class="social-link social-link--empty" target="_blank" rel="noopener noreferrer" aria-label="يوتيوب">
+          <span class="social-link__icon" aria-hidden="true">&#127910;</span>
+          <span class="social-link__text">يوتيوب</span>
+        </a>
+      </article>
+
+    </div>
+
+  </div>
+
+  <script src="/js/components.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/club.js"></script>
+  <script>
+    // Grab player ID from URL and wire save button
+    function handleSavePlayer(btn) {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (id) savePlayer(id, btn);
+    }
+  </script>
+</body>
+</html>
