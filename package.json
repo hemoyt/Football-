@@ -1,0 +1,13 @@
+{
+  "name": "gog-football",
+  "version": "1.0.0",
+  "description": "GOG - Gateway of Goals football scouting platform",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.7"
+  }
+}
