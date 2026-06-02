@@ -2,7 +2,7 @@
 
 منصة الكشافة الكروية التي تربط اللاعبين بالأندية الموثقة حول العالم.
 
-> **Demo Mode:** All data is saved in the browser's `localStorage`. No server or database is needed. Works fully on Netlify.
+
 
 ---
 
