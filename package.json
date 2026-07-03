@@ -1,6 +1,6 @@
 {
   "name": "gog-football",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GOG - Gateway of Goals football scouting platform",
   "engines": {
     "node": ">=18"
