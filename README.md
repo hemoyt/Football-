@@ -167,3 +167,5 @@ An admin user is automatically created on first page load:
 - Data is **browser-local** — clearing browser storage will erase all data
 - Photos and videos are stored as **base64 Data URLs** in localStorage — large files may approach storage limits (~5MB)
 - For a production version, replace `js/storage.js` with real API calls to a PHP/Node.js backend
+
+<!-- Last updated: 2026-07-10 -->
